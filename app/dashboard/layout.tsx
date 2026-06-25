@@ -27,6 +27,7 @@ export default async function DashboardLayout({
         <DashboardTopbar
           fullName={session.fullName}
           roleLabel={ROLE_META[session.role].label}
+          role={session.role}
           configured={session.configured}
         />
         {!session.configured && (
