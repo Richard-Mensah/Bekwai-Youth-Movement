@@ -13,22 +13,22 @@ export default async function AccountPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Profile</h3>
+          <h3 className="text-sm font-bold text-canopy">Profile</h3>
           <dl className="mt-4 space-y-3 text-sm">
             <div className="flex justify-between">
-              <dt className="text-gray-500">Name</dt>
+              <dt className="text-ink/55">Name</dt>
               <dd className="font-medium text-gray-700">{session.fullName}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-gray-500">Email</dt>
+              <dt className="text-ink/55">Email</dt>
               <dd className="font-medium text-gray-700">{session.email ?? "—"}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-gray-500">Role</dt>
+              <dt className="text-ink/55">Role</dt>
               <dd className="font-medium text-gray-700">{ROLE_META[session.role].label}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-gray-500">Status</dt>
+              <dt className="text-ink/55">Status</dt>
               <dd className="font-medium text-gray-700 capitalize">
                 {session.verificationStatus}
               </dd>
@@ -37,8 +37,8 @@ export default async function AccountPage() {
         </Card>
 
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Change password</h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <h3 className="text-sm font-bold text-canopy">Change password</h3>
+          <p className="mt-1 text-xs text-ink/55">
             Set a personal password to replace any temporary one.
           </p>
           <div className="mt-4">

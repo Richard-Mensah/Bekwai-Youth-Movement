@@ -37,8 +37,8 @@ export default async function MpDashboard() {
 
       <div className="mt-6" id="bills">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Bills pipeline</h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <h3 className="text-sm font-bold text-canopy">Bills pipeline</h3>
+          <p className="mt-1 text-xs text-ink/55">
             Click a bill to open its readings, debate, and live vote.
           </p>
           <div className="mt-4">
@@ -49,7 +49,7 @@ export default async function MpDashboard() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.3fr]">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Submit business</h3>
+          <h3 className="text-sm font-bold text-canopy">Submit business</h3>
           <div className="mt-4">
             <BillForm />
           </div>
@@ -57,7 +57,7 @@ export default async function MpDashboard() {
 
         <div className="space-y-6">
           <Card>
-            <h3 className="text-sm font-bold text-brand-green-700">Motions</h3>
+            <h3 className="text-sm font-bold text-canopy">Motions</h3>
             <ul className="mt-3 space-y-2">
               {motions.map((m) => (
                 <li key={m.id} className="rounded-lg border border-gray-100 p-3">
@@ -65,14 +65,14 @@ export default async function MpDashboard() {
                     <p className="text-sm font-medium text-gray-700">{m.title}</p>
                     <Badge tone="blue">{m.status}</Badge>
                   </div>
-                  {m.body && <p className="mt-1 text-xs text-gray-500">{m.body}</p>}
+                  {m.body && <p className="mt-1 text-xs text-ink/55">{m.body}</p>}
                 </li>
               ))}
             </ul>
           </Card>
 
           <Card>
-            <h3 className="text-sm font-bold text-brand-green-700">
+            <h3 className="text-sm font-bold text-canopy">
               Youth Recommendations
             </h3>
             <ul className="mt-3 space-y-2">
@@ -89,12 +89,12 @@ export default async function MpDashboard() {
 
       <div className="mt-6">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Sessions</h3>
+          <h3 className="text-sm font-bold text-canopy">Sessions</h3>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {sessions.map((s) => (
               <div key={s.id} className="rounded-lg border border-gray-100 p-3 text-sm">
                 <p className="font-medium text-gray-700">{s.name}</p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-ink/55">
                   {s.opensOn ?? "—"} → {s.closesOn ?? "—"}
                 </p>
               </div>

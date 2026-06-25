@@ -45,7 +45,7 @@ export default function GenderComplianceChart({
           />
           <Bar dataKey="female" radius={[4, 4, 0, 0]}>
             {data.map((d, i) => (
-              <Cell key={i} fill={d.female >= FLOOR ? "#1F4D3F" : "#8E1B1B"} />
+              <Cell key={i} fill={d.female >= FLOOR ? "#14342B" : "#8E1B1B"} />
             ))}
           </Bar>
         </BarChart>

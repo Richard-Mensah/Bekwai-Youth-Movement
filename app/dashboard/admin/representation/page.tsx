@@ -11,7 +11,7 @@ function Seat({ ok, label }: { ok: boolean; label: string }) {
       title={`${label}: ${ok ? "filled" : "vacant"}`}
       className={
         ok
-          ? "inline-flex h-5 min-w-5 items-center justify-center rounded bg-brand-green-50 px-1 text-[9px] font-bold text-brand-green-700"
+          ? "inline-flex h-5 min-w-5 items-center justify-center rounded bg-canopy-50 px-1 text-[9px] font-bold text-canopy"
           : "inline-flex h-5 min-w-5 items-center justify-center rounded bg-brand-red-50 px-1 text-[9px] font-bold text-brand-red-700"
       }
     >
@@ -45,8 +45,8 @@ export default async function RepresentationPage() {
 
       <div className="mt-6">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Seat coverage</h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <h3 className="text-sm font-bold text-canopy">Seat coverage</h3>
+          <p className="mt-1 text-xs text-ink/55">
             Each community has 3 seats: <strong>MP</strong>, <strong>CR</strong> (Council Rep),
             <strong> CIN</strong>. Green = filled, red = vacant.
           </p>
@@ -72,18 +72,18 @@ export default async function RepresentationPage() {
 
       <div className="mt-6">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">
+          <h3 className="text-sm font-bold text-canopy">
             Three-tier interim representation protocol
           </h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-ink/55">
             Activated when a community produces no qualified candidate after two cycles.
           </p>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {INTERIM_TIERS.map((t) => (
               <div key={t.tier} className="rounded-lg border border-gray-100 p-4">
                 <span className="text-xs font-bold text-brand-red">TIER {t.tier}</span>
-                <p className="mt-1 text-sm font-bold text-brand-green-700">{t.name}</p>
-                <p className="mt-1 text-xs text-gray-600">{t.note}</p>
+                <p className="mt-1 text-sm font-bold text-canopy">{t.name}</p>
+                <p className="mt-1 text-xs text-ink/65">{t.note}</p>
               </div>
             ))}
           </div>

@@ -51,14 +51,14 @@ export default async function ProjectDetailPage({
             <div className="flex flex-wrap items-center gap-3">
               <Badge tone={meta.tone}>{meta.label}</Badge>
               {project.unitName && (
-                <span className="text-xs text-gray-500">{project.unitName}</span>
+                <span className="text-xs text-ink/55">{project.unitName}</span>
               )}
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-gray-600">
+            <p className="mt-4 text-sm leading-relaxed text-ink/65">
               {project.description ?? "No description provided."}
             </p>
             <div className="mt-5 border-t border-gray-100 pt-4">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink/45">
                 Lifecycle actions
               </p>
               <ProjectControls projectId={project.id} status={project.status} />
@@ -66,11 +66,11 @@ export default async function ProjectDetailPage({
           </Card>
 
           <Card>
-            <h3 className="text-sm font-bold text-brand-green-700">Expenditure</h3>
+            <h3 className="text-sm font-bold text-canopy">Expenditure</h3>
             <div className="mt-3 overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-gray-400">
+                  <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-ink/45">
                     <th className="py-2 pr-4 font-medium">Date</th>
                     <th className="py-2 pr-4 font-medium">Payee</th>
                     <th className="py-2 pr-4 font-medium">Purpose</th>
@@ -80,9 +80,9 @@ export default async function ProjectDetailPage({
                 <tbody>
                   {expenditures.map((e) => (
                     <tr key={e.id} className="border-b border-gray-100">
-                      <td className="py-2 pr-4 text-gray-500">{formatDate(e.spentOn)}</td>
+                      <td className="py-2 pr-4 text-ink/55">{formatDate(e.spentOn)}</td>
                       <td className="py-2 pr-4 text-gray-700">{e.payee}</td>
-                      <td className="py-2 pr-4 text-gray-600">{e.purpose}</td>
+                      <td className="py-2 pr-4 text-ink/65">{e.purpose}</td>
                       <td className="py-2 pr-4 text-right font-medium text-gray-700">
                         {ghs(e.amountGhs)}
                       </td>
@@ -90,7 +90,7 @@ export default async function ProjectDetailPage({
                   ))}
                   {expenditures.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="py-4 text-center text-xs text-gray-400">
+                      <td colSpan={4} className="py-4 text-center text-xs text-ink/45">
                         No expenditure recorded yet.
                       </td>
                     </tr>
@@ -105,7 +105,7 @@ export default async function ProjectDetailPage({
         </div>
 
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Budget</h3>
+          <h3 className="text-sm font-bold text-canopy">Budget</h3>
           <div className="mt-4">
             <BudgetMeter budget={project.budgetGhs} spent={spentTotal} />
           </div>

@@ -24,7 +24,7 @@ export default function TrendLine({ data }: { data: Datum[] }) {
           <Line
             type="monotone"
             dataKey="reports"
-            stroke="#1F4D3F"
+            stroke="#14342B"
             strokeWidth={2.5}
             dot={{ r: 3 }}
           />

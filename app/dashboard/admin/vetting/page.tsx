@@ -32,8 +32,8 @@ export default async function VettingPage() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Pipeline</h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <h3 className="text-sm font-bold text-canopy">Pipeline</h3>
+          <p className="mt-1 text-xs text-ink/55">
             {NOMINATION_FLOW.length} stages — nominated → residency → vetting → interview → appointed.
           </p>
           <div className="mt-4">
@@ -41,7 +41,7 @@ export default async function VettingPage() {
           </div>
         </Card>
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Add nomination</h3>
+          <h3 className="text-sm font-bold text-canopy">Add nomination</h3>
           <div className="mt-4">
             <NominationForm />
           </div>

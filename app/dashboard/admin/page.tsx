@@ -6,6 +6,7 @@ import Card from "@/components/ui/Card"
 import Badge from "@/components/ui/Badge"
 import { COMMUNITY_COUNT } from "@/constants/communities"
 import { getGenderCompliance } from "@/lib/data/governance"
+import { getMemberStats } from "@/lib/data/admin"
 
 const NEW_FEATURES: [string, string, string][] = [
   ["Nomination & Vetting Pipeline", "8-week, 5-step applicant tracking to Letters of Appointment.", "/dashboard/admin/vetting"],
@@ -16,7 +17,11 @@ const NEW_FEATURES: [string, string, string][] = [
 ]
 
 export default async function AdminDashboard() {
-  const gender = await getGenderCompliance()
+  const [gender, members] = await Promise.all([
+    getGenderCompliance(),
+    getMemberStats(),
+  ])
+
   return (
     <>
       <DashboardHeading
@@ -24,19 +29,38 @@ export default async function AdminDashboard() {
         subtitle="Members, vetting, compliance, and platform configuration"
       />
 
-      <div className="grid gap-4 sm:grid-cols-4">
-        <StatCard label="Total members" value={0} hint="Registered" />
-        <StatCard label="Pending verification" value={0} hint="Awaiting review" accent="red" />
-        <StatCard label="Communities" value={COMMUNITY_COUNT} hint="Seeded" accent="blue" />
-        <StatCard label="Cabinet positions" value={19} hint="Defined" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          label="Total members"
+          value={members.total}
+          hint={members.configured ? "Registered" : "Connect Supabase for live count"}
+        />
+        <StatCard
+          label="Pending verification"
+          value={members.pending}
+          hint="Awaiting review"
+          accent="red"
+        />
+        <StatCard
+          label="Verified members"
+          value={members.verified}
+          hint="Active on the platform"
+          accent="gold"
+        />
+        <StatCard
+          label="Communities"
+          value={COMMUNITY_COUNT}
+          hint="Sefwi Bekwai + 31"
+          accent="blue"
+        />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]" id="compliance">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">
+          <h3 className="font-display text-base font-semibold text-canopy">
             40% Gender-Equality Compliance
           </h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-ink/55">
             Female representation by arm against the 40% constitutional floor.
           </p>
           <div className="mt-4">
@@ -44,27 +68,29 @@ export default async function AdminDashboard() {
           </div>
         </Card>
         <Card id="members">
-          <h3 className="text-sm font-bold text-brand-green-700">
+          <h3 className="font-display text-base font-semibold text-canopy">
             Member verification
           </h3>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-ink/65">
             New registrations land here as <Badge tone="amber">pending</Badge>.
             Verify to assign a role and unlock the member&apos;s dashboard.
           </p>
-          <p className="mt-3 text-xs text-gray-400">
-            Live queue connects once Supabase is configured.
+          <p className="mt-3 text-xs text-ink/45">
+            {members.configured
+              ? `${members.pending} member${members.pending === 1 ? "" : "s"} awaiting verification.`
+              : "Live queue connects once Supabase is configured."}
           </p>
           <Link
             href="/dashboard/admin/transparency"
-            className="mt-3 inline-block text-sm font-medium text-brand-green hover:underline"
+            className="mt-3 inline-block text-sm font-semibold text-canopy hover:underline"
           >
             Transparency publishing →
           </Link>
         </Card>
       </div>
 
-      <div className="mt-6">
-        <h3 className="mb-3 text-sm font-bold text-brand-green-700">
+      <div className="mt-8">
+        <h3 className="mb-3 font-display text-base font-semibold text-canopy">
           Governance feature modules
         </h3>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -72,11 +98,11 @@ export default async function AdminDashboard() {
             <Link
               key={title}
               href={href}
-              className="block rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition hover:border-brand-green"
+              className="group block rounded-2xl border border-canopy/10 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
             >
-              <h4 className="text-sm font-bold text-brand-green-700">{title}</h4>
-              <p className="mt-2 text-sm text-gray-600">{desc}</p>
-              <span className="mt-3 inline-block text-sm font-medium text-brand-green">
+              <h4 className="font-display text-sm font-semibold text-canopy">{title}</h4>
+              <p className="mt-2 text-sm text-ink/65">{desc}</p>
+              <span className="mt-3 inline-block text-sm font-semibold text-gold-600">
                 Open →
               </span>
             </Link>

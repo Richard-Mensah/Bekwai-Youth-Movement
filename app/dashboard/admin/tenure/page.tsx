@@ -32,7 +32,7 @@ export default async function TenurePage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-gray-400">
+                <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-ink/45">
                   <th className="py-2 pr-4 font-medium">Officer</th>
                   <th className="py-2 pr-4 font-medium">Position</th>
                   <th className="py-2 pr-4 font-medium">Term</th>
@@ -44,8 +44,8 @@ export default async function TenurePage() {
                 {rows.map((r) => (
                   <tr key={r.id} className="border-b border-gray-100">
                     <td className="py-2.5 pr-4 font-medium text-gray-700">{r.fullName}</td>
-                    <td className="py-2.5 pr-4 text-gray-600">{r.positionTitle}</td>
-                    <td className="py-2.5 pr-4 text-xs text-gray-500">
+                    <td className="py-2.5 pr-4 text-ink/65">{r.positionTitle}</td>
+                    <td className="py-2.5 pr-4 text-xs text-ink/55">
                       {r.termStart ? formatDate(r.termStart) : "—"} →{" "}
                       {r.termEnd ? formatDate(r.termEnd) : "—"}
                     </td>

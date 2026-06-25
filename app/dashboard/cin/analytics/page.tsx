@@ -44,15 +44,15 @@ export default async function CinAnalyticsPage() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Reporting trend</h3>
-          <p className="mt-1 text-xs text-gray-500">Reports submitted per month</p>
+          <h3 className="text-sm font-bold text-canopy">Reporting trend</h3>
+          <p className="mt-1 text-xs text-ink/55">Reports submitted per month</p>
           <div className="mt-3">
             <TrendLine data={monthlyTrend(rows)} />
           </div>
         </Card>
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Severity mix</h3>
-          <p className="mt-1 text-xs text-gray-500">All reports by severity</p>
+          <h3 className="text-sm font-bold text-canopy">Severity mix</h3>
+          <p className="mt-1 text-xs text-ink/55">All reports by severity</p>
           <div className="mt-3">
             <SeverityDonut data={severityCounts(rows)} />
           </div>
@@ -61,7 +61,7 @@ export default async function CinAnalyticsPage() {
 
       <div className="mt-6">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Issues by category</h3>
+          <h3 className="text-sm font-bold text-canopy">Issues by category</h3>
           <div className="mt-3">
             <CategoryBarChart data={categoryCounts(rows)} />
           </div>
@@ -70,10 +70,10 @@ export default async function CinAnalyticsPage() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">
+          <h3 className="text-sm font-bold text-canopy">
             Community development heatmap
           </h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-ink/55">
             Score per community (higher is better)
           </p>
           <div className="mt-4">
@@ -81,7 +81,7 @@ export default async function CinAnalyticsPage() {
           </div>
         </Card>
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">
+          <h3 className="text-sm font-bold text-canopy">
             Communities needing attention
           </h3>
           <ul className="mt-3 space-y-2">
@@ -93,16 +93,16 @@ export default async function CinAnalyticsPage() {
                 <span className="font-medium text-gray-700">
                   {i + 1}. {c.communityName}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-ink/55">
                   {c.open} open · score {c.score}
                 </span>
               </li>
             ))}
           </ul>
-          <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-brand-green-700">
+          <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-canopy">
             Top communities
           </p>
-          <ul className="mt-2 space-y-1 text-xs text-gray-500">
+          <ul className="mt-2 space-y-1 text-xs text-ink/55">
             {ranked.slice(0, 3).map((c) => (
               <li key={c.communityId}>
                 {c.communityName} — score {c.score}

@@ -29,9 +29,9 @@ export default async function ElderDashboard() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Endorsement requests</h3>
+          <h3 className="text-sm font-bold text-canopy">Endorsement requests</h3>
           {pending.length === 0 ? (
-            <p className="mt-3 text-sm text-gray-500">No pending endorsements.</p>
+            <p className="mt-3 text-sm text-ink/55">No pending endorsements.</p>
           ) : (
             <ul className="mt-3 space-y-2">
               {pending.map((e) => (
@@ -50,8 +50,8 @@ export default async function ElderDashboard() {
         </Card>
 
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Log an engagement</h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <h3 className="text-sm font-bold text-canopy">Log an engagement</h3>
+          <p className="mt-1 text-xs text-ink/55">
             Courtesy calls, sensitisation, durbar accountability, dispute mediation.
           </p>
           <div className="mt-4">
@@ -62,22 +62,22 @@ export default async function ElderDashboard() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Recent engagements</h3>
+          <h3 className="text-sm font-bold text-canopy">Recent engagements</h3>
           <ul className="mt-3 space-y-2">
             {engagements.map((g) => (
               <li key={g.id} className="flex items-start justify-between gap-3 rounded-lg border border-gray-100 p-3">
                 <div>
                   <p className="text-sm font-medium text-gray-700">{humanize(g.kind)}</p>
-                  <p className="text-xs text-gray-500">{g.communityName}{g.summary ? ` — ${g.summary}` : ""}</p>
+                  <p className="text-xs text-ink/55">{g.communityName}{g.summary ? ` — ${g.summary}` : ""}</p>
                 </div>
-                <span className="shrink-0 text-xs text-gray-400">{formatDate(g.occurredOn)}</span>
+                <span className="shrink-0 text-xs text-ink/45">{formatDate(g.occurredOn)}</span>
               </li>
             ))}
           </ul>
         </Card>
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Governance visibility</h3>
-          <p className="mt-2 text-sm text-gray-600">
+          <h3 className="text-sm font-bold text-canopy">Governance visibility</h3>
+          <p className="mt-2 text-sm text-ink/65">
             As a Council member you can view leadership, projects, and published
             reports across the Movement.
           </p>

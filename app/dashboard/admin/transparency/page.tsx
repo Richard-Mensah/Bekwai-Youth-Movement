@@ -35,13 +35,13 @@ export default async function AdminTransparencyPage() {
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div className="space-y-6">
           <Card>
-            <h3 className="text-sm font-bold text-brand-green-700">Budgets</h3>
+            <h3 className="text-sm font-bold text-canopy">Budgets</h3>
             <ul className="mt-3 space-y-2">
               {budgets.map((b) => (
                 <li key={b.id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3">
                   <div>
                     <p className="text-sm font-medium text-gray-700">{b.title}</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-ink/45">
                       Income {ghs(b.incomeGhs)} · Spend {ghs(b.expenditureGhs)}
                     </p>
                   </div>
@@ -52,7 +52,7 @@ export default async function AdminTransparencyPage() {
           </Card>
 
           <Card>
-            <h3 className="text-sm font-bold text-brand-green-700">Public reports</h3>
+            <h3 className="text-sm font-bold text-canopy">Public reports</h3>
             <ul className="mt-3 space-y-2">
               {reports.map((r) => (
                 <li key={r.id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3">
@@ -64,7 +64,7 @@ export default async function AdminTransparencyPage() {
           </Card>
 
           <Card>
-            <h3 className="text-sm font-bold text-brand-green-700">Annual & SDG reports</h3>
+            <h3 className="text-sm font-bold text-canopy">Annual & SDG reports</h3>
             <ul className="mt-3 space-y-2">
               {annual.map((a) => (
                 <li key={a.id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3">
@@ -76,7 +76,7 @@ export default async function AdminTransparencyPage() {
           </Card>
 
           <Card>
-            <h3 className="text-sm font-bold text-brand-green-700">Community scorecards</h3>
+            <h3 className="text-sm font-bold text-canopy">Community scorecards</h3>
             <ul className="mt-3 space-y-2">
               {scorecards.map((s) => (
                 <li key={s.id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3">
@@ -91,8 +91,8 @@ export default async function AdminTransparencyPage() {
         </div>
 
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Create record</h3>
-          <p className="mt-1 text-xs text-gray-500">New records start as drafts.</p>
+          <h3 className="text-sm font-bold text-canopy">Create record</h3>
+          <p className="mt-1 text-xs text-ink/55">New records start as drafts.</p>
           <div className="mt-4">
             <TransparencyForm />
           </div>

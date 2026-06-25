@@ -6,10 +6,8 @@ type Props = {
 export default function DashboardHeading({ title, subtitle }: Props) {
   return (
     <div className="mb-6">
-      <h1 className="font-serif text-2xl font-bold text-brand-green-700">
-        {title}
-      </h1>
-      {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
+      <h1 className="font-display text-2xl font-semibold text-canopy">{title}</h1>
+      {subtitle && <p className="mt-1 text-sm text-ink/55">{subtitle}</p>}
     </div>
   )
 }

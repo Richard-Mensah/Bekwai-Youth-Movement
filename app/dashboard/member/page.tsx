@@ -23,8 +23,8 @@ export default async function MemberDashboard() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Get involved</h3>
-          <p className="mt-2 text-sm text-gray-600">
+          <h3 className="text-sm font-bold text-canopy">Get involved</h3>
+          <p className="mt-2 text-sm text-ink/65">
             Stand for your community as a Parliament Member, Council
             Representative, or Community Intelligence Officer — or join a
             Volunteer Action Team.

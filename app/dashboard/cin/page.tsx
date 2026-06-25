@@ -28,10 +28,10 @@ export default async function CinDashboard() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.2fr]" id="reports">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">
+          <h3 className="text-sm font-bold text-canopy">
             New monthly report
           </h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-ink/55">
             Share a summary with your sub-chief before submission (monthly protocol).
           </p>
           <div className="mt-4">
@@ -41,7 +41,7 @@ export default async function CinDashboard() {
 
         <Card>
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-brand-green-700">
+            <h3 className="text-sm font-bold text-canopy">
               {session.userId ? "My reports" : "Reports (sample)"}
             </h3>
             <Link

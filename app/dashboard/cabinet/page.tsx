@@ -27,8 +27,8 @@ export default async function CabinetDashboard() {
 
       <div className="mt-6" id="projects">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Project portfolio</h3>
-          <p className="mt-1 text-xs text-gray-500">
+          <h3 className="text-sm font-bold text-canopy">Project portfolio</h3>
+          <p className="mt-1 text-xs text-ink/55">
             Click a project to open its budget, expenditure, and lifecycle.
           </p>
           <div className="mt-4">
@@ -39,7 +39,7 @@ export default async function CabinetDashboard() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">
+          <h3 className="text-sm font-bold text-canopy">
             Budget vs spend by status
           </h3>
           <div className="mt-3">
@@ -47,7 +47,7 @@ export default async function CabinetDashboard() {
           </div>
         </Card>
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">Propose a project</h3>
+          <h3 className="text-sm font-bold text-canopy">Propose a project</h3>
           <div className="mt-4">
             <ProjectForm />
           </div>

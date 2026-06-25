@@ -15,24 +15,26 @@ export default function Sidebar({ role }: Props) {
   const groups = ROLE_NAV_GROUPS[role] ?? ["base"]
 
   return (
-    <aside className="hidden w-60 shrink-0 border-r border-gray-200 bg-white lg:block">
-      <div className="flex h-16 items-center gap-2.5 border-b border-gray-200 px-5">
-        <Image
-          src="/images/logo.jpg"
-          alt="BYM"
-          width={32}
-          height={32}
-          className="rounded-full"
-        />
-        <span className="text-sm font-bold text-brand-green-700">
+    <aside className="canopy-texture hidden w-64 shrink-0 flex-col bg-canopy text-white/80 lg:flex">
+      <div className="flex h-16 items-center gap-2.5 border-b border-white/10 px-5">
+        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full ring-1 ring-gold-400/40">
+          <Image
+            src="/images/logo.jpg"
+            alt="BYM"
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
+        </span>
+        <span className="font-display text-sm font-semibold text-white">
           BYM Console
         </span>
       </div>
 
-      <nav className="space-y-5 p-4">
+      <nav className="flex-1 space-y-5 overflow-y-auto p-4">
         {groups.map((group) => (
           <div key={group}>
-            <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+            <p className="px-2 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-300/80">
               {group === "base" ? "Dashboard" : group}
             </p>
             {(DASHBOARD_NAV[group] ?? []).map((item) => {
@@ -42,10 +44,10 @@ export default function Sidebar({ role }: Props) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "block rounded-md px-3 py-2 text-sm font-medium",
+                    "block rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     active
-                      ? "bg-brand-green-50 text-brand-green-700"
-                      : "text-gray-600 hover:bg-gray-50"
+                      ? "bg-white/10 text-white shadow-[inset_2px_0_0_0_theme(colors.gold.400)]"
+                      : "text-white/65 hover:bg-white/5 hover:text-white"
                   )}
                 >
                   {item.label}
@@ -56,8 +58,8 @@ export default function Sidebar({ role }: Props) {
         ))}
       </nav>
 
-      <div className="mt-auto px-5 py-4 text-[11px] text-gray-400">
-        Role: {ROLE_META[role].label}
+      <div className="border-t border-white/10 px-5 py-4 text-[11px] uppercase tracking-wider text-white/45">
+        Role · <span className="text-gold-300">{ROLE_META[role].label}</span>
       </div>
     </aside>
   )

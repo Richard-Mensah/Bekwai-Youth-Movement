@@ -36,7 +36,7 @@ export default async function BillDetailPage({
         <Card>
           <div className="flex items-center gap-3">
             <Badge tone={meta.tone}>{meta.label}</Badge>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-ink/45">
               Introduced {formatDate(bill.createdAt)}
             </span>
           </div>
@@ -45,13 +45,13 @@ export default async function BillDetailPage({
             <ReadingsProgress status={bill.status} />
           </div>
 
-          <h3 className="mt-6 text-sm font-bold text-brand-green-700">Summary</h3>
-          <p className="mt-2 text-sm leading-relaxed text-gray-600">
+          <h3 className="mt-6 text-sm font-bold text-canopy">Summary</h3>
+          <p className="mt-2 text-sm leading-relaxed text-ink/65">
             {bill.summary ?? "No summary provided."}
           </p>
 
           <div className="mt-6 border-t border-gray-100 pt-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink/45">
               Presiding actions
             </p>
             <AdvanceStageButton billId={bill.id} status={bill.status} />
