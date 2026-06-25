@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation"
 import { getSessionProfile } from "@/lib/auth"
+
+// Auth-gated, role-dependent — never statically prerender any dashboard route.
+export const dynamic = "force-dynamic"
 import { ROLE_META } from "@/constants/roles"
 import Sidebar from "@/components/layout/Sidebar"
 import DashboardTopbar from "@/components/layout/DashboardTopbar"
