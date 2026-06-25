@@ -32,6 +32,28 @@ export const cinReportSchema = z.object({
 
 export type CinReportInput = z.infer<typeof cinReportSchema>
 
+/** A new Bill submitted to Parliament. */
+export const billSchema = z.object({
+  title: z.string().min(6, "Enter a bill title (min 6 characters)"),
+  summary: z.string().min(10, "Add a short summary (min 10 characters)"),
+})
+export type BillInput = z.infer<typeof billSchema>
+
+/** A new Motion. */
+export const motionSchema = z.object({
+  title: z.string().min(6, "Enter a motion title (min 6 characters)"),
+  body: z.string().min(10, "Describe the motion (min 10 characters)"),
+})
+export type MotionInput = z.infer<typeof motionSchema>
+
+/** A Youth Recommendation forwarded to Cabinet. */
+export const recommendationSchema = z.object({
+  title: z.string().min(6, "Enter a title (min 6 characters)"),
+  body: z.string().min(10, "Describe the recommendation (min 10 characters)"),
+  communityId: z.coerce.number().int().optional(),
+})
+export type RecommendationInput = z.infer<typeof recommendationSchema>
+
 export const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(1, "Enter your password"),
