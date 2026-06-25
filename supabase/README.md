@@ -23,10 +23,24 @@ In the Supabase **SQL Editor**, run each migration in order:
 0006_governance_features.sql
 0007_rls.sql
 0008_auth_hook.sql
+0009_storage.sql
+0010_security_hardening.sql
 ```
 
 Then run `seed.sql` to load the 32 communities, 7 units, 19 cabinet
 positions, 12 SDGs, standing committees, and TAC placeholders.
+
+> **Project `BekwaiYouthMovement` (npbeiffqenmzdxwmlydz) is already set up** —
+> all migrations + seed + Realtime (on `votes`) have been applied.
+
+## Make yourself an admin
+After signing up at `/join`, promote your account in the SQL Editor:
+
+```sql
+update profiles
+set role = 'super_admin', verification_status = 'verified'
+where email = 'YOUR_EMAIL_HERE';
+```
 
 > Using the Supabase CLI instead? Place these in `supabase/migrations/`
 > and run `supabase db push`.
