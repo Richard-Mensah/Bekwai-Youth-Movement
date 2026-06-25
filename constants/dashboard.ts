@@ -12,6 +12,7 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
   cin: [
     { label: "CIN overview", href: "/dashboard/cin" },
     { label: "My reports", href: "/dashboard/cin#reports" },
+    { label: "Analytics", href: "/dashboard/cin/analytics" },
   ],
   mp: [
     { label: "Parliament", href: "/dashboard/mp" },
@@ -38,6 +39,6 @@ export const ROLE_NAV_GROUPS: Record<Role, string[]> = {
   mp: ["base", "mp"],
   secretary: ["base", "cabinet"],
   elder: ["base", "elder"],
-  admin: ["base", "admin", "cabinet"],
-  super_admin: ["base", "admin", "cabinet", "elder"],
+  admin: ["base", "admin", "cin", "cabinet"],
+  super_admin: ["base", "admin", "cin", "cabinet", "elder"],
 }
