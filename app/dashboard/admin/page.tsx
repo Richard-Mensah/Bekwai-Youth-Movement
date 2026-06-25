@@ -1,3 +1,4 @@
+import Link from "next/link"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import GenderComplianceChart from "@/components/features/dashboard/GenderComplianceChart"
 import StatCard from "@/components/ui/StatCard"
@@ -52,6 +53,12 @@ export default function AdminDashboard() {
           <p className="mt-3 text-xs text-gray-400">
             Live queue connects once Supabase is configured.
           </p>
+          <Link
+            href="/dashboard/admin/transparency"
+            className="mt-3 inline-block text-sm font-medium text-brand-green hover:underline"
+          >
+            Transparency publishing →
+          </Link>
         </Card>
       </div>
 
