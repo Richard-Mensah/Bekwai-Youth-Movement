@@ -3,16 +3,28 @@ import type { Community } from "@/types"
 /**
  * The 32 communities = Sefwi Bekwai (town) + 31 sub-communities.
  *
- * IMPORTANT: The governance documents reference "32 communities" and one
- * example name ("Amoaful") but do not enumerate the full list. The 31
- * sub-community names below are PLACEHOLDERS — replace each with the real
- * BYM community name. The structure, IDs, and counts are correct.
+ * Sefwi Bekwai is the capital of the Sefwi Bekwai Traditional Area within the
+ * Bibiani-Anhwiaso-Bekwai Municipal, Western North Region, Ghana.
+ *
+ * NAMES BELOW ARE EDITABLE PLACEHOLDERS. A few are confirmed real area towns
+ * (Awaso, Anhwiaso, Chirano, Kunkumso, Aprutu, Sayerano, Adabokrom); the rest
+ * are realistic local-style names to replace with BYM's official community list.
+ * IDs and counts are fixed — only edit the `name` values.
  */
+const SUB_COMMUNITY_NAMES = [
+  "Awaso", "Anhwiaso", "Chirano", "Kunkumso", "Aprutu", "Sayerano",
+  "Adabokrom", "Dominase", "Subriso", "Kojina", "Pataboso", "Ahokwaa",
+  "Nkatieso", "Bekwai Nkwanta", "Nyamebekyere", "Datano", "Kwakukrom",
+  "Adjoafua", "Asempaneye", "Bopa", "Camp", "Old Town", "New Town",
+  "Zongo", "Krofofrom", "Mile Eight", "Akoti", "Brapakrom", "Yawkrom",
+  "Asanteman", "Wreckers",
+]
+
 export const COMMUNITIES: Community[] = [
   { id: 1, name: "Sefwi Bekwai", isTown: true },
-  ...Array.from({ length: 31 }, (_, i) => ({
+  ...SUB_COMMUNITY_NAMES.map((name, i) => ({
     id: i + 2,
-    name: `Sub-Community ${String(i + 1).padStart(2, "0")}`,
+    name,
     isTown: false,
   })),
 ]

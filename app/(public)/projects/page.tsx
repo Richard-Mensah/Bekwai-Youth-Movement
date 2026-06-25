@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import PageHeader from "@/components/layout/PageHeader"
 import SectionHeading from "@/components/ui/SectionHeading"
 import EmptyState from "@/components/ui/EmptyState"
-import Card from "@/components/ui/Card"
 import Badge from "@/components/ui/Badge"
 import { getProjects } from "@/lib/data/projects"
 import { PROJECT_STATUS_META, ghs } from "@/constants/projects"
+import { placeholderImage } from "@/lib/images"
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -39,21 +40,35 @@ export default async function ProjectsPage() {
               {published.map((p) => {
                 const meta = PROJECT_STATUS_META[p.status]
                 return (
-                  <Card key={p.id}>
-                    <div className="flex items-center justify-between gap-2">
-                      <Badge tone={meta.tone}>{meta.label}</Badge>
-                      <span className="text-xs font-semibold text-brand-blue">
-                        {ghs(p.budgetGhs)}
-                      </span>
+                  <div
+                    key={p.id}
+                    className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+                  >
+                    <div className="relative h-40 w-full bg-gray-100">
+                      <Image
+                        src={placeholderImage(p.id, 600, 360)}
+                        alt={p.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover"
+                      />
                     </div>
-                    <h3 className="mt-3 text-base font-bold text-brand-green-700">
-                      {p.name}
-                    </h3>
-                    <p className="mt-1 text-xs text-gray-400">{p.communityName}</p>
-                    {p.description && (
-                      <p className="mt-2 text-sm text-gray-600">{p.description}</p>
-                    )}
-                  </Card>
+                    <div className="p-5">
+                      <div className="flex items-center justify-between gap-2">
+                        <Badge tone={meta.tone}>{meta.label}</Badge>
+                        <span className="text-xs font-semibold text-brand-blue">
+                          {ghs(p.budgetGhs)}
+                        </span>
+                      </div>
+                      <h3 className="mt-3 text-base font-bold text-brand-green-700">
+                        {p.name}
+                      </h3>
+                      <p className="mt-1 text-xs text-gray-400">{p.communityName}</p>
+                      {p.description && (
+                        <p className="mt-2 text-sm text-gray-600">{p.description}</p>
+                      )}
+                    </div>
+                  </div>
                 )
               })}
             </div>

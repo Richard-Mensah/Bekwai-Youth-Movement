@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { getTenureById } from "@/lib/data/governance"
 import { ORG } from "@/constants/nav"
 import { formatDate } from "@/lib/utils"
+import { avatarUrl } from "@/lib/images"
 import PrintButton from "@/components/features/governance/PrintButton"
 
 export const metadata = { title: "Member ID Card", robots: { index: false } }
@@ -33,8 +34,14 @@ export default async function IdCard({
         </div>
 
         <div className="flex gap-3 p-4">
-          <div className="flex h-20 w-16 shrink-0 items-center justify-center rounded-md bg-gray-100 text-[9px] text-gray-400">
-            PHOTO
+          <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-md bg-gray-100">
+            <Image
+              src={avatarUrl(officer.fullName, 128)}
+              alt={officer.fullName}
+              fill
+              sizes="64px"
+              className="object-cover"
+            />
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-brand-green-700">{officer.fullName}</p>

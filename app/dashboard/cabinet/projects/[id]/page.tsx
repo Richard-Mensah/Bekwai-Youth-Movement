@@ -1,6 +1,8 @@
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getProjectById, getExpenditures } from "@/lib/data/projects"
+import { placeholderImage } from "@/lib/images"
 import { PROJECT_STATUS_META, ghs } from "@/constants/projects"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import BudgetMeter from "@/components/features/projects/BudgetMeter"
@@ -37,6 +39,15 @@ export default async function ProjectDetailPage({
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="space-y-6">
           <Card>
+            <div className="relative -mx-6 -mt-6 mb-4 h-44 w-[calc(100%+3rem)] overflow-hidden rounded-t-xl bg-gray-100">
+              <Image
+                src={placeholderImage(project.id, 800, 360)}
+                alt={project.name}
+                fill
+                sizes="(max-width: 1024px) 100vw, 66vw"
+                className="object-cover"
+              />
+            </div>
             <div className="flex flex-wrap items-center gap-3">
               <Badge tone={meta.tone}>{meta.label}</Badge>
               {project.unitName && (
