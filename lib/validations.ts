@@ -54,6 +54,25 @@ export const recommendationSchema = z.object({
 })
 export type RecommendationInput = z.infer<typeof recommendationSchema>
 
+/** A new community development project. */
+export const projectSchema = z.object({
+  name: z.string().min(6, "Enter a project name (min 6 characters)"),
+  description: z.string().min(10, "Add a short description (min 10 characters)"),
+  communityId: z.coerce.number().int().min(1, "Select a community"),
+  unitId: z.coerce.number().int().optional(),
+  budgetGhs: z.coerce.number().min(0, "Budget cannot be negative").default(0),
+})
+export type ProjectInput = z.infer<typeof projectSchema>
+
+/** A recorded expenditure against a project. */
+export const expenditureSchema = z.object({
+  projectId: z.string().min(1),
+  amountGhs: z.coerce.number().positive("Enter an amount greater than 0"),
+  payee: z.string().min(2, "Enter the payee"),
+  purpose: z.string().min(3, "Enter the purpose"),
+})
+export type ExpenditureInput = z.infer<typeof expenditureSchema>
+
 export const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(1, "Enter your password"),
