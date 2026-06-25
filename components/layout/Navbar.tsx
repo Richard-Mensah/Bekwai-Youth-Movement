@@ -29,6 +29,7 @@ export default function Navbar() {
   }, [open])
 
   return (
+    <>
     <header
       className={cn(
         "sticky top-0 z-50 bg-white/90 backdrop-blur transition-shadow",
@@ -102,8 +103,11 @@ export default function Navbar() {
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </nav>
+      </header>
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer — rendered as a sibling of <header> so position:fixed
+          resolves against the viewport, not the header's backdrop-filter
+          containing block (which would otherwise collapse the panel height). */}
       <div
         className={cn(
           "fixed inset-x-0 top-[4.5rem] bottom-0 z-40 overflow-y-auto bg-white lg:hidden",
@@ -176,6 +180,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-    </header>
+    </>
   )
 }
