@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-brand-green: #1f4d3f;
+  --color-brand-red: #8e1b1b;
+  --color-brand-blue: #3c6e9f;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white text-ink antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif tracking-tight text-brand-green-700;
+  }
+}
+
+@layer components {
+  .container-content {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+  /* Subtle institutional section divider */
+  .rule-accent {
+    @apply h-1 w-16 rounded-full bg-brand-red;
+  }
+}
