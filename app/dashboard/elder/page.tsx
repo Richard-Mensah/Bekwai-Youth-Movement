@@ -1,51 +1,90 @@
+import { getEndorsements, getTacEngagements } from "@/lib/data/governance"
+import { humanize, formatDate } from "@/lib/utils"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
+import EndorsementActions from "@/components/features/governance/EndorsementActions"
+import TacEngagementForm from "@/components/features/governance/TacEngagementForm"
 import StatCard from "@/components/ui/StatCard"
 import Card from "@/components/ui/Card"
 import Button from "@/components/ui/Button"
-import EmptyState from "@/components/ui/EmptyState"
 
-export default function ElderDashboard() {
+export default async function ElderDashboard() {
+  const [endorsements, engagements] = await Promise.all([
+    getEndorsements(),
+    getTacEngagements(),
+  ])
+  const pending = endorsements.filter((e) => e.decision === "pending")
+
   return (
     <>
       <DashboardHeading
         title="Traditional Advisory Council"
-        subtitle="Read-only oversight & formal endorsements"
+        subtitle="Read-only oversight, endorsements, and engagement log"
       />
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Pending endorsements" value={0} hint="Awaiting your review" accent="red" />
+        <StatCard label="Pending endorsements" value={pending.length} accent="red" />
         <StatCard label="Communities" value={32} hint="Under advisory" accent="blue" />
-        <StatCard label="Annual durbar" value="—" hint="Accountability report" />
+        <StatCard label="Engagements logged" value={engagements.length} />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">
-            Endorsement requests
-          </h3>
+          <h3 className="text-sm font-bold text-brand-green-700">Endorsement requests</h3>
+          {pending.length === 0 ? (
+            <p className="mt-3 text-sm text-gray-500">No pending endorsements.</p>
+          ) : (
+            <ul className="mt-3 space-y-2">
+              {pending.map((e) => (
+                <li key={e.id} className="rounded-lg border border-gray-100 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-brand-red">
+                    {humanize(e.subjectType)}
+                  </p>
+                  <p className="mt-0.5 text-sm font-medium text-gray-700">{e.subjectLabel}</p>
+                  <div className="mt-2">
+                    <EndorsementActions id={e.id} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+
+        <Card>
+          <h3 className="text-sm font-bold text-brand-green-700">Log an engagement</h3>
+          <p className="mt-1 text-xs text-gray-500">
+            Courtesy calls, sensitisation, durbar accountability, dispute mediation.
+          </p>
           <div className="mt-4">
-            <EmptyState
-              title="Endorsement workflow arrives in Phase 6"
-              description="Review and formally endorse nominations, projects, and policies. Your role is read-only across the platform, with endorsement actions."
-              phase="Roadmap Phase 6"
-            />
+            <TacEngagementForm />
           </div>
         </Card>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Card>
-          <h3 className="text-sm font-bold text-brand-green-700">
-            Governance visibility
-          </h3>
+          <h3 className="text-sm font-bold text-brand-green-700">Recent engagements</h3>
+          <ul className="mt-3 space-y-2">
+            {engagements.map((g) => (
+              <li key={g.id} className="flex items-start justify-between gap-3 rounded-lg border border-gray-100 p-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-700">{humanize(g.kind)}</p>
+                  <p className="text-xs text-gray-500">{g.communityName}{g.summary ? ` — ${g.summary}` : ""}</p>
+                </div>
+                <span className="shrink-0 text-xs text-gray-400">{formatDate(g.occurredOn)}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+        <Card>
+          <h3 className="text-sm font-bold text-brand-green-700">Governance visibility</h3>
           <p className="mt-2 text-sm text-gray-600">
             As a Council member you can view leadership, projects, and published
             reports across the Movement.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Button href="/leadership" size="sm" variant="outline">
-              Leadership
-            </Button>
-            <Button href="/transparency" size="sm" variant="outline">
-              Transparency
-            </Button>
+            <Button href="/leadership" size="sm" variant="outline">Leadership</Button>
+            <Button href="/transparency" size="sm" variant="outline">Transparency</Button>
+            <Button href="/projects" size="sm" variant="outline">Projects</Button>
           </div>
         </Card>
       </div>

@@ -73,6 +73,17 @@ export const expenditureSchema = z.object({
 })
 export type ExpenditureInput = z.infer<typeof expenditureSchema>
 
+/** A nomination entering the vetting pipeline. */
+export const nominationSchema = z.object({
+  fullName: z.string().min(3, "Enter the nominee's full name"),
+  communityId: z.coerce.number().int().min(1, "Select a community"),
+  seatType: z.enum(["mp", "council_rep", "cin_officer"], {
+    message: "Select the seat",
+  }),
+  nominatedBy: z.string().optional(),
+})
+export type NominationInput = z.infer<typeof nominationSchema>
+
 export const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(1, "Enter your password"),

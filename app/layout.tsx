@@ -1,7 +1,8 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, Source_Serif_4 } from "next/font/google"
 import "./globals.css"
 import { ORG } from "@/constants/nav"
+import PwaRegister from "@/components/PwaRegister"
 
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const serif = Source_Serif_4({ subsets: ["latin"], variable: "--font-serif" })
@@ -27,6 +28,8 @@ export const metadata: Metadata = {
     "Volunteering for Change",
   ],
   icons: { icon: "/images/logo.jpg", apple: "/images/logo.jpg" },
+  appleWebApp: { capable: true, title: ORG.shortName, statusBarStyle: "default" },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     title: `${ORG.name} — ${ORG.motto}`,
     description:
@@ -45,6 +48,12 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  themeColor: "#1F4D3F",
+  width: "device-width",
+  initialScale: 1,
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -52,7 +61,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <PwaRegister />
+      </body>
     </html>
   )
 }

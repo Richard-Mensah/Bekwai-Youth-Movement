@@ -5,16 +5,18 @@ import StatCard from "@/components/ui/StatCard"
 import Card from "@/components/ui/Card"
 import Badge from "@/components/ui/Badge"
 import { COMMUNITY_COUNT } from "@/constants/communities"
+import { getGenderCompliance } from "@/lib/data/governance"
 
-const NEW_FEATURES = [
-  ["Nomination & Vetting Pipeline", "8-week, 5-step applicant tracking to Letters of Appointment.", "Phase 6"],
-  ['"No Community Left Without a Voice"', "Gap tracker for vacant seats + 3-tier interim protocol.", "Phase 6"],
-  ["Gender-Equality Monitor", "Live 40% female-representation compliance.", "Phase 1"],
-  ["Traditional Authority Workflow", "Courtesy calls, endorsements, durbar accountability.", "Phase 6"],
-  ["Term-Limit & Tenure Registry", "Tenure tracking + PDF appointment letters & ID cards.", "Phase 6"],
+const NEW_FEATURES: [string, string, string][] = [
+  ["Nomination & Vetting Pipeline", "8-week, 5-step applicant tracking to Letters of Appointment.", "/dashboard/admin/vetting"],
+  ['"No Community Left Without a Voice"', "Gap tracker for vacant seats + 3-tier interim protocol.", "/dashboard/admin/representation"],
+  ["Traditional Authority Workflow", "Courtesy calls, endorsements, durbar accountability.", "/dashboard/elder"],
+  ["Term-Limit & Tenure Registry", "Tenure tracking + printable appointment letters & ID cards.", "/dashboard/admin/tenure"],
+  ["Transparency Publishing", "Control budgets, scorecards, and reports on the public portal.", "/dashboard/admin/transparency"],
 ]
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
+  const gender = await getGenderCompliance()
   return (
     <>
       <DashboardHeading
@@ -35,11 +37,10 @@ export default function AdminDashboard() {
             40% Gender-Equality Compliance
           </h3>
           <p className="mt-1 text-xs text-gray-500">
-            Female representation by arm against the 40% constitutional floor
-            (sample data).
+            Female representation by arm against the 40% constitutional floor.
           </p>
           <div className="mt-4">
-            <GenderComplianceChart />
+            <GenderComplianceChart data={gender} />
           </div>
         </Card>
         <Card id="members">
@@ -67,14 +68,18 @@ export default function AdminDashboard() {
           Governance feature modules
         </h3>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {NEW_FEATURES.map(([title, desc, phase]) => (
-            <Card key={title}>
-              <div className="flex items-start justify-between gap-2">
-                <h4 className="text-sm font-bold text-brand-green-700">{title}</h4>
-                <Badge tone={phase === "Phase 1" ? "green" : "gray"}>{phase}</Badge>
-              </div>
+          {NEW_FEATURES.map(([title, desc, href]) => (
+            <Link
+              key={title}
+              href={href}
+              className="block rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition hover:border-brand-green"
+            >
+              <h4 className="text-sm font-bold text-brand-green-700">{title}</h4>
               <p className="mt-2 text-sm text-gray-600">{desc}</p>
-            </Card>
+              <span className="mt-3 inline-block text-sm font-medium text-brand-green">
+                Open →
+              </span>
+            </Link>
           ))}
         </div>
       </div>
