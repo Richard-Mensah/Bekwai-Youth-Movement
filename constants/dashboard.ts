@@ -4,7 +4,10 @@ export type NavItem = { label: string; href: string }
 
 /** Sidebar nav per role. Shared items first, then role-specific. */
 export const DASHBOARD_NAV: Record<string, NavItem[]> = {
-  base: [{ label: "Overview", href: "/dashboard" }],
+  base: [
+    { label: "Overview", href: "/dashboard" },
+    { label: "Account", href: "/dashboard/account" },
+  ],
   member: [
     { label: "My profile", href: "/dashboard/member" },
     { label: "My community", href: "/dashboard/member#community" },
