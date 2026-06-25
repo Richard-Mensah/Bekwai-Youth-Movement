@@ -49,8 +49,8 @@ export default function CinPage() {
               <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand-blue-50 text-brand-blue">
                 <Icon size={22} />
               </div>
-              <h3 className="mt-4 text-base font-bold text-brand-green-700">{label}</h3>
-              <p className="mt-1 text-sm text-gray-600">{desc}</p>
+              <h3 className="mt-4 text-base font-bold text-canopy">{label}</h3>
+              <p className="mt-1 text-sm text-ink/65">{desc}</p>
             </Card>
           ))}
         </div>
@@ -66,12 +66,12 @@ export default function CinPage() {
             {FLOW.map(([title, desc], i) => (
               <div key={title} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
                 <span className="text-xs font-bold text-brand-red">STEP {i + 1}</span>
-                <p className="mt-1 text-sm font-bold text-brand-green-700">{title}</p>
-                <p className="mt-1 text-xs text-gray-600">{desc}</p>
+                <p className="mt-1 text-sm font-bold text-canopy">{title}</p>
+                <p className="mt-1 text-xs text-ink/65">{desc}</p>
               </div>
             ))}
           </div>
-          <p className="mt-8 text-sm text-gray-500">
+          <p className="mt-8 text-sm text-ink/55">
             Live community heatmaps, trend charts, and development scores arrive with
             the CIN module (Phase 2). All published data is anonymised and aggregate,
             in line with Ghana&apos;s Data Protection Act, 2012.

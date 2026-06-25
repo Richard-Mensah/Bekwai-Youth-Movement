@@ -1,11 +1,20 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Source_Serif_4 } from "next/font/google"
+import { Public_Sans, Fraunces } from "next/font/google"
 import "./globals.css"
 import { ORG } from "@/constants/nav"
 import PwaRegister from "@/components/PwaRegister"
 
-const sans = Inter({ subsets: ["latin"], variable: "--font-sans" })
-const serif = Source_Serif_4({ subsets: ["latin"], variable: "--font-serif" })
+const sans = Public_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+})
+const display = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+  axes: ["opsz"],
+})
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
 
@@ -49,7 +58,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#1F4D3F",
+  themeColor: "#14342B",
   width: "device-width",
   initialScale: 1,
 }
@@ -60,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${sans.variable} ${serif.variable}`}>
+    <html lang="en" className={`${sans.variable} ${display.variable}`}>
       <body>
         {children}
         <PwaRegister />

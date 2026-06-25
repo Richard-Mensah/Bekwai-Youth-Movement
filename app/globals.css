@@ -6,6 +6,8 @@
   --color-brand-green: #1f4d3f;
   --color-brand-red: #8e1b1b;
   --color-brand-blue: #3c6e9f;
+  --color-canopy: #14342b;
+  --color-gold: #c9a24b;
 }
 
 @layer base {
@@ -14,12 +16,24 @@
   }
   body {
     @apply bg-white text-ink antialiased;
+    font-feature-settings: "ss01", "cv01";
   }
   h1,
   h2,
   h3,
   h4 {
-    @apply font-serif tracking-tight text-brand-green-700;
+    @apply font-display tracking-tight text-canopy;
+  }
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -27,8 +41,40 @@
   .container-content {
     @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
   }
-  /* Subtle institutional section divider */
+  /* Section vertical rhythm */
+  .section {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+  /* Gold civic eyebrow label */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-gold-600;
+  }
+  .eyebrow-light {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-gold-300;
+  }
+  /* Decorative rules */
   .rule-accent {
     @apply h-1 w-16 rounded-full bg-brand-red;
+  }
+  .civic-rule {
+    @apply h-px w-12 bg-gradient-to-r from-gold to-transparent;
+  }
+  /* Hero/section dark-surface texture */
+  .canopy-texture {
+    background-image: radial-gradient(
+        circle at 18% 18%,
+        rgba(201, 162, 75, 0.14),
+        transparent 42%
+      ),
+      radial-gradient(circle at 84% 8%, rgba(60, 110, 159, 0.16), transparent 40%);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
   }
 }

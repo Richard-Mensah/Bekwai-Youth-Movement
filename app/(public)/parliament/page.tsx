@@ -76,8 +76,8 @@ export default function ParliamentPage() {
               <div className="mt-6 space-y-3">
                 {OFFICERS.map(([role, desc]) => (
                   <div key={role} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-                    <p className="text-sm font-bold text-brand-green-700">{role}</p>
-                    <p className="mt-1 text-sm text-gray-600">{desc}</p>
+                    <p className="text-sm font-bold text-canopy">{role}</p>
+                    <p className="mt-1 text-sm text-ink/65">{desc}</p>
                   </div>
                 ))}
               </div>

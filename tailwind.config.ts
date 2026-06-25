@@ -37,15 +37,57 @@ const config: Config = {
             700: "#264667",
           },
         },
+        // Civic + Youth redesign tokens
+        canopy: {
+          DEFAULT: "#14342B",
+          50: "#eaf2ee",
+          100: "#cfe1d8",
+          500: "#14342B",
+          600: "#102a23",
+          700: "#0c201b",
+          800: "#081712",
+          900: "#050e0b",
+        },
+        gold: {
+          DEFAULT: "#C9A24B",
+          50: "#faf5e8",
+          100: "#f3e7c4",
+          200: "#e7cf8f",
+          300: "#dab85c",
+          400: "#C9A24B",
+          500: "#b78d35",
+          600: "#94702a",
+          700: "#6f5420",
+        },
         ink: "#111827",
-        paper: "#F8FAFC",
+        paper: "#F7F5EF",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        serif: ["var(--font-serif)", "Georgia", "serif"],
+        serif: ["var(--font-display)", "Georgia", "serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
       },
       maxWidth: {
-        content: "72rem",
+        content: "75rem",
+      },
+      keyframes: {
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+      },
+      animation: {
+        "fade-up": "fade-up 0.6s ease-out both",
+        marquee: "marquee 40s linear infinite",
+      },
+      boxShadow: {
+        card: "0 1px 2px rgba(16,42,35,0.04), 0 8px 24px -12px rgba(16,42,35,0.18)",
+        "card-hover":
+          "0 2px 4px rgba(16,42,35,0.06), 0 18px 40px -16px rgba(16,42,35,0.28)",
       },
     },
   },

@@ -60,12 +60,12 @@ export default async function ProjectsPage() {
                           {ghs(p.budgetGhs)}
                         </span>
                       </div>
-                      <h3 className="mt-3 text-base font-bold text-brand-green-700">
+                      <h3 className="mt-3 text-base font-bold text-canopy">
                         {p.name}
                       </h3>
                       <p className="mt-1 text-xs text-gray-400">{p.communityName}</p>
                       {p.description && (
-                        <p className="mt-2 text-sm text-gray-600">{p.description}</p>
+                        <p className="mt-2 text-sm text-ink/65">{p.description}</p>
                       )}
                     </div>
                   </div>

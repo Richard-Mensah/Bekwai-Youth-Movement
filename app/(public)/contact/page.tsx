@@ -1,16 +1,26 @@
 import type { Metadata } from "next"
 import { Mail, MapPin, Users } from "lucide-react"
 import PageHeader from "@/components/layout/PageHeader"
-import SectionHeading from "@/components/ui/SectionHeading"
-import Card from "@/components/ui/Card"
+import Reveal from "@/components/ui/Reveal"
 import Button from "@/components/ui/Button"
+import ContactForm from "@/components/features/public/ContactForm"
 import { ORG } from "@/constants/nav"
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with the Bekwai Youth Movement Secretariat in Sefwi Bekwai, Western North Region, Ghana.",
+    "Get in touch with the Bekwai Youth Movement Secretariat in Sefwi Bekwai, Western North Region, Ghana — for partnerships, media, or membership.",
 }
+
+const INFO = [
+  { icon: MapPin, title: "Location", body: ORG.region },
+  { icon: Mail, title: "Email", body: ORG.email },
+  {
+    icon: Users,
+    title: "Membership",
+    body: "Open to youth across all 32 communities.",
+  },
+]
 
 export default function ContactPage() {
   return (
@@ -18,46 +28,62 @@ export default function ContactPage() {
       <PageHeader
         eyebrow="Get in touch"
         title="Contact the Secretariat"
-        description="For partnerships, media, membership, or community engagement enquiries."
+        description="For partnerships, media, membership, or community engagement enquiries — we'd love to hear from you."
       />
 
-      <section className="container-content py-16">
-        <div className="grid gap-8 lg:grid-cols-3">
-          <Card>
-            <MapPin className="text-brand-green" />
-            <h3 className="mt-3 text-base font-bold text-brand-green-700">Location</h3>
-            <p className="mt-1 text-sm text-gray-600">{ORG.region}</p>
-          </Card>
-          <Card>
-            <Mail className="text-brand-green" />
-            <h3 className="mt-3 text-base font-bold text-brand-green-700">Email</h3>
-            <p className="mt-1 text-sm text-gray-600">{ORG.email}</p>
-          </Card>
-          <Card>
-            <Users className="text-brand-green" />
-            <h3 className="mt-3 text-base font-bold text-brand-green-700">Membership</h3>
-            <p className="mt-1 text-sm text-gray-600">
-              Open to youth across all 32 communities.
-            </p>
-            <div className="mt-3">
-              <Button href="/join" size="sm">
-                Join BYM
-              </Button>
-            </div>
-          </Card>
-        </div>
+      <section className="section">
+        <div className="container-content grid gap-12 lg:grid-cols-[1fr_1.2fr]">
+          {/* Info column */}
+          <Reveal className="space-y-4">
+            {INFO.map(({ icon: Icon, title, body }) => (
+              <div
+                key={title}
+                className="flex gap-4 rounded-2xl border border-canopy/10 bg-white p-5 shadow-card"
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-canopy-50 text-canopy">
+                  <Icon size={20} />
+                </span>
+                <div>
+                  <h3 className="font-semibold text-canopy">{title}</h3>
+                  <p className="mt-0.5 text-sm text-ink/65">{body}</p>
+                </div>
+              </div>
+            ))}
 
-        <div className="mt-12 rounded-2xl bg-brand-green-900 px-8 py-10 text-center text-white">
-          <SectionHeading
-            title="Partner with the Movement"
-            description="BYM works with NGOs, the Municipal Assembly, diaspora networks, and development partners to deliver SDG-aligned community impact."
-            centered
-          />
-          <div className="mt-6">
-            <Button href={`mailto:${ORG.email}`} variant="secondary" size="lg">
-              Email the Secretariat
-            </Button>
-          </div>
+            <div className="rounded-2xl bg-canopy p-6 text-white canopy-texture">
+              <h3 className="font-display text-lg font-semibold text-white">
+                Partner with the movement
+              </h3>
+              <p className="mt-2 text-sm text-white/75">
+                We work with NGOs, the Municipal Assembly, diaspora networks, and
+                development partners to deliver SDG-aligned community impact.
+              </p>
+              <div className="mt-4">
+                <Button
+                  href="/join"
+                  size="sm"
+                  className="bg-gold-400 text-canopy hover:bg-gold-300 focus-visible:ring-gold"
+                >
+                  Become a member
+                </Button>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Form column */}
+          <Reveal delay={0.1}>
+            <div className="rounded-3xl border border-canopy/10 bg-white p-6 shadow-card sm:p-8">
+              <h2 className="font-display text-2xl font-semibold text-canopy">
+                Send us a message
+              </h2>
+              <p className="mt-1 text-sm text-ink/60">
+                Tell us how we can help and the Secretariat will get back to you.
+              </p>
+              <div className="mt-6">
+                <ContactForm />
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
     </>

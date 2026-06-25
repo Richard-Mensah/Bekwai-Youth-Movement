@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import PageHeader from "@/components/layout/PageHeader"
+import GalleryGrid from "@/components/features/public/GalleryGrid"
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -35,23 +35,8 @@ export default function GalleryPage() {
         description="Community activities, leadership, and volunteering across Sefwi Bekwai — 2021 to 2024."
       />
 
-      <section className="container-content py-16">
-        <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 [&>*]:mb-4">
-          {PHOTOS.map((img) => (
-            <div
-              key={img}
-              className="relative overflow-hidden rounded-xl border border-gray-200"
-            >
-              <Image
-                src={`/images/history/${img}`}
-                alt="Bekwai Youth Movement activity"
-                width={500}
-                height={500}
-                className="h-auto w-full object-cover transition hover:scale-105"
-              />
-            </div>
-          ))}
-        </div>
+      <section className="container-content section">
+        <GalleryGrid photos={PHOTOS} />
       </section>
     </>
   )

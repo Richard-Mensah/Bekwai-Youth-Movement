@@ -44,7 +44,7 @@ export default async function TransparencyPage() {
             <SectionHeading title="Published budgets" />
             <div className="mt-4 overflow-x-auto">
               {budgets.length === 0 ? (
-                <p className="text-sm text-gray-500">No budgets published yet.</p>
+                <p className="text-sm text-ink/55">No budgets published yet.</p>
               ) : (
                 <table className="w-full text-left text-sm">
                   <thead>
@@ -58,8 +58,8 @@ export default async function TransparencyPage() {
                     {budgets.map((b) => (
                       <tr key={b.id} className="border-b border-gray-100">
                         <td className="py-2 pr-4 font-medium text-gray-700">{b.title}</td>
-                        <td className="py-2 pr-4 text-right text-gray-600">{ghs(b.incomeGhs)}</td>
-                        <td className="py-2 pr-4 text-right text-gray-600">{ghs(b.expenditureGhs)}</td>
+                        <td className="py-2 pr-4 text-right text-ink/65">{ghs(b.incomeGhs)}</td>
+                        <td className="py-2 pr-4 text-right text-ink/65">{ghs(b.expenditureGhs)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -70,7 +70,7 @@ export default async function TransparencyPage() {
 
           <Card>
             <SectionHeading title="SDG progress" />
-            <p className="mt-1 text-xs text-gray-500">Projects aligned to each goal</p>
+            <p className="mt-1 text-xs text-ink/55">Projects aligned to each goal</p>
             <div className="mt-4">
               <SdgProgress data={sdg} />
             </div>
@@ -109,7 +109,7 @@ export default async function TransparencyPage() {
                   <FileText size={18} className="mt-0.5 shrink-0 text-brand-green" />
                   <div>
                     <p className="text-sm font-medium text-gray-700">{r.title}</p>
-                    {r.summary && <p className="text-xs text-gray-500">{r.summary}</p>}
+                    {r.summary && <p className="text-xs text-ink/55">{r.summary}</p>}
                   </div>
                 </li>
               ))}

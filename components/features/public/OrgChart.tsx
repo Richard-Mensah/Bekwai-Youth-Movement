@@ -6,15 +6,15 @@ function PositionCard({ p, accent }: { p: CabinetPosition; accent?: boolean }) {
     <div
       className={
         accent
-          ? "rounded-lg border-2 border-brand-green bg-brand-green text-white px-4 py-3 text-center shadow"
-          : "rounded-lg border border-gray-200 bg-white px-4 py-3 text-center shadow-sm"
+          ? "rounded-xl border border-canopy bg-canopy px-4 py-3 text-center text-white shadow-card"
+          : "rounded-xl border border-canopy/10 bg-white px-4 py-3 text-center shadow-card"
       }
     >
-      <p className={accent ? "text-sm font-bold" : "text-sm font-semibold text-brand-green-700"}>
+      <p className={accent ? "text-sm font-bold" : "text-sm font-semibold text-canopy"}>
         {p.title}
       </p>
       {p.ukEquivalent && (
-        <p className={accent ? "text-[11px] text-brand-blue-100" : "text-[11px] text-gray-500"}>
+        <p className={accent ? "text-[11px] text-gold-300" : "text-[11px] text-ink/45"}>
           {p.ukEquivalent}
         </p>
       )}
@@ -40,10 +40,10 @@ export default function OrgChart() {
   return (
     <div className="space-y-8">
       <div>
-        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">
+        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-gold-600">
           Supreme authority
         </p>
-        <div className="mx-auto max-w-xs rounded-lg border border-dashed border-gray-300 bg-paper px-4 py-2 text-center text-sm text-gray-600">
+        <div className="mx-auto max-w-xs rounded-xl border border-dashed border-canopy/25 bg-paper px-4 py-2 text-center text-sm text-ink/60">
           BYM Founding Leadership
         </div>
       </div>
@@ -58,7 +58,7 @@ export default function OrgChart() {
       </div>
 
       <div>
-        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">
+        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-ink/45">
           Reports to the Director-General
         </p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -69,7 +69,7 @@ export default function OrgChart() {
       </div>
 
       <div>
-        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">
+        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-ink/45">
           Portfolio Secretaries & Officers
         </p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -80,7 +80,7 @@ export default function OrgChart() {
       </div>
 
       <div>
-        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">
+        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-ink/45">
           Deputies & support
         </p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

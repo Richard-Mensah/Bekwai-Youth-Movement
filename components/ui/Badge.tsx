@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 
-type Tone = "green" | "red" | "blue" | "gray" | "amber"
+type Tone = "green" | "red" | "blue" | "gray" | "amber" | "gold" | "canopy"
 
 type Props = {
   children: React.ReactNode
@@ -14,6 +14,8 @@ const TONES: Record<Tone, string> = {
   blue: "bg-brand-blue-50 text-brand-blue-700 ring-brand-blue-100",
   gray: "bg-gray-100 text-gray-700 ring-gray-200",
   amber: "bg-amber-50 text-amber-700 ring-amber-100",
+  gold: "bg-gold-50 text-gold-700 ring-gold-200",
+  canopy: "bg-canopy-50 text-canopy-700 ring-canopy-100",
 }
 
 export default function Badge({ children, tone = "green", className }: Props) {

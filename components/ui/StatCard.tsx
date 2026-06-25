@@ -4,7 +4,7 @@ type Props = {
   label: string
   value: string | number
   hint?: string
-  accent?: "green" | "red" | "blue"
+  accent?: "green" | "red" | "blue" | "gold"
   className?: string
 }
 
@@ -12,6 +12,7 @@ const ACCENT: Record<NonNullable<Props["accent"]>, string> = {
   green: "text-brand-green",
   red: "text-brand-red",
   blue: "text-brand-blue",
+  gold: "text-gold-600",
 }
 
 export default function StatCard({
@@ -24,15 +25,15 @@ export default function StatCard({
   return (
     <div
       className={cn(
-        "rounded-xl border border-gray-200 bg-white p-5 shadow-sm",
+        "rounded-2xl border border-canopy/10 bg-white p-5 shadow-card",
         className
       )}
     >
-      <p className="text-sm font-medium text-gray-500">{label}</p>
-      <p className={cn("mt-1 text-3xl font-bold font-serif", ACCENT[accent])}>
+      <p className="text-sm font-medium text-ink/55">{label}</p>
+      <p className={cn("mt-1 font-display text-3xl font-semibold", ACCENT[accent])}>
         {value}
       </p>
-      {hint && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
+      {hint && <p className="mt-1 text-xs text-ink/45">{hint}</p>}
     </div>
   )
 }
