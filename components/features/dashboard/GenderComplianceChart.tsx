@@ -36,7 +36,7 @@ export default function GenderComplianceChart({
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="arm" tick={{ fontSize: 12 }} />
           <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} unit="%" />
-          <Tooltip formatter={(v: number) => [`${v}%`, "Female"]} />
+          <Tooltip formatter={(value) => [`${value}%`, "Female"]} />
           <ReferenceLine
             y={FLOOR}
             stroke="#8E1B1B"

@@ -24,7 +24,7 @@ export default function BudgetChart({ data }: { data: Datum[] }) {
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="status" tick={{ fontSize: 11 }} />
           <YAxis tickFormatter={fmt} tick={{ fontSize: 11 }} />
-          <Tooltip formatter={(v: number) => `₵${v.toLocaleString()}`} />
+          <Tooltip formatter={(value) => `₵${Number(value).toLocaleString()}`} />
           <Legend />
           <Bar dataKey="budget" name="Budget" fill="#3C6E9F" radius={[4, 4, 0, 0]} />
           <Bar dataKey="spent" name="Spent" fill="#1F4D3F" radius={[4, 4, 0, 0]} />
