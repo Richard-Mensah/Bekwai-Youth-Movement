@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { Send } from "lucide-react"
+import { useState, useTransition } from "react"
+import { Send, CheckCircle2 } from "lucide-react"
 import Input from "@/components/ui/Input"
-import { ORG } from "@/constants/nav"
+import { submitContact } from "@/app/actions/contact"
 
 const TOPICS = [
   "Partnership / collaboration",
@@ -13,20 +13,20 @@ const TOPICS = [
   "Other",
 ]
 
-/**
- * Composes a pre-filled email to the Secretariat (mailto). Keeps the contact
- * channel working with no backend; swap for a Supabase insert later if desired.
- */
+/** Sends a contact enquiry to Supabase (contact_messages) via a server action. */
 export default function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [serverError, setServerError] = useState<string | null>(null)
+  const [done, setDone] = useState(false)
+  const [pending, startTransition] = useTransition()
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setServerError(null)
     const form = e.currentTarget
     const data = new FormData(form)
     const name = String(data.get("name") ?? "").trim()
     const email = String(data.get("email") ?? "").trim()
-    const topic = String(data.get("topic") ?? "")
     const message = String(data.get("message") ?? "").trim()
 
     const next: Record<string, string> = {}
@@ -37,11 +37,25 @@ export default function ContactForm() {
     setErrors(next)
     if (Object.keys(next).length > 0) return
 
-    const subject = encodeURIComponent(`[${topic}] enquiry from ${name}`)
-    const body = encodeURIComponent(
-      `${message}\n\n— ${name}\n${email}`
+    startTransition(async () => {
+      const res = await submitContact(data)
+      if (res.ok) setDone(true)
+      else setServerError(res.error ?? "Something went wrong.")
+    })
+  }
+
+  if (done) {
+    return (
+      <div className="flex flex-col items-center rounded-2xl border border-gold-200 bg-gold-50 p-8 text-center">
+        <CheckCircle2 size={36} className="text-gold-600" />
+        <h3 className="mt-3 font-display text-xl font-semibold text-canopy">
+          Message sent
+        </h3>
+        <p className="mt-1 text-sm text-ink/65">
+          Thank you for reaching out — the Secretariat will get back to you soon.
+        </p>
+      </div>
     )
-    window.location.href = `mailto:${ORG.email}?subject=${subject}&body=${body}`
   }
 
   return (
@@ -58,10 +72,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label
-          htmlFor="topic"
-          className="block text-sm font-medium text-ink/75"
-        >
+        <label htmlFor="topic" className="block text-sm font-medium text-ink/75">
           Reason for contact
         </label>
         <select
@@ -76,10 +87,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label
-          htmlFor="message"
-          className="block text-sm font-medium text-ink/75"
-        >
+        <label htmlFor="message" className="block text-sm font-medium text-ink/75">
           Message
         </label>
         <textarea
@@ -94,15 +102,16 @@ export default function ContactForm() {
         )}
       </div>
 
+      {serverError && <p className="text-sm text-brand-red">{serverError}</p>}
+
       <button
         type="submit"
-        className="inline-flex items-center gap-2 rounded-full bg-canopy px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
+        disabled={pending}
+        className="inline-flex items-center gap-2 rounded-full bg-canopy px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-canopy-600 disabled:opacity-60"
       >
-        Send message <Send size={16} />
+        {pending ? "Sending…" : "Send message"}
+        {!pending && <Send size={16} />}
       </button>
-      <p className="text-xs text-ink/45">
-        This opens your email app with the message pre-filled to {ORG.email}.
-      </p>
     </form>
   )
 }

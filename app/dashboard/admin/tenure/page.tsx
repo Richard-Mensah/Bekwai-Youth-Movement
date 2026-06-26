@@ -29,7 +29,7 @@ export default async function TenurePage() {
 
       <div className="mt-6">
         <Card>
-          <div className="overflow-x-auto">
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-ink/45">
@@ -73,6 +73,39 @@ export default async function TenurePage() {
               </tbody>
             </table>
           </div>
+
+          {/* Mobile: stacked cards */}
+          <ul className="space-y-3 md:hidden">
+            {rows.map((r) => (
+              <li key={r.id} className="rounded-xl border border-gray-200 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium text-gray-700">{r.fullName}</p>
+                    <p className="text-xs text-ink/65">{r.positionTitle}</p>
+                  </div>
+                  {r.expired ? (
+                    <Badge tone="red">Expired</Badge>
+                  ) : r.expiringSoon ? (
+                    <Badge tone="amber">Expiring</Badge>
+                  ) : (
+                    <Badge tone="green">Active</Badge>
+                  )}
+                </div>
+                <p className="mt-2 text-xs text-ink/55">
+                  {r.termStart ? formatDate(r.termStart) : "—"} →{" "}
+                  {r.termEnd ? formatDate(r.termEnd) : "—"}
+                </p>
+                <div className="mt-3 flex gap-4 border-t border-gray-100 pt-3">
+                  <Link href={`/print/appointment/${r.id}`} className="text-xs font-medium text-brand-green hover:underline">
+                    Letter
+                  </Link>
+                  <Link href={`/print/id-card/${r.id}`} className="text-xs font-medium text-brand-blue hover:underline">
+                    ID card
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
         </Card>
       </div>
     </>

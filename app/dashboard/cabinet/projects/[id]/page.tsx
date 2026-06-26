@@ -67,7 +67,7 @@ export default async function ProjectDetailPage({
 
           <Card>
             <h3 className="text-sm font-bold text-canopy">Expenditure</h3>
-            <div className="mt-3 overflow-x-auto">
+            <div className="mt-3 hidden overflow-x-auto md:block">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-ink/45">
@@ -98,6 +98,25 @@ export default async function ProjectDetailPage({
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile: stacked cards */}
+            <ul className="mt-3 space-y-2 md:hidden">
+              {expenditures.map((e) => (
+                <li key={e.id} className="rounded-xl border border-gray-200 p-3">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <p className="font-medium text-gray-700">{e.payee}</p>
+                    <p className="shrink-0 font-medium text-gray-700">{ghs(e.amountGhs)}</p>
+                  </div>
+                  <p className="mt-0.5 text-xs text-ink/65">{e.purpose}</p>
+                  <p className="mt-1 text-[11px] text-ink/45">{formatDate(e.spentOn)}</p>
+                </li>
+              ))}
+              {expenditures.length === 0 && (
+                <li className="rounded-xl border border-dashed border-gray-200 p-4 text-center text-xs text-ink/45">
+                  No expenditure recorded yet.
+                </li>
+              )}
+            </ul>
             <div className="mt-4 border-t border-gray-100 pt-4">
               <ExpenditureForm projectId={project.id} />
             </div>
