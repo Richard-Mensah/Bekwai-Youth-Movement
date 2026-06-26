@@ -30,6 +30,7 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
     { label: "Administration", href: "/dashboard/admin" },
     { label: "Members & vetting", href: "/dashboard/admin#members" },
     { label: "Compliance", href: "/dashboard/admin#compliance" },
+    { label: "Inbox", href: "/dashboard/admin/inbox" },
     { label: "Transparency publishing", href: "/dashboard/admin/transparency" },
   ],
 }

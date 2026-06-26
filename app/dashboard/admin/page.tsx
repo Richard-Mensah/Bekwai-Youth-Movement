@@ -14,6 +14,7 @@ const NEW_FEATURES: [string, string, string][] = [
   ["Traditional Authority Workflow", "Courtesy calls, endorsements, durbar accountability.", "/dashboard/elder"],
   ["Term-Limit & Tenure Registry", "Tenure tracking + printable appointment letters & ID cards.", "/dashboard/admin/tenure"],
   ["Transparency Publishing", "Control budgets, scorecards, and reports on the public portal.", "/dashboard/admin/transparency"],
+  ["Inbox", "Read contact enquiries and newsletter subscribers from the public site.", "/dashboard/admin/inbox"],
 ]
 
 export default async function AdminDashboard() {
