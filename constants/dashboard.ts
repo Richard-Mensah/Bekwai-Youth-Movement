@@ -33,6 +33,16 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
     { label: "Inbox", href: "/dashboard/admin/inbox" },
     { label: "Transparency publishing", href: "/dashboard/admin/transparency" },
   ],
+  content: [
+    { label: "Content Studio", href: "/dashboard/admin/content" },
+    { label: "Posts & Blog", href: "/dashboard/admin/content/posts" },
+    { label: "Leadership", href: "/dashboard/admin/content/leaders" },
+    { label: "Gallery", href: "/dashboard/admin/content/gallery" },
+    { label: "Events", href: "/dashboard/admin/content/events" },
+    { label: "Partners", href: "/dashboard/admin/content/partners" },
+    { label: "Communities", href: "/dashboard/admin/content/communities" },
+    { label: "Site settings", href: "/dashboard/admin/content/settings" },
+  ],
 }
 
 /** Which sidebar groups each role sees. */
@@ -42,8 +52,8 @@ export const ROLE_NAV_GROUPS: Record<Role, string[]> = {
   volunteer: ["base", "member"],
   cin_officer: ["base", "cin"],
   mp: ["base", "mp"],
-  secretary: ["base", "cabinet"],
+  secretary: ["base", "content", "cabinet"],
   elder: ["base", "elder"],
-  admin: ["base", "admin", "cin", "mp", "cabinet"],
-  super_admin: ["base", "admin", "cin", "mp", "cabinet", "elder"],
+  admin: ["base", "admin", "content", "cin", "mp", "cabinet"],
+  super_admin: ["base", "admin", "content", "cin", "mp", "cabinet", "elder"],
 }
