@@ -1,8 +1,10 @@
 import type { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import PageHeader from "@/components/layout/PageHeader"
 import Badge from "@/components/ui/Badge"
-import { NEWS } from "@/constants/news"
+import { getPublishedPosts } from "@/lib/data/content"
 import { ORG } from "@/constants/nav"
 
 export const metadata: Metadata = {
@@ -11,7 +13,8 @@ export const metadata: Metadata = {
     "Bekwai Youth Movement on the local and global stage — summits, partnerships, and stories from our communities.",
 }
 
-function formatDate(iso: string) {
+function formatDate(iso: string | null) {
+  if (!iso) return ""
   return new Date(iso).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "long",
@@ -19,7 +22,9 @@ function formatDate(iso: string) {
   })
 }
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const posts = await getPublishedPosts()
+
   return (
     <>
       <PageHeader
@@ -30,40 +35,46 @@ export default function NewsPage() {
 
       <section className="section">
         <div className="container-content grid gap-6 md:grid-cols-2">
-          {NEWS.map((item) => (
-            <a
-              key={item.title}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex flex-col rounded-2xl border border-canopy/10 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+          {posts.map((post) => (
+            <Link
+              key={post.id}
+              href={`/news/${post.slug}`}
+              className="group flex flex-col overflow-hidden rounded-2xl border border-canopy/10 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gold-600">
-                  {item.context}
-                </span>
-                <ArrowUpRight
-                  size={18}
-                  className="text-ink/30 transition-colors group-hover:text-canopy"
-                />
-              </div>
-              <h2 className="mt-3 font-display text-xl font-semibold leading-snug text-canopy">
-                {item.title}
-              </h2>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/65">
-                {item.summary}
-              </p>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs text-ink/45">{formatDate(item.date)}</span>
-                <div className="flex gap-1.5">
-                  {item.sdg?.slice(0, 3).map((g) => (
-                    <Badge key={g} tone="canopy">
-                      SDG {g}
-                    </Badge>
-                  ))}
+              {post.coverUrl && (
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={post.coverUrl}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+              )}
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-gold-600">
+                    {post.tags[0] ?? "News"}
+                  </span>
+                  <ArrowUpRight
+                    size={18}
+                    className="text-ink/30 transition-colors group-hover:text-canopy"
+                  />
+                </div>
+                <h2 className="mt-3 font-display text-xl font-semibold leading-snug text-canopy">
+                  {post.title}
+                </h2>
+                {post.excerpt && (
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/65">
+                    {post.excerpt}
+                  </p>
+                )}
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-xs text-ink/45">{formatDate(post.publishedAt)}</span>
+                  {post.tags[0] && <Badge tone="canopy">{post.tags[0]}</Badge>}
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
 

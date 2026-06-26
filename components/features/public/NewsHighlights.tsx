@@ -1,18 +1,21 @@
+import Link from "next/link"
+import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 import SectionHeading from "@/components/ui/SectionHeading"
 import Reveal from "@/components/ui/Reveal"
 import Badge from "@/components/ui/Badge"
-import { FEATURED_NEWS } from "@/constants/news"
+import { getPublishedPosts } from "@/lib/data/content"
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    month: "short",
-    year: "numeric",
-  })
+function formatDate(iso: string | null) {
+  if (!iso) return ""
+  return new Date(iso).toLocaleDateString("en-GB", { month: "short", year: "numeric" })
 }
 
-/** "BYM on the global stage" — real international participation, from Medium. */
-export default function NewsHighlights() {
+/** "BYM on the global stage" — latest published posts from the CMS. */
+export default async function NewsHighlights() {
+  const posts = await getPublishedPosts(4)
+  if (posts.length === 0) return null
+
   return (
     <section className="section bg-paper">
       <div className="container-content">
@@ -20,48 +23,58 @@ export default function NewsHighlights() {
           <SectionHeading
             eyebrow="On the global stage"
             title="Youth from Sefwi Bekwai, engaging the world"
-            description="Since 2023, BYM delegates have represented our communities at international summits on climate, biodiversity, and the Sustainable Development Goals."
+            description="Stories, summits, and milestones from the movement — published straight from our newsroom."
           />
-          <a
+          <Link
             href="/news"
             className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-canopy hover:text-canopy-600"
           >
             All news & press
             <ArrowUpRight size={16} />
-          </a>
+          </Link>
         </Reveal>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURED_NEWS.map((item, i) => (
-            <Reveal key={item.title} delay={(i % 4) * 0.06}>
-              <a
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex h-full flex-col rounded-2xl border border-canopy/10 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+          {posts.map((post, i) => (
+            <Reveal key={post.id} delay={(i % 4) * 0.06}>
+              <Link
+                href={`/news/${post.slug}`}
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-canopy/10 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-gold-600">
-                    {item.context}
-                  </span>
-                  <ArrowUpRight
-                    size={18}
-                    className="text-ink/30 transition-colors group-hover:text-canopy"
-                  />
-                </div>
-                <h3 className="mt-3 font-display text-base font-semibold leading-snug text-canopy">
-                  {item.title}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/60">
-                  {item.summary}
-                </p>
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-xs text-ink/45">{formatDate(item.date)}</span>
-                  {item.sdg && item.sdg.length > 0 && (
-                    <Badge tone="canopy">SDG {item.sdg[0]}</Badge>
+                {post.coverUrl && (
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <Image
+                      src={post.coverUrl}
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-gold-600">
+                      {post.tags[0] ?? "News"}
+                    </span>
+                    <ArrowUpRight
+                      size={18}
+                      className="text-ink/30 transition-colors group-hover:text-canopy"
+                    />
+                  </div>
+                  <h3 className="mt-3 font-display text-base font-semibold leading-snug text-canopy">
+                    {post.title}
+                  </h3>
+                  {post.excerpt && (
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/60">
+                      {post.excerpt}
+                    </p>
                   )}
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="text-xs text-ink/45">{formatDate(post.publishedAt)}</span>
+                    {post.tags[0] && <Badge tone="canopy">{post.tags[0]}</Badge>}
+                  </div>
                 </div>
-              </a>
+              </Link>
             </Reveal>
           ))}
         </div>

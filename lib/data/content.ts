@@ -159,10 +159,11 @@ export async function getAllPosts(): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  if (!isSupabaseConfigured()) return null
+  const fromFallback = () => newsToPosts().find((p) => p.slug === slug) ?? null
+  if (!isSupabaseConfigured()) return fromFallback()
   const supabase = await createClient()
   const { data } = await supabase.from("posts").select("*").eq("slug", slug).single()
-  return data ? mapPost(data) : null
+  return data ? mapPost(data) : fromFallback()
 }
 
 export async function getPostById(id: string): Promise<Post | null> {
