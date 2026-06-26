@@ -4,7 +4,7 @@ import SectionHeading from "@/components/ui/SectionHeading"
 import Reveal from "@/components/ui/Reveal"
 import OrgChart from "@/components/features/public/OrgChart"
 import LeadershipGrid from "@/components/features/public/LeadershipGrid"
-import { LEADERSHIP_TIERS } from "@/constants/leadership"
+import { getLeaderTiers } from "@/lib/data/content"
 
 export const metadata: Metadata = {
   title: "Leadership & Cabinet",
@@ -12,8 +12,9 @@ export const metadata: Metadata = {
     "The Bekwai Youth Movement leadership — a 19-member Civic Cabinet led by the Director-General, with the Youth Parliament, Community Intelligence Network, and Traditional Advisory Council.",
 }
 
-export default function LeadershipPage() {
-  const [cabinet, ...rest] = LEADERSHIP_TIERS
+export default async function LeadershipPage() {
+  const tiers = await getLeaderTiers()
+  const [cabinet, ...rest] = tiers
 
   return (
     <>
@@ -60,7 +61,7 @@ export default function LeadershipPage() {
       {/* Executive Cabinet roster */}
       <section className="section bg-paper">
         <div className="container-content">
-          <LeadershipGrid tier={cabinet} />
+          {cabinet && <LeadershipGrid tier={cabinet} />}
           <p className="mt-8 text-sm text-ink/50">
             Names and portraits are added as appointments are confirmed (Cabinet
             appointments: 2026). Office holders shown without a name are pending

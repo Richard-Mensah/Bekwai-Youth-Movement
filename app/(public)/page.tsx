@@ -10,11 +10,18 @@ import NewsHighlights from "@/components/features/public/NewsHighlights"
 import RepresentationBand from "@/components/features/public/RepresentationBand"
 import CredibilityBand from "@/components/features/public/CredibilityBand"
 import GetInvolved from "@/components/features/public/GetInvolved"
+import { getSettings } from "@/lib/data/content"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await getSettings()
   return (
     <>
-      <Hero />
+      <Hero
+        eyebrow={settings.heroEyebrow}
+        title={settings.heroTitle}
+        subtitle={settings.heroSubtitle}
+        foundingDate={settings.foundingDate}
+      />
       <TrustBar />
       <MissionIntro />
       <ImpactStats />

@@ -7,7 +7,19 @@ import Button from "@/components/ui/Button"
 import Countdown from "@/components/ui/Countdown"
 import { ORG } from "@/constants/nav"
 
-export default function Hero() {
+type Props = {
+  eyebrow?: string
+  title?: string
+  subtitle?: string
+  foundingDate?: string
+}
+
+export default function Hero({
+  eyebrow = ORG.region,
+  title = "Harnessing the potential of every young person in Sefwi Bekwai",
+  subtitle = "A non-political youth movement building structured governance, community intelligence, and volunteerism across 32 communities — aligned with the UN Sustainable Development Goals.",
+  foundingDate = ORG.foundingDate,
+}: Props) {
   const reduce = useReducedMotion()
   const container: Variants = {
     hidden: {},
@@ -44,28 +56,23 @@ export default function Hero() {
         className="container-content relative grid items-center gap-12 py-20 md:grid-cols-[1.5fr_1fr] md:py-28"
       >
         <div>
-          <motion.p
-            variants={item}
-            className="eyebrow-light"
-          >
+          <motion.p variants={item} className="eyebrow-light">
             <span className="h-px w-6 bg-gold-400" />
-            {ORG.region}
+            {eyebrow}
           </motion.p>
 
           <motion.h1
             variants={item}
             className="mt-5 max-w-2xl font-display text-4xl font-semibold leading-[1.05] text-white text-balance sm:text-5xl lg:text-6xl"
           >
-            Harnessing the potential of every young person in Sefwi Bekwai
+            {title}
           </motion.h1>
 
           <motion.p
             variants={item}
             className="mt-6 max-w-xl text-lg leading-relaxed text-white/75 text-pretty"
           >
-            A non-political youth movement building structured governance,
-            community intelligence, and volunteerism across 32 communities —
-            aligned with the UN Sustainable Development Goals.
+            {subtitle}
           </motion.p>
 
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
@@ -91,7 +98,7 @@ export default function Hero() {
                 <span className="font-semibold text-white">12 January 2027</span>
               </p>
             </div>
-            <Countdown to={ORG.foundingDate} />
+            <Countdown to={foundingDate} />
           </motion.div>
         </div>
 

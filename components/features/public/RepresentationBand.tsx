@@ -1,7 +1,7 @@
 import { Vote, Users, Radar } from "lucide-react"
 import SectionHeading from "@/components/ui/SectionHeading"
 import Reveal from "@/components/ui/Reveal"
-import { COMMUNITIES } from "@/constants/communities"
+import { getCommunities } from "@/lib/data/content"
 
 const SEATS = [
   {
@@ -25,7 +25,8 @@ const SEATS = [
 ]
 
 /** "No community left without a voice" — the 3-rep model + 32-community grid. */
-export default function RepresentationBand() {
+export default async function RepresentationBand() {
+  const communities = await getCommunities()
   return (
     <section className="section">
       <div className="container-content grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
@@ -72,7 +73,7 @@ export default function RepresentationBand() {
               communities, each with a seat at the table
             </p>
             <div className="mt-6 flex flex-wrap gap-1.5">
-              {COMMUNITIES.map((c) => (
+              {communities.map((c) => (
                 <span
                   key={c.id}
                   className={`rounded-md px-2.5 py-1 text-xs font-medium ${

@@ -3,6 +3,7 @@ import Image from "next/image"
 import { Mail, MapPin, ArrowRight } from "lucide-react"
 import { FOOTER_NAV, ORG } from "@/constants/nav"
 import NewsletterForm from "@/components/features/public/NewsletterForm"
+import { getSettings } from "@/lib/data/content"
 
 const TRUST = [
   "Aligned with UN SDGs 2030",
@@ -11,7 +12,10 @@ const TRUST = [
   "Serving 32 communities",
 ]
 
-export default function Footer() {
+export default async function Footer() {
+  const settings = await getSettings()
+  const email = settings.email || ORG.email
+  const medium = settings.medium || ORG.medium
   return (
     <footer className="canopy-texture bg-canopy text-white/70">
       {/* Newsletter band */}
@@ -59,7 +63,7 @@ export default function Footer() {
             Intelligence Network.
           </p>
           <a
-            href={ORG.medium}
+            href={medium}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-gold-300 hover:text-gold-200"
@@ -94,8 +98,8 @@ export default function Footer() {
             </li>
             <li className="flex gap-2.5">
               <Mail size={16} className="mt-0.5 shrink-0 text-gold-300" />
-              <a href={`mailto:${ORG.email}`} className="hover:text-white">
-                {ORG.email}
+              <a href={`mailto:${email}`} className="hover:text-white">
+                {email}
               </a>
             </li>
             <li className="pt-1">

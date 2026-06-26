@@ -4,6 +4,7 @@ import { slugify } from "@/lib/cms"
 import { NEWS } from "@/constants/news"
 import { LEADERSHIP_TIERS } from "@/constants/leadership"
 import { GALLERY_PHOTOS } from "@/constants/gallery"
+import { COMMUNITIES } from "@/constants/communities"
 import { ORG } from "@/constants/nav"
 
 // ---------- Types ----------
@@ -229,6 +230,21 @@ export async function getGallery(): Promise<GalleryItem[]> {
   }))
 }
 
+export async function getAllGallery(): Promise<GalleryItem[]> {
+  if (!isSupabaseConfigured()) return []
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("gallery_images")
+    .select("*")
+    .order("sort_order", { ascending: true })
+  return (data ?? []).map((r) => ({
+    id: r.id,
+    url: publicUrl(r.path) ?? "",
+    caption: r.caption ?? "",
+    sortOrder: r.sort_order,
+  }))
+}
+
 export async function getPublishedEvents(): Promise<EventItem[]> {
   if (!isSupabaseConfigured()) return fallbackEvents()
   const supabase = await createClient()
@@ -300,6 +316,24 @@ export async function getSettings(): Promise<SiteSettings> {
     ...stored,
     stats: { ...DEFAULT_SETTINGS.stats, ...(stored.stats ?? {}) },
   }
+}
+
+export type CommunityItem = { id: number; name: string; isTown: boolean }
+
+export async function getCommunities(): Promise<CommunityItem[]> {
+  const fallback = COMMUNITIES.map((c) => ({
+    id: c.id,
+    name: c.name,
+    isTown: c.isTown,
+  }))
+  if (!isSupabaseConfigured()) return fallback
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("communities")
+    .select("id, name, is_town")
+    .order("id", { ascending: true })
+  if (!data || data.length === 0) return fallback
+  return data.map((r) => ({ id: r.id, name: r.name, isTown: r.is_town }))
 }
 
 export type ContentCounts = {

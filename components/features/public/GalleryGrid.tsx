@@ -5,14 +5,16 @@ import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 import { X, ChevronLeft, ChevronRight } from "lucide-react"
 
-export default function GalleryGrid({ photos }: { photos: string[] }) {
+type Item = { url: string; caption?: string }
+
+export default function GalleryGrid({ images }: { images: Item[] }) {
   const [active, setActive] = useState<number | null>(null)
 
   const close = () => setActive(null)
   const prev = () =>
-    setActive((i) => (i === null ? i : (i - 1 + photos.length) % photos.length))
+    setActive((i) => (i === null ? i : (i - 1 + images.length) % images.length))
   const next = () =>
-    setActive((i) => (i === null ? i : (i + 1) % photos.length))
+    setActive((i) => (i === null ? i : (i + 1) % images.length))
 
   useEffect(() => {
     if (active === null) return
@@ -32,16 +34,17 @@ export default function GalleryGrid({ photos }: { photos: string[] }) {
   return (
     <>
       <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 [&>*]:mb-4">
-        {photos.map((img, i) => (
+        {images.map((img, i) => (
           <button
-            key={img}
+            key={img.url + i}
             type="button"
+            aria-label={img.caption || "View photo"}
             onClick={() => setActive(i)}
             className="group relative block w-full overflow-hidden rounded-xl border border-canopy/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
           >
             <Image
-              src={`/images/history/${img}`}
-              alt="Bekwai Youth Movement activity"
+              src={img.url}
+              alt={img.caption || "Bekwai Youth Movement activity"}
               width={500}
               height={500}
               className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -91,12 +94,17 @@ export default function GalleryGrid({ photos }: { photos: string[] }) {
               onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={`/images/history/${photos[active]}`}
-                alt="Bekwai Youth Movement activity"
+                src={images[active].url}
+                alt={images[active].caption || "Bekwai Youth Movement activity"}
                 width={1200}
                 height={900}
                 className="mx-auto max-h-[85vh] w-auto rounded-xl object-contain"
               />
+              {images[active].caption && (
+                <p className="mt-3 text-center text-sm text-white/80">
+                  {images[active].caption}
+                </p>
+              )}
             </motion.div>
             <button
               type="button"
