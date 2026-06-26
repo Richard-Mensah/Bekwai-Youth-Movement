@@ -17,6 +17,7 @@ type SendArgs = {
   html: string
   text?: string
   replyTo?: string
+  bcc?: string | string[]
 }
 
 /**
@@ -32,6 +33,7 @@ export async function sendEmail(
     const { error } = await resend.emails.send({
       from: FROM,
       to: args.to,
+      bcc: args.bcc,
       subject: args.subject,
       html: args.html,
       text: args.text,

@@ -1,11 +1,18 @@
 import Link from "next/link"
-import { Mail } from "lucide-react"
+import { Mail, Download, Send } from "lucide-react"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import StatCard from "@/components/ui/StatCard"
 import Card from "@/components/ui/Card"
 import Badge from "@/components/ui/Badge"
+import MessageStatusActions from "./MessageStatusActions"
 import { getContactMessages, getSubscribers } from "@/lib/data/admin"
 import { formatDate } from "@/lib/utils"
+
+const STATUS_TONE: Record<string, "amber" | "green" | "gray"> = {
+  new: "amber",
+  read: "green",
+  archived: "gray",
+}
 
 export const metadata = { title: "Inbox" }
 
@@ -40,9 +47,19 @@ export default async function InboxPage() {
 
       {/* Contact messages */}
       <div className="mt-8">
-        <h3 className="mb-3 font-display text-base font-semibold text-canopy">
-          Contact messages
-        </h3>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="font-display text-base font-semibold text-canopy">
+            Contact messages
+          </h3>
+          {messages.length > 0 && (
+            <a
+              href="/dashboard/admin/inbox/messages"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-canopy hover:underline"
+            >
+              <Download size={14} /> Export CSV
+            </a>
+          )}
+        </div>
         {messages.length === 0 ? (
           <Card>
             <p className="text-sm text-ink/55">
@@ -65,6 +82,7 @@ export default async function InboxPage() {
                       </a>
                     </div>
                     <div className="flex items-center gap-2">
+                      <Badge tone={STATUS_TONE[m.status] ?? "gray"}>{m.status}</Badge>
                       {m.topic && <Badge tone="canopy">{m.topic}</Badge>}
                       <span className="text-xs text-ink/45">
                         {formatDate(m.createdAt)}
@@ -74,12 +92,15 @@ export default async function InboxPage() {
                   <p className="mt-3 whitespace-pre-wrap border-t border-gray-100 pt-3 text-sm leading-relaxed text-ink/70">
                     {m.message}
                   </p>
-                  <a
-                    href={`mailto:${m.email}?subject=Re: your message to Bekwai Youth Movement`}
-                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-canopy hover:underline"
-                  >
-                    <Mail size={15} /> Reply
-                  </a>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-3">
+                    <a
+                      href={`mailto:${m.email}?subject=Re: your message to Bekwai Youth Movement`}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-canopy hover:underline"
+                    >
+                      <Mail size={15} /> Reply
+                    </a>
+                    <MessageStatusActions id={m.id} status={m.status} />
+                  </div>
                 </Card>
               </li>
             ))}
@@ -89,9 +110,27 @@ export default async function InboxPage() {
 
       {/* Subscribers */}
       <div className="mt-8">
-        <h3 className="mb-3 font-display text-base font-semibold text-canopy">
-          Newsletter subscribers
-        </h3>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <h3 className="font-display text-base font-semibold text-canopy">
+            Newsletter subscribers
+          </h3>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/dashboard/admin/inbox/broadcast"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-canopy hover:underline"
+            >
+              <Send size={14} /> Compose broadcast
+            </Link>
+            {subscribers.length > 0 && (
+              <a
+                href="/dashboard/admin/inbox/subscribers"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-canopy hover:underline"
+              >
+                <Download size={14} /> Export CSV
+              </a>
+            )}
+          </div>
+        </div>
         <Card>
           {subscribers.length === 0 ? (
             <p className="text-sm text-ink/55">

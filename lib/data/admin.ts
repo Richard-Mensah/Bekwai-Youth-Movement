@@ -40,6 +40,7 @@ export type ContactMessage = {
   email: string
   topic: string | null
   message: string
+  status: string
   createdAt: string
 }
 
@@ -59,7 +60,7 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from("contact_messages")
-    .select("id, name, email, topic, message, created_at")
+    .select("id, name, email, topic, message, status, created_at")
     .order("created_at", { ascending: false })
     .limit(200)
   return (data ?? []).map((r) => ({
@@ -68,6 +69,7 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
     email: r.email,
     topic: r.topic,
     message: r.message,
+    status: r.status ?? "new",
     createdAt: r.created_at,
   }))
 }
@@ -76,6 +78,33 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
  * Newsletter subscribers, newest first. Returns [] in demo mode or if the
  * table hasn't been created yet (migration 0011 not applied).
  */
+export type Broadcast = {
+  id: string
+  subject: string
+  status: string
+  recipientCount: number
+  sentAt: string | null
+  createdAt: string
+}
+
+export async function getBroadcasts(): Promise<Broadcast[]> {
+  if (!isSupabaseConfigured()) return []
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("newsletter_broadcasts")
+    .select("id, subject, status, recipient_count, sent_at, created_at")
+    .order("created_at", { ascending: false })
+    .limit(50)
+  return (data ?? []).map((r) => ({
+    id: r.id,
+    subject: r.subject,
+    status: r.status,
+    recipientCount: r.recipient_count ?? 0,
+    sentAt: r.sent_at,
+    createdAt: r.created_at,
+  }))
+}
+
 export async function getSubscribers(): Promise<Subscriber[]> {
   if (!isSupabaseConfigured()) return []
   const supabase = await createClient()
