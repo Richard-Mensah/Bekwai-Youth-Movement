@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Mail, MapPin, ArrowRight } from "lucide-react"
 import { FOOTER_NAV, ORG } from "@/constants/nav"
+import NewsletterForm from "@/components/features/public/NewsletterForm"
 
 const TRUST = [
   "Aligned with UN SDGs 2030",
@@ -25,28 +26,7 @@ export default function Footer() {
               Founding Day — straight to your inbox.
             </p>
           </div>
-          <form
-            className="flex w-full max-w-md gap-2 md:ml-auto"
-            action={`mailto:${ORG.email}`}
-            method="post"
-          >
-            <label htmlFor="newsletter-email" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="newsletter-email"
-              type="email"
-              required
-              placeholder="you@example.com"
-              className="min-w-0 flex-1 rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm text-white placeholder:text-white/40 focus:border-gold-400/60 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gold-400 px-5 py-3 text-sm font-semibold text-canopy transition-colors hover:bg-gold-300"
-            >
-              Subscribe <ArrowRight size={16} />
-            </button>
-          </form>
+          <NewsletterForm />
         </div>
       </div>
 

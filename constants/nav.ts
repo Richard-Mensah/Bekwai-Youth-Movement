@@ -16,9 +16,10 @@ export function isDropdown(
 
 /**
  * Public site primary navigation.
- * Mixes direct links (Home, Get Involved, Contact) and dropdown tabs
- * (About, Our Governance, Our Impact, Media). Data-driven so the header
- * renders dropdowns wherever an item has `children`.
+ * Mixes direct links (Home, Contact) and dropdown tabs (About, Our Governance,
+ * Our Impact, Media). Data-driven so the header renders dropdowns wherever an
+ * item has `children`. Note: joining is handled by the "Join BYM" header button
+ * (→ /join), so there is deliberately no duplicate "Get Involved" nav tab.
  */
 export const PUBLIC_NAV: NavItem[] = [
   { label: "Home", href: "/" },
@@ -100,7 +101,6 @@ export const PUBLIC_NAV: NavItem[] = [
       { label: "Gallery", href: "/gallery", description: "Moments from our communities" },
     ],
   },
-  { label: "Get Involved", href: "/join" },
   { label: "Contact", href: "/contact" },
 ]
 
