@@ -53,6 +53,14 @@ export default async function PostsListPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
+                  <a
+                    href={`/news/${p.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-semibold text-canopy hover:underline"
+                  >
+                    {p.status === "published" ? "View" : "Preview"}
+                  </a>
                   <Link
                     href={`/dashboard/admin/content/posts/${p.id}/edit`}
                     className="text-xs font-semibold text-canopy hover:underline"

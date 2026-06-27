@@ -7,6 +7,8 @@ import {
   Handshake,
   Settings,
   MapPin,
+  FolderOpen,
+  History,
 } from "lucide-react"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import StatCard from "@/components/ui/StatCard"
@@ -27,6 +29,8 @@ const MODULES: [string, string, string, typeof FileText][] = [
   ["Partners & Sponsors", "Logos and partner links.", "/dashboard/admin/content/partners", Handshake],
   ["Communities", "Edit the 32 community names.", "/dashboard/admin/content/communities", MapPin],
   ["Site settings", "Hero text, stats, and org details.", "/dashboard/admin/content/settings", Settings],
+  ["Media library", "Upload and reuse images.", "/dashboard/admin/content/media", FolderOpen],
+  ["Activity log", "Who changed what, and when.", "/dashboard/admin/content/audit", History],
 ]
 
 export default async function ContentStudioPage() {

@@ -337,6 +337,36 @@ export async function getCommunities(): Promise<CommunityItem[]> {
   return data.map((r) => ({ id: r.id, name: r.name, isTown: r.is_town }))
 }
 
+export type AuditEntry = {
+  id: string
+  entity: string
+  action: string
+  summary: string | null
+  actor: string
+  createdAt: string
+}
+
+export async function getAuditLog(limit = 60): Promise<AuditEntry[]> {
+  if (!isSupabaseConfigured()) return []
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("content_audit")
+    .select("id, entity, action, summary, created_at, profiles(full_name)")
+    .order("created_at", { ascending: false })
+    .limit(limit)
+  return (data ?? []).map((r) => {
+    const prof = r.profiles as { full_name?: string } | null
+    return {
+      id: r.id as string,
+      entity: r.entity as string,
+      action: r.action as string,
+      summary: (r.summary as string) ?? null,
+      actor: prof?.full_name ?? "—",
+      createdAt: r.created_at as string,
+    }
+  })
+}
+
 export type ContentCounts = {
   posts: number
   leaders: number

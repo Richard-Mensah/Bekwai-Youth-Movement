@@ -1,8 +1,28 @@
 import { createClient } from "@/lib/supabase/server"
+import { publicUrl as toPublicUrl } from "@/lib/media"
 
 export { publicUrl } from "@/lib/media"
 
 export const CONTENT_BUCKET = "content"
+
+/** Lists images in the content bucket across known prefixes (newest first). */
+export async function listMedia(): Promise<{ path: string; url: string }[]> {
+  const supabase = await createClient()
+  const prefixes = ["uploads", "posts", "leaders", "gallery", "events", "partners"]
+  const out: { path: string; url: string }[] = []
+  for (const p of prefixes) {
+    const { data } = await supabase.storage
+      .from(CONTENT_BUCKET)
+      .list(p, { limit: 100, sortBy: { column: "created_at", order: "desc" } })
+    for (const f of data ?? []) {
+      if (f.name && f.id) {
+        const path = `${p}/${f.name}`
+        out.push({ path, url: toPublicUrl(path) ?? "" })
+      }
+    }
+  }
+  return out
+}
 
 /**
  * Uploads an image to a public Storage bucket and returns its object key.

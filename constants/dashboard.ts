@@ -42,6 +42,8 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
     { label: "Partners", href: "/dashboard/admin/content/partners" },
     { label: "Communities", href: "/dashboard/admin/content/communities" },
     { label: "Site settings", href: "/dashboard/admin/content/settings" },
+    { label: "Media library", href: "/dashboard/admin/content/media" },
+    { label: "Activity log", href: "/dashboard/admin/content/audit" },
   ],
 }
 
