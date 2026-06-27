@@ -106,6 +106,30 @@ export async function getAnnualReports({ includeUnpublished }: Opts = {}): Promi
   }))
 }
 
+export interface FinancialSummary {
+  totalIncome: number
+  totalExpenditure: number
+  surplus: number
+  latestYear: number | null
+  count: number
+  recent: BudgetRow[]
+}
+
+/** Aggregate of all published budgets, for the homepage finance trust band. */
+export async function getFinancialSummary(): Promise<FinancialSummary> {
+  const budgets = await getBudgets()
+  const totalIncome = budgets.reduce((s, b) => s + b.incomeGhs, 0)
+  const totalExpenditure = budgets.reduce((s, b) => s + b.expenditureGhs, 0)
+  return {
+    totalIncome,
+    totalExpenditure,
+    surplus: totalIncome - totalExpenditure,
+    latestYear: budgets.length ? Math.max(...budgets.map((b) => b.fiscalYear)) : null,
+    count: budgets.length,
+    recent: budgets.slice(0, 3),
+  }
+}
+
 /** SDG progress = number of projects aligned to each goal. */
 export async function getSdgProgress() {
   const projects = await getProjects()

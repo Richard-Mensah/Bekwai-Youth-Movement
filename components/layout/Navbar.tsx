@@ -5,13 +5,21 @@ import Link from "next/link"
 import Image from "next/image"
 import { ChevronDown, Menu, X } from "lucide-react"
 import { PUBLIC_NAV, ORG, isDropdown } from "@/constants/nav"
+import { NAV_LABEL_KEYS } from "@/constants/i18n"
 import NavDropdown from "@/components/layout/NavDropdown"
+import LanguageToggle from "@/components/i18n/LanguageToggle"
+import { useLanguage } from "@/components/i18n/LanguageProvider"
 import { cn } from "@/lib/utils"
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
+  const { t } = useLanguage()
+  const navT = (label: string) => {
+    const key = NAV_LABEL_KEYS[label]
+    return key ? t(key) : label
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -63,14 +71,14 @@ export default function Navbar() {
         <div className="hidden items-center gap-0.5 lg:flex">
           {PUBLIC_NAV.map((item) =>
             isDropdown(item) ? (
-              <NavDropdown key={item.label} label={item.label} items={item.children} />
+              <NavDropdown key={item.label} label={navT(item.label)} items={item.children} />
             ) : (
               <Link
                 key={item.href}
                 href={item.href}
                 className="rounded-md px-3 py-2 text-sm font-medium text-ink/70 transition-colors hover:text-canopy"
               >
-                {item.label}
+                {navT(item.label)}
               </Link>
             )
           )}
@@ -78,17 +86,18 @@ export default function Navbar() {
 
         {/* Desktop auth */}
         <div className="hidden items-center gap-2 lg:flex">
+          <LanguageToggle />
           <Link
             href="/login"
             className="rounded-full px-4 py-2 text-sm font-semibold text-canopy transition-colors hover:bg-canopy-50"
           >
-            Sign in
+            {t("nav.signIn")}
           </Link>
           <Link
             href="/join"
             className="rounded-full bg-brand-red px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-red-600"
           >
-            Join BYM
+            {t("nav.join")}
           </Link>
         </div>
 
@@ -115,6 +124,9 @@ export default function Navbar() {
         )}
       >
         <div className="container-content flex flex-col gap-1 py-4">
+          <div className="mb-2 px-2">
+            <LanguageToggle />
+          </div>
           {PUBLIC_NAV.map((item) =>
             isDropdown(item) ? (
               <div key={item.label} className="border-b border-canopy/5 py-1">
@@ -126,7 +138,7 @@ export default function Navbar() {
                   aria-expanded={expanded === item.label ? "true" : "false"}
                   className="flex w-full items-center justify-between px-2 py-2.5 text-left text-base font-semibold text-canopy"
                 >
-                  {item.label}
+                  {navT(item.label)}
                   <ChevronDown
                     size={18}
                     className={cn(
@@ -157,7 +169,7 @@ export default function Navbar() {
                 onClick={() => setOpen(false)}
                 className="border-b border-canopy/5 px-2 py-3 text-base font-semibold text-canopy"
               >
-                {item.label}
+                {navT(item.label)}
               </Link>
             )
           )}
@@ -168,14 +180,14 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
               className="flex-1 rounded-full border border-canopy/25 px-4 py-3 text-center text-sm font-semibold text-canopy"
             >
-              Sign in
+              {t("nav.signIn")}
             </Link>
             <Link
               href="/join"
               onClick={() => setOpen(false)}
               className="flex-1 rounded-full bg-brand-red px-4 py-3 text-center text-sm font-semibold text-white"
             >
-              Join BYM
+              {t("nav.join")}
             </Link>
           </div>
         </div>

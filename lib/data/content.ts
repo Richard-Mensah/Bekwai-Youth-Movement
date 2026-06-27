@@ -74,6 +74,7 @@ export type SiteSettings = {
   foundingDate: string
   email: string
   medium: string
+  whatsapp: string
   stats: { communities: number; cabinet: number; reps: number; sdgs: number; women: number }
 }
 
@@ -85,6 +86,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   foundingDate: ORG.foundingDate,
   email: ORG.email,
   medium: ORG.medium,
+  whatsapp: "",
   stats: { communities: 32, cabinet: 19, reps: 3, sdgs: 12, women: 40 },
 }
 
@@ -337,6 +339,111 @@ export async function getCommunities(): Promise<CommunityItem[]> {
   return data.map((r) => ({ id: r.id, name: r.name, isTown: r.is_town }))
 }
 
+// ---------- Public members wall ----------
+export type PublicMember = {
+  id: string
+  firstName: string
+  photoUrl: string | null
+  communityName: string | null
+}
+
+/** Verified, opted-in members (name + photo only) for the homepage wall,
+ * read from the privacy-safe `public_members` view. Plus a total count. */
+export async function getPublicMembersData(
+  limit = 18
+): Promise<{ members: PublicMember[]; total: number }> {
+  if (!isSupabaseConfigured()) return { members: [], total: 0 }
+  const supabase = await createClient()
+  const [{ data }, { count }] = await Promise.all([
+    supabase
+      .from("public_members")
+      .select("id, first_name, profile_image_path, community_name")
+      .order("created_at", { ascending: false })
+      .limit(limit),
+    supabase.from("public_members").select("*", { count: "exact", head: true }),
+  ])
+  const members = (data ?? []).map((r: Record<string, unknown>) => ({
+    id: r.id as string,
+    firstName: (r.first_name as string) ?? "Member",
+    photoUrl: publicUrl(r.profile_image_path as string) ?? null,
+    communityName: (r.community_name as string) ?? null,
+  }))
+  return { members, total: count ?? members.length }
+}
+
+// ---------- Testimonials (member voices) ----------
+export type Testimonial = {
+  id: string
+  name: string
+  role: string | null
+  quote: string
+  photoUrl: string | null
+  sortOrder: number
+  isPublished: boolean
+}
+
+const FALLBACK_TESTIMONIALS: Testimonial[] = [
+  {
+    id: "t1",
+    name: "Ama Serwaa",
+    role: "Member · Health & Welfare",
+    quote:
+      "BYM gave me a structured way to serve my community — and a real voice in the decisions that affect young people.",
+    photoUrl: null,
+    sortOrder: 1,
+    isPublished: true,
+  },
+  {
+    id: "t2",
+    name: "Kwame Boateng",
+    role: "Council Representative",
+    quote:
+      "For the first time, my sub-community has someone carrying our priorities straight to the Assembly.",
+    photoUrl: null,
+    sortOrder: 2,
+    isPublished: true,
+  },
+  {
+    id: "t3",
+    name: "Esi Mensah",
+    role: "Volunteer",
+    quote:
+      "I joined to plant trees and stayed because I found a movement that actually listens to the youth.",
+    photoUrl: null,
+    sortOrder: 3,
+    isPublished: true,
+  },
+]
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  if (!isSupabaseConfigured()) return FALLBACK_TESTIMONIALS
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("testimonials")
+    .select("*")
+    .eq("is_published", true)
+    .order("sort_order", { ascending: true })
+  if (!data || data.length === 0) return FALLBACK_TESTIMONIALS
+  return data.map(mapTestimonial)
+}
+
+export async function getAllTestimonials(): Promise<Testimonial[]> {
+  if (!isSupabaseConfigured()) return []
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("testimonials")
+    .select("*")
+    .order("sort_order", { ascending: true })
+  return (data ?? []).map(mapTestimonial)
+}
+
+export async function getTestimonialById(id: string): Promise<Testimonial | null> {
+  if (!isSupabaseConfigured()) return null
+  const supabase = await createClient()
+  const { data } = await supabase.from("testimonials").select("*").eq("id", id).single()
+  return data ? mapTestimonial(data) : null
+}
+
 export type AuditEntry = {
   id: string
   entity: string
@@ -445,6 +552,18 @@ function mapPartner(r: Record<string, unknown>): PartnerItem {
     logoUrl: publicUrl(r.logo_path as string) ?? null,
     url: (r.url as string) ?? null,
     tier: (r.tier as string) ?? "partner",
+    sortOrder: (r.sort_order as number) ?? 0,
+    isPublished: (r.is_published as boolean) ?? true,
+  }
+}
+
+function mapTestimonial(r: Record<string, unknown>): Testimonial {
+  return {
+    id: r.id as string,
+    name: r.name as string,
+    role: (r.role as string) ?? null,
+    quote: r.quote as string,
+    photoUrl: publicUrl(r.photo_path as string) ?? null,
     sortOrder: (r.sort_order as number) ?? 0,
     isPublished: (r.is_published as boolean) ?? true,
   }

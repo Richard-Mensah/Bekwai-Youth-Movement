@@ -77,6 +77,16 @@ export default function SettingsForm({ settings }: { settings: SiteSettings }) {
         <h3 className="font-display text-base font-semibold text-canopy">Organisation</h3>
         <Input name="email" label="Contact email" defaultValue={settings.email} />
         <Input name="medium" label="Medium URL" defaultValue={settings.medium} />
+        <Input
+          name="whatsapp"
+          label="WhatsApp (phone in international format, e.g. 233XXXXXXXXX, or a community invite link)"
+          defaultValue={settings.whatsapp}
+          placeholder="233200000000"
+        />
+        <p className="text-xs text-ink/45">
+          Shows a floating &ldquo;Chat with us&rdquo; button on the public site. Leave
+          blank to hide it.
+        </p>
       </section>
 
       {msg && (

@@ -20,6 +20,7 @@ export async function updateSettings(formData: FormData): Promise<ContentResult>
     foundingDate: String(formData.get("foundingDate") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim(),
     medium: String(formData.get("medium") ?? "").trim(),
+    whatsapp: String(formData.get("whatsapp") ?? "").trim(),
     stats: {
       communities: num(formData, "statCommunities", 32),
       cabinet: num(formData, "statCabinet", 19),

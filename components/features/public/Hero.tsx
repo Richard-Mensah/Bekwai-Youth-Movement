@@ -6,6 +6,7 @@ import { ArrowRight, CalendarDays } from "lucide-react"
 import Button from "@/components/ui/Button"
 import Countdown from "@/components/ui/Countdown"
 import { ORG } from "@/constants/nav"
+import { useLanguage } from "@/components/i18n/LanguageProvider"
 
 type Props = {
   eyebrow?: string
@@ -21,6 +22,12 @@ export default function Hero({
   foundingDate = ORG.foundingDate,
 }: Props) {
   const reduce = useReducedMotion()
+  const { lang, t } = useLanguage()
+  // In English, show the editable copy from Site Settings; in Twi, show the
+  // curated translation from the dictionary.
+  const heroEyebrow = lang === "tw" ? t("hero.eyebrow") : eyebrow
+  const heroTitle = lang === "tw" ? t("hero.title") : title
+  const heroSubtitle = lang === "tw" ? t("hero.subtitle") : subtitle
   const container: Variants = {
     hidden: {},
     show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
@@ -58,29 +65,29 @@ export default function Hero({
         <div>
           <motion.p variants={item} className="eyebrow-light">
             <span className="h-px w-6 bg-gold-400" />
-            {eyebrow}
+            {heroEyebrow}
           </motion.p>
 
           <motion.h1
             variants={item}
             className="mt-5 max-w-2xl font-display text-4xl font-semibold leading-[1.05] text-white text-balance sm:text-5xl lg:text-6xl"
           >
-            {title}
+            {heroTitle}
           </motion.h1>
 
           <motion.p
             variants={item}
             className="mt-6 max-w-xl text-lg leading-relaxed text-white/75 text-pretty"
           >
-            {subtitle}
+            {heroSubtitle}
           </motion.p>
 
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
             <Button href="/join" size="lg" variant="primary" className="bg-brand-red hover:bg-brand-red-600 focus-visible:ring-brand-red">
-              Join the Movement <ArrowRight size={18} />
+              {t("hero.ctaJoin")} <ArrowRight size={18} />
             </Button>
             <Button href="/about" size="lg" variant="light">
-              Explore our work
+              {t("hero.ctaExplore")}
             </Button>
           </motion.div>
 
@@ -91,7 +98,7 @@ export default function Hero({
           >
             <div>
               <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-gold-300">
-                <CalendarDays size={14} /> The road to Founding Day
+                <CalendarDays size={14} /> {t("hero.foundingEyebrow")}
               </p>
               <p className="mt-1.5 text-sm text-white/75">
                 Official Launch of the Youth General Assembly —{" "}

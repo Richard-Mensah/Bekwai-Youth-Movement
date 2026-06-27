@@ -34,6 +34,46 @@ export async function getMemberStats(): Promise<MemberStats> {
   return { configured: true, total, pending, verified }
 }
 
+export type Member = {
+  id: string
+  fullName: string
+  email: string | null
+  phone: string | null
+  membershipId: string | null
+  status: string
+  isPublic: boolean
+  communityName: string | null
+  createdAt: string
+}
+
+/**
+ * All registered members (profiles), newest first. Admin RLS lets admins
+ * read every profile. Returns [] in demo mode. Selects `is_public`, which
+ * exists after migration 0014.
+ */
+export async function getMembers(): Promise<Member[]> {
+  if (!isSupabaseConfigured()) return []
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("profiles")
+    .select(
+      "id, full_name, email, phone, membership_id, verification_status, is_public, created_at, communities(name)"
+    )
+    .order("created_at", { ascending: false })
+    .limit(1000)
+  return (data ?? []).map((r: Record<string, unknown>) => ({
+    id: r.id as string,
+    fullName: (r.full_name as string) ?? "",
+    email: (r.email as string) ?? null,
+    phone: (r.phone as string) ?? null,
+    membershipId: (r.membership_id as string) ?? null,
+    status: (r.verification_status as string) ?? "pending",
+    isPublic: Boolean(r.is_public ?? true),
+    communityName: (r.communities as { name?: string } | null)?.name ?? null,
+    createdAt: r.created_at as string,
+  }))
+}
+
 export type ContactMessage = {
   id: string
   name: string

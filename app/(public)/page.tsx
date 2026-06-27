@@ -6,9 +6,14 @@ import ImpactStats from "@/components/features/public/ImpactStats"
 import ThreeArms from "@/components/features/public/ThreeArms"
 import ProgramsGrid from "@/components/features/public/ProgramsGrid"
 import SdgShowcase from "@/components/features/public/SdgShowcase"
+import ImpactStoriesCarousel from "@/components/features/public/ImpactStoriesCarousel"
 import NewsHighlights from "@/components/features/public/NewsHighlights"
 import RepresentationBand from "@/components/features/public/RepresentationBand"
+import CommunityMap from "@/components/features/public/CommunityMap"
+import MembersWall from "@/components/features/public/MembersWall"
+import MemberVoices from "@/components/features/public/MemberVoices"
 import CredibilityBand from "@/components/features/public/CredibilityBand"
+import FinanceTransparencyBand from "@/components/features/public/FinanceTransparencyBand"
 import PartnersStrip from "@/components/features/public/PartnersStrip"
 import GetInvolved from "@/components/features/public/GetInvolved"
 import { getSettings } from "@/lib/data/content"
@@ -30,9 +35,14 @@ export default async function HomePage() {
       <JourneyTimeline />
       <ProgramsGrid />
       <SdgShowcase />
+      <ImpactStoriesCarousel />
       <NewsHighlights />
       <RepresentationBand />
+      <CommunityMap />
+      <MembersWall />
+      <MemberVoices />
       <CredibilityBand />
+      <FinanceTransparencyBand />
       <PartnersStrip />
       <GetInvolved />
     </>

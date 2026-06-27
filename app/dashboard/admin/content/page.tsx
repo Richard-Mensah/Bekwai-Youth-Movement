@@ -9,6 +9,7 @@ import {
   MapPin,
   FolderOpen,
   History,
+  Quote,
 } from "lucide-react"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import StatCard from "@/components/ui/StatCard"
@@ -27,6 +28,7 @@ const MODULES: [string, string, string, typeof FileText][] = [
   ["Gallery", "Upload, caption, and order photos.", "/dashboard/admin/content/gallery", ImageIcon],
   ["Events", "Durbars, sittings, and the launch.", "/dashboard/admin/content/events", CalendarDays],
   ["Partners & Sponsors", "Logos and partner links.", "/dashboard/admin/content/partners", Handshake],
+  ["Member voices", "Testimonials shown on the homepage.", "/dashboard/admin/content/testimonials", Quote],
   ["Communities", "Edit the 32 community names.", "/dashboard/admin/content/communities", MapPin],
   ["Site settings", "Hero text, stats, and org details.", "/dashboard/admin/content/settings", Settings],
   ["Media library", "Upload and reuse images.", "/dashboard/admin/content/media", FolderOpen],

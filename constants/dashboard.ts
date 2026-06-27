@@ -29,6 +29,7 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
   admin: [
     { label: "Administration", href: "/dashboard/admin" },
     { label: "Members & vetting", href: "/dashboard/admin#members" },
+    { label: "Members directory", href: "/dashboard/admin/members" },
     { label: "Compliance", href: "/dashboard/admin#compliance" },
     { label: "Inbox", href: "/dashboard/admin/inbox" },
     { label: "Transparency publishing", href: "/dashboard/admin/transparency" },
@@ -40,6 +41,7 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
     { label: "Gallery", href: "/dashboard/admin/content/gallery" },
     { label: "Events", href: "/dashboard/admin/content/events" },
     { label: "Partners", href: "/dashboard/admin/content/partners" },
+    { label: "Member voices", href: "/dashboard/admin/content/testimonials" },
     { label: "Communities", href: "/dashboard/admin/content/communities" },
     { label: "Site settings", href: "/dashboard/admin/content/settings" },
     { label: "Media library", href: "/dashboard/admin/content/media" },
