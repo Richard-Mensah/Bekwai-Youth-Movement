@@ -98,6 +98,7 @@ export const PUBLIC_NAV: NavItem[] = [
         href: "/news",
         description: "BYM on the local and global stage",
       },
+      { label: "Events", href: "/events", description: "Durbars, sittings, and launches" },
       { label: "Gallery", href: "/gallery", description: "Moments from our communities" },
     ],
   },

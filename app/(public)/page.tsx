@@ -9,6 +9,7 @@ import SdgShowcase from "@/components/features/public/SdgShowcase"
 import NewsHighlights from "@/components/features/public/NewsHighlights"
 import RepresentationBand from "@/components/features/public/RepresentationBand"
 import CredibilityBand from "@/components/features/public/CredibilityBand"
+import PartnersStrip from "@/components/features/public/PartnersStrip"
 import GetInvolved from "@/components/features/public/GetInvolved"
 import { getSettings } from "@/lib/data/content"
 
@@ -32,6 +33,7 @@ export default async function HomePage() {
       <NewsHighlights />
       <RepresentationBand />
       <CredibilityBand />
+      <PartnersStrip />
       <GetInvolved />
     </>
   )

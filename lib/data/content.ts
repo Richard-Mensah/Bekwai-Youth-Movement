@@ -64,6 +64,7 @@ export type PartnerItem = {
   url: string | null
   tier: string
   sortOrder: number
+  isPublished: boolean
 }
 
 export type SiteSettings = {
@@ -415,6 +416,7 @@ function mapPartner(r: Record<string, unknown>): PartnerItem {
     url: (r.url as string) ?? null,
     tier: (r.tier as string) ?? "partner",
     sortOrder: (r.sort_order as number) ?? 0,
+    isPublished: (r.is_published as boolean) ?? true,
   }
 }
 
