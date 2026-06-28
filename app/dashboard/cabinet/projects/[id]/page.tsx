@@ -8,6 +8,7 @@ import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import BudgetMeter from "@/components/features/projects/BudgetMeter"
 import ProjectControls from "@/components/features/projects/ProjectControls"
 import ExpenditureForm from "@/components/features/projects/ExpenditureForm"
+import ProjectImageForm from "@/components/features/projects/ProjectImageForm"
 import Card from "@/components/ui/Card"
 import Badge from "@/components/ui/Badge"
 import { formatDate } from "@/lib/utils"
@@ -41,7 +42,7 @@ export default async function ProjectDetailPage({
           <Card>
             <div className="relative -mx-6 -mt-6 mb-4 h-44 w-[calc(100%+3rem)] overflow-hidden rounded-t-xl bg-gray-100">
               <Image
-                src={placeholderImage(project.id, 800, 360)}
+                src={project.coverUrl ?? placeholderImage(project.id, 800, 360)}
                 alt={project.name}
                 fill
                 sizes="(max-width: 1024px) 100vw, 66vw"
@@ -123,12 +124,24 @@ export default async function ProjectDetailPage({
           </Card>
         </div>
 
-        <Card>
-          <h3 className="text-sm font-bold text-canopy">Budget</h3>
-          <div className="mt-4">
-            <BudgetMeter budget={project.budgetGhs} spent={spentTotal} />
-          </div>
-        </Card>
+        <div className="space-y-6">
+          <Card>
+            <h3 className="text-sm font-bold text-canopy">Budget</h3>
+            <div className="mt-4">
+              <BudgetMeter budget={project.budgetGhs} spent={spentTotal} />
+            </div>
+          </Card>
+
+          <Card>
+            <h3 className="text-sm font-bold text-canopy">Cover image</h3>
+            <p className="mt-1 text-xs text-ink/55">
+              Appears on the public projects page and the homepage impact grid.
+            </p>
+            <div className="mt-3">
+              <ProjectImageForm projectId={project.id} currentUrl={project.coverUrl} />
+            </div>
+          </Card>
+        </div>
       </div>
     </>
   )

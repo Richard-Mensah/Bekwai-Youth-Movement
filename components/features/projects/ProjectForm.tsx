@@ -6,6 +6,7 @@ import { COMMUNITIES } from "@/constants/communities"
 import { UNITS } from "@/constants/units"
 import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
+import ImageUploadField from "@/components/features/cms/ImageUploadField"
 
 const SUPABASE_READY =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -67,6 +68,11 @@ export default function ProjectForm() {
         </div>
       </div>
       <Input name="budgetGhs" type="number" label="Budget (GHS)" placeholder="0" />
+      <ImageUploadField
+        name="cover"
+        label="Cover image (optional)"
+        hint="Shown on the homepage impact grid and the public projects page."
+      />
       <Button type="submit" disabled={!SUPABASE_READY || pending} className="w-full">
         {pending ? "Submitting…" : "Propose project"}
       </Button>

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Check } from "lucide-react"
 import { updateCommunityName } from "./actions"
 import type { CommunityItem } from "@/lib/data/content"
@@ -17,6 +18,7 @@ function Row({ community }: { community: CommunityItem }) {
     <div className="flex items-center gap-2 rounded-lg border border-canopy/10 bg-white px-3 py-2">
       <span className="w-6 shrink-0 text-xs text-ink/40">{community.id}</span>
       <input
+        aria-label={`Community name for ${community.name}`}
         value={name}
         onChange={(e) => {
           setName(e.target.value)
@@ -45,6 +47,12 @@ function Row({ community }: { community: CommunityItem }) {
       >
         {saved && !dirty ? <Check size={14} /> : "Save"}
       </button>
+      <Link
+        href={`/dashboard/admin/content/communities/${community.id}/edit`}
+        className="shrink-0 rounded-full px-3 py-1 text-xs font-semibold text-brand-green hover:bg-brand-green-50"
+      >
+        Details
+      </Link>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import Image from "next/image"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Users } from "lucide-react"
+import SectionHeading from "@/components/ui/SectionHeading"
 import Reveal from "@/components/ui/Reveal"
 import { getPublicMembersData } from "@/lib/data/content"
 
@@ -13,50 +14,63 @@ export default async function MembersWall() {
   if (total === 0) return null
 
   return (
-    <section className="section bg-canopy text-white canopy-texture">
+    <section className="section bg-paper">
       <div className="container-content">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="eyebrow-light justify-center">
-            <span className="h-px w-5 bg-gold-400" />
-            Our people
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
-            Join {total.toLocaleString()} young leader{total === 1 ? "" : "s"} already
-            building the movement
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-white/75">
-            Real young people from across our 32 communities — volunteering,
-            representing, and shaping Sefwi Bekwai&apos;s future together.
-          </p>
+        <Reveal>
+          <SectionHeading
+            eyebrow="Our people"
+            title={`Join ${total.toLocaleString()} young leader${
+              total === 1 ? "" : "s"
+            } building the movement`}
+            description="Real young people from across our 32 communities — volunteering, representing, and shaping Sefwi Bekwai's future together."
+            centered
+          />
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
+          <div className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-4">
             {members.map((m) => (
-              <div key={m.id} className="w-20 text-center sm:w-24">
-                <div className="mx-auto h-16 w-16 overflow-hidden rounded-full ring-2 ring-gold-400/40 sm:h-20 sm:w-20">
+              <div
+                key={m.id}
+                className="flex w-24 flex-col items-center rounded-2xl border border-canopy/10 bg-white p-3 text-center shadow-card sm:w-28"
+              >
+                <div className="h-16 w-16 overflow-hidden rounded-full ring-2 ring-gold-400/40 sm:h-20 sm:w-20">
                   {m.photoUrl ? (
                     <Image
                       src={m.photoUrl}
                       alt={m.firstName}
-                      width={80}
-                      height={80}
+                      width={72}
+                      height={72}
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-white/10 font-display text-lg font-semibold text-gold-300">
+                    <div className="flex h-full w-full items-center justify-center bg-canopy-50 font-display text-lg font-semibold text-canopy">
                       {initials(m.firstName)}
                     </div>
                   )}
                 </div>
-                <p className="mt-2 truncate text-xs font-medium text-white/85">
+                <p className="mt-2 w-full truncate text-xs font-semibold text-canopy">
                   {m.firstName}
                 </p>
                 {m.communityName && (
-                  <p className="truncate text-[10px] text-white/45">{m.communityName}</p>
+                  <p className="w-full truncate text-[10px] text-ink/45">
+                    {m.communityName}
+                  </p>
                 )}
               </div>
             ))}
+
+            {total > members.length && (
+              <div className="flex w-24 flex-col items-center justify-center rounded-2xl border border-dashed border-canopy/20 bg-white p-3 text-center sm:w-28">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gold-50 text-gold-600 sm:h-20 sm:w-20">
+                  <Users size={22} />
+                </span>
+                <p className="mt-2 text-xs font-semibold text-canopy">
+                  +{(total - members.length).toLocaleString()}
+                </p>
+                <p className="text-[10px] text-ink/45">more</p>
+              </div>
+            )}
           </div>
         </Reveal>
 

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
+import { uploadImage } from "@/lib/storage"
 import { projectSchema, expenditureSchema } from "@/lib/validations"
 import { nextProjectStatus } from "@/constants/projects"
 import type { ProjectStatus } from "@/types"
@@ -34,17 +35,48 @@ export async function createProject(formData: FormData): Promise<ActionResult> {
 
   const { supabase, user } = await userOrError()
   if (!user) return { ok: false, error: "Sign in required." }
+
+  const cover = await uploadImage(formData.get("cover") as File | null, "projects")
+  if (cover.error) return { ok: false, error: cover.error }
+
   const { error } = await supabase.from("projects").insert({
     name: parsed.data.name,
     description: parsed.data.description,
     community_id: parsed.data.communityId,
     unit_id: parsed.data.unitId ?? null,
     budget_ghs: parsed.data.budgetGhs,
+    cover_path: cover.path ?? null,
     lead_id: user.id,
     status: "proposed",
   })
   if (error) return { ok: false, error: error.message }
   revalidatePath("/dashboard/cabinet")
+  revalidatePath("/projects")
+  revalidatePath("/")
+  return { ok: true }
+}
+
+/** Sets/replaces a project's cover image. */
+export async function updateProjectImage(formData: FormData): Promise<ActionResult> {
+  if (!isSupabaseConfigured()) return NOT_READY
+  const projectId = String(formData.get("projectId") ?? "")
+  if (!projectId) return { ok: false, error: "Missing project." }
+
+  const { supabase, user } = await userOrError()
+  if (!user) return { ok: false, error: "Sign in required." }
+
+  const cover = await uploadImage(formData.get("cover") as File | null, "projects")
+  if (cover.error) return { ok: false, error: cover.error }
+  if (!cover.path) return { ok: false, error: "Choose an image to upload." }
+
+  const { error } = await supabase
+    .from("projects")
+    .update({ cover_path: cover.path, updated_at: new Date().toISOString() })
+    .eq("id", projectId)
+  if (error) return { ok: false, error: error.message }
+  revalidatePath(`/dashboard/cabinet/projects/${projectId}`)
+  revalidatePath("/projects")
+  revalidatePath("/")
   return { ok: true }
 }
 

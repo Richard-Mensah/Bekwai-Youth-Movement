@@ -46,7 +46,7 @@ export default async function ProjectsPage() {
                   >
                     <div className="relative h-40 w-full bg-gray-100">
                       <Image
-                        src={placeholderImage(p.id, 600, 360)}
+                        src={p.coverUrl ?? placeholderImage(p.id, 600, 360)}
                         alt={p.name}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"

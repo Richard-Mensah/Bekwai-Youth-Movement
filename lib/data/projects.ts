@@ -1,4 +1,5 @@
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
+import { publicUrl } from "@/lib/media"
 import { PROJECT_STATUS_META } from "@/constants/projects"
 import type { ProjectStatus } from "@/types"
 
@@ -12,6 +13,7 @@ export interface ProjectRow {
   budgetGhs: number
   spentGhs: number
   sdg: number[]
+  coverUrl: string | null
   isPublished: boolean
 }
 export interface ExpenditureRow {
@@ -23,7 +25,7 @@ export interface ExpenditureRow {
 }
 
 // ---- Demo data ---------------------------------------------
-const DEMO: ProjectRow[] = [
+const DEMO: Omit<ProjectRow, "coverUrl">[] = [
   { id: "demo-p-1", name: "Bekwai Market Sanitation Drive", description: "Weekly clean-ups and two new waste points at the central market.", communityName: "Sefwi Bekwai", unitName: "Environment, Sanitation & Climate Unit", status: "in_progress", budgetGhs: 18000, spentGhs: 9500, sdg: [6, 11], isPublished: true },
   { id: "demo-p-2", name: "Youth Apprenticeship Placements", description: "Placing 40 out-of-school youth into trade apprenticeships.", communityName: "Sub-Community 03", unitName: "Economic Empowerment & Employment Unit", status: "approved", budgetGhs: 25000, spentGhs: 0, sdg: [1, 8], isPublished: true },
   { id: "demo-p-3", name: "Community Borehole Rehabilitation", description: "Restoring three boreholes in underserved sub-communities.", communityName: "Sub-Community 11", unitName: "Environment, Sanitation & Climate Unit", status: "proposed", budgetGhs: 32000, spentGhs: 0, sdg: [6], isPublished: false },
@@ -33,12 +35,12 @@ const DEMO: ProjectRow[] = [
 ]
 
 export async function getProjects(): Promise<ProjectRow[]> {
-  if (!isSupabaseConfigured()) return DEMO
+  if (!isSupabaseConfigured()) return DEMO.map((p) => ({ ...p, coverUrl: null }))
   const supabase = await createClient()
   const [{ data: projects }, { data: exp }] = await Promise.all([
     supabase
       .from("projects")
-      .select("id, name, description, status, budget_ghs, is_published, communities(name), units(name)")
+      .select("id, name, description, status, budget_ghs, cover_path, is_published, communities(name), units(name)")
       .order("created_at", { ascending: false }),
     supabase.from("expenditures").select("project_id, amount_ghs"),
   ])
@@ -55,6 +57,7 @@ export async function getProjects(): Promise<ProjectRow[]> {
     budgetGhs: Number(p.budget_ghs ?? 0),
     spentGhs: spent.get(p.id as string) ?? 0,
     sdg: [],
+    coverUrl: publicUrl(p.cover_path as string) ?? null,
     isPublished: Boolean(p.is_published),
   }))
 }

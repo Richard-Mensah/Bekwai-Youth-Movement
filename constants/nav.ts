@@ -84,6 +84,11 @@ export const PUBLIC_NAV: NavItem[] = [
         description: "Budgets, reports and scorecards",
       },
       {
+        label: "Communities",
+        href: "/communities",
+        description: "Explore all 32 communities and their reps",
+      },
+      {
         label: "Community Representation",
         href: "/representation",
         description: "No community left without a voice",

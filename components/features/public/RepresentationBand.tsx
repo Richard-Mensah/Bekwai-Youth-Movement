@@ -1,6 +1,7 @@
 import { Vote, Users, Radar } from "lucide-react"
-import SectionHeading from "@/components/ui/SectionHeading"
 import Reveal from "@/components/ui/Reveal"
+import CommunityExplorer from "@/components/features/public/CommunityExplorer"
+import WesternNorthMap from "@/components/features/public/WesternNorthMap"
 import { getCommunities } from "@/lib/data/content"
 
 const SEATS = [
@@ -24,7 +25,8 @@ const SEATS = [
   },
 ]
 
-/** "No community left without a voice" — the 3-rep model + 32-community grid. */
+/** "No community left without a voice" — the 3-rep model + an interactive,
+ * clickable map of all communities, plus a real Western North Region map. */
 export default async function RepresentationBand() {
   const communities = await getCommunities()
   return (
@@ -39,10 +41,10 @@ export default async function RepresentationBand() {
             No community left without a voice
           </h2>
           <p className="mt-5 leading-relaxed text-ink/70">
-            Every one of our 32 communities — from Sefwi Bekwai town to the
+            Every one of our {communities.length} communities — from Sefwi Bekwai town to the
             furthest sub-community — is entitled to three dedicated representatives.
-            Where a seat is unfilled, an interim protocol guarantees the community
-            is still heard.
+            Tap any community to explore it; open its page to meet its chief, elders,
+            and BYM representatives.
           </p>
 
           <div className="mt-7 space-y-3">
@@ -67,26 +69,13 @@ export default async function RepresentationBand() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="rounded-3xl bg-canopy p-8 text-white canopy-texture">
-            <p className="font-display text-5xl font-semibold text-gold-300">32</p>
-            <p className="mt-1 text-sm text-white/70">
-              communities, each with a seat at the table
-            </p>
-            <div className="mt-6 flex flex-wrap gap-1.5">
-              {communities.map((c) => (
-                <span
-                  key={c.id}
-                  className={`rounded-md px-2.5 py-1 text-xs font-medium ${
-                    c.isTown
-                      ? "bg-gold-400 text-canopy"
-                      : "bg-white/10 text-white/80"
-                  }`}
-                >
-                  {c.name}
-                </span>
-              ))}
-            </div>
-          </div>
+          <CommunityExplorer communities={communities} />
+        </Reveal>
+      </div>
+
+      <div className="container-content mt-12">
+        <Reveal>
+          <WesternNorthMap />
         </Reveal>
       </div>
     </section>

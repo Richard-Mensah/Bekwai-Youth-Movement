@@ -321,22 +321,141 @@ export async function getSettings(): Promise<SiteSettings> {
   }
 }
 
-export type CommunityItem = { id: number; name: string; isTown: boolean }
+export type CommunityItem = { id: number; name: string; isTown: boolean; slug: string }
 
 export async function getCommunities(): Promise<CommunityItem[]> {
   const fallback = COMMUNITIES.map((c) => ({
     id: c.id,
     name: c.name,
     isTown: c.isTown,
+    slug: slugify(c.name),
   }))
   if (!isSupabaseConfigured()) return fallback
   const supabase = await createClient()
   const { data } = await supabase
     .from("communities")
-    .select("id, name, is_town")
+    .select("id, name, is_town, slug")
     .order("id", { ascending: true })
   if (!data || data.length === 0) return fallback
-  return data.map((r) => ({ id: r.id, name: r.name, isTown: r.is_town }))
+  return data.map((r) => ({
+    id: r.id,
+    name: r.name,
+    isTown: r.is_town,
+    slug: (r.slug as string) || slugify(r.name),
+  }))
+}
+
+// ---------- Per-community detail + representatives ----------
+export type CommunityDetail = {
+  id: number
+  name: string
+  slug: string
+  isTown: boolean
+  about: string | null
+  chief: string | null
+  chiefTitle: string | null
+  /** Elders, one per line in the source text. */
+  elders: string[]
+}
+
+export type SeatType = "mp" | "council_rep" | "cin_officer"
+
+export const SEAT_LABELS: Record<SeatType, string> = {
+  mp: "Youth Parliament Member",
+  council_rep: "Council Representative",
+  cin_officer: "Community Intelligence Officer",
+}
+
+export type CommunityRep = {
+  id: string
+  name: string
+  photoUrl: string | null
+  seatType: SeatType
+}
+
+function parseElders(raw: string | null | undefined): string[] {
+  return (raw ?? "")
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+}
+
+export async function getAllCommunities(): Promise<CommunityItem[]> {
+  return getCommunities()
+}
+
+export async function getCommunityBySlug(slug: string): Promise<CommunityDetail | null> {
+  const fromFallback = (): CommunityDetail | null => {
+    const c = COMMUNITIES.find((x) => slugify(x.name) === slug)
+    if (!c) return null
+    return {
+      id: c.id,
+      name: c.name,
+      slug,
+      isTown: c.isTown,
+      about: null,
+      chief: null,
+      chiefTitle: null,
+      elders: [],
+    }
+  }
+  if (!isSupabaseConfigured()) return fromFallback()
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("communities")
+    .select("id, name, slug, is_town, about, chief, chief_title, elders")
+    .eq("slug", slug)
+    .maybeSingle()
+  if (!data) return fromFallback()
+  return {
+    id: data.id,
+    name: data.name,
+    slug: data.slug || slug,
+    isTown: data.is_town,
+    about: data.about ?? null,
+    chief: data.chief ?? null,
+    chiefTitle: data.chief_title ?? null,
+    elders: parseElders(data.elders),
+  }
+}
+
+export async function getCommunityDetailById(id: number): Promise<CommunityDetail | null> {
+  if (!isSupabaseConfigured()) return null
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("communities")
+    .select("id, name, slug, is_town, about, chief, chief_title, elders")
+    .eq("id", id)
+    .maybeSingle()
+  if (!data) return null
+  return {
+    id: data.id,
+    name: data.name,
+    slug: data.slug || slugify(data.name),
+    isTown: data.is_town,
+    about: data.about ?? null,
+    chief: data.chief ?? null,
+    chiefTitle: data.chief_title ?? null,
+    elders: parseElders(data.elders),
+  }
+}
+
+/** Verified BYM representatives for a community, from the public view. */
+export async function getCommunityReps(communityId: number): Promise<CommunityRep[]> {
+  if (!isSupabaseConfigured()) return []
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("public_representatives")
+    .select("id, full_name, profile_image_path, seat_type")
+    .eq("community_id", communityId)
+  return (data ?? [])
+    .filter((r) => r.seat_type in SEAT_LABELS)
+    .map((r: Record<string, unknown>) => ({
+      id: r.id as string,
+      name: (r.full_name as string) ?? "Member",
+      photoUrl: publicUrl(r.profile_image_path as string) ?? null,
+      seatType: r.seat_type as SeatType,
+    }))
 }
 
 // ---------- Public members wall ----------
