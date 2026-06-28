@@ -43,7 +43,7 @@ export default function ThreeArms() {
           {ARMS.map(({ icon: Icon, title, tag, body, href }, i) => (
             <Reveal key={title} delay={i * 0.08}>
               <Link href={href} className="group block h-full">
-                <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-canopy/10 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+                <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-canopy/10 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover dark:border-white/10 dark:bg-canopy-800">
                   <span className="absolute inset-x-0 top-0 h-1 bg-gold-400" />
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-canopy text-gold-300">
                     <Icon size={24} />
@@ -54,10 +54,10 @@ export default function ThreeArms() {
                   <h3 className="mt-1.5 font-display text-xl font-semibold text-canopy">
                     {title}
                   </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/65">
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/65 dark:text-paper/65">
                     {body}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-canopy">
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-canopy dark:text-paper">
                     Explore
                     <ArrowRight
                       size={16}

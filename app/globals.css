@@ -15,14 +15,14 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-white text-ink antialiased;
+    @apply bg-white text-ink antialiased transition-colors duration-300 dark:bg-canopy-900 dark:text-paper;
     font-feature-settings: "ss01", "cv01";
   }
   h1,
   h2,
   h3,
   h4 {
-    @apply font-display tracking-tight text-canopy;
+    @apply font-display tracking-tight text-canopy dark:text-paper;
   }
   /* Respect users who prefer reduced motion */
   @media (prefers-reduced-motion: reduce) {

@@ -29,9 +29,9 @@ const ICONS: Record<number, LucideIcon> = {
 function UnitCard({ unit }: { unit: Unit }) {
   const Icon = ICONS[unit.no] ?? Scale
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-canopy/10 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+    <div className="flex h-full flex-col rounded-2xl border border-canopy/10 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover dark:border-white/10 dark:bg-canopy-800">
       <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-canopy-50 text-canopy">
+        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-canopy-50 text-canopy dark:bg-white/10 dark:text-gold-300">
           <Icon size={20} />
         </span>
         <span className="text-xs font-semibold uppercase tracking-wider text-gold-600">
@@ -39,7 +39,7 @@ function UnitCard({ unit }: { unit: Unit }) {
         </span>
       </div>
       <h3 className="mt-4 font-display text-lg font-semibold text-canopy">{unit.name}</h3>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/65">{unit.mandate}</p>
+      <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/65 dark:text-paper/65">{unit.mandate}</p>
       <div className="mt-4 flex flex-wrap gap-1.5">
         {unit.sdg.map((g) => (
           <Badge key={g} tone="gold">
@@ -91,7 +91,7 @@ export default function ProgramsGridClient({ units }: { units: Unit[] }) {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            className="inline-flex items-center gap-2 rounded-full border border-canopy/25 bg-white px-6 py-3 text-sm font-semibold text-canopy transition-all hover:-translate-y-0.5 hover:bg-canopy-50"
+            className="inline-flex items-center gap-2 rounded-full border border-canopy/25 bg-white px-6 py-3 text-sm font-semibold text-canopy transition-all hover:-translate-y-0.5 hover:bg-canopy-50 dark:border-white/20 dark:bg-canopy-800 dark:text-paper dark:hover:bg-canopy-700"
           >
             {open ? "Show less" : `Show all ${units.length} units`}
             <ChevronDown

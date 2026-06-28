@@ -38,7 +38,7 @@ export default function SectionHeading({
         <p
           className={cn(
             "mt-4 leading-relaxed text-pretty",
-            invert ? "text-white/75" : "text-ink/70"
+            invert ? "text-white/75" : "text-ink/70 dark:text-paper/70"
           )}
         >
           {description}

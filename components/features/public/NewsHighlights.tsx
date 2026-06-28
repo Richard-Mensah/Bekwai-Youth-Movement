@@ -17,7 +17,7 @@ export default async function NewsHighlights() {
   if (posts.length === 0) return null
 
   return (
-    <section className="section bg-paper">
+    <section className="section bg-paper dark:bg-canopy-900">
       <div className="container-content">
         <Reveal className="flex flex-wrap items-end justify-between gap-4">
           <SectionHeading
@@ -27,7 +27,7 @@ export default async function NewsHighlights() {
           />
           <Link
             href="/news"
-            className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-canopy hover:text-canopy-600"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-canopy hover:text-canopy-600 dark:text-paper dark:hover:text-gold-200"
           >
             All news & press
             <ArrowUpRight size={16} />
@@ -39,7 +39,7 @@ export default async function NewsHighlights() {
             <Reveal key={post.id} delay={(i % 4) * 0.06}>
               <Link
                 href={`/news/${post.slug}`}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-canopy/10 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-canopy/10 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover dark:border-white/10 dark:bg-canopy-800"
               >
                 {post.coverUrl && (
                   <div className="relative aspect-[16/10] overflow-hidden">
@@ -65,12 +65,12 @@ export default async function NewsHighlights() {
                     {post.title}
                   </h3>
                   {post.excerpt && (
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/60">
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/60 dark:text-paper/60">
                       {post.excerpt}
                     </p>
                   )}
                   <div className="mt-4 flex items-center justify-between">
-                    <span className="text-xs text-ink/45">{formatDate(post.publishedAt)}</span>
+                    <span className="text-xs text-ink/45 dark:text-paper/45">{formatDate(post.publishedAt)}</span>
                     {post.tags[0] && <Badge tone="canopy">{post.tags[0]}</Badge>}
                   </div>
                 </div>

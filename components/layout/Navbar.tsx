@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ChevronDown, Menu, X } from "lucide-react"
+import { ChevronDown, Menu, X, Search } from "lucide-react"
 import { PUBLIC_NAV, ORG, isDropdown } from "@/constants/nav"
 import { NAV_LABEL_KEYS } from "@/constants/i18n"
 import NavDropdown from "@/components/layout/NavDropdown"
 import LanguageToggle from "@/components/i18n/LanguageToggle"
 import { useLanguage } from "@/components/i18n/LanguageProvider"
+import ThemeToggle from "@/components/theme/ThemeToggle"
+import { useCommandPalette } from "@/components/features/public/CommandPalette"
 import { cn } from "@/lib/utils"
 
 export default function Navbar() {
@@ -16,6 +18,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
   const { t } = useLanguage()
+  const { open: openPalette } = useCommandPalette()
   const navT = (label: string) => {
     const key = NAV_LABEL_KEYS[label]
     return key ? t(key) : label
@@ -40,8 +43,10 @@ export default function Navbar() {
     <>
     <header
       className={cn(
-        "sticky top-0 z-50 bg-white/90 backdrop-blur transition-shadow",
-        scrolled ? "shadow-card border-b border-canopy/5" : "border-b border-canopy/10"
+        "sticky top-0 z-50 bg-white/90 backdrop-blur transition-shadow dark:bg-canopy-900/90",
+        scrolled
+          ? "shadow-card border-b border-canopy/5 dark:border-white/5"
+          : "border-b border-canopy/10 dark:border-white/10"
       )}
     >
       <nav className="container-content flex h-[4.5rem] items-center justify-between">
@@ -58,7 +63,7 @@ export default function Navbar() {
             />
           </span>
           <span className="leading-tight">
-            <span className="block font-display text-[15px] font-semibold text-canopy sm:text-base">
+            <span className="block font-display text-[15px] font-semibold text-canopy sm:text-base dark:text-paper">
               {ORG.name}
             </span>
             <span className="block text-[11px] font-medium uppercase tracking-[0.14em] text-gold-600">
@@ -76,7 +81,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-ink/70 transition-colors hover:text-canopy"
+                className="rounded-md px-3 py-2 text-sm font-medium text-ink/70 transition-colors hover:text-canopy dark:text-paper/70 dark:hover:text-paper"
               >
                 {navT(item.label)}
               </Link>
@@ -86,10 +91,23 @@ export default function Navbar() {
 
         {/* Desktop auth */}
         <div className="hidden items-center gap-2 lg:flex">
+          <button
+            type="button"
+            onClick={openPalette}
+            aria-label="Open search (Command or Control + K)"
+            className="inline-flex items-center gap-2 rounded-full border border-canopy/15 px-3 py-1.5 text-xs font-medium text-ink/60 transition-colors hover:border-canopy/30 hover:text-canopy dark:border-white/15 dark:text-paper/60 dark:hover:text-paper"
+          >
+            <Search size={14} />
+            <span className="hidden xl:inline">Search</span>
+            <kbd className="rounded bg-canopy/5 px-1.5 py-0.5 font-sans text-[10px] font-semibold text-ink/50 dark:bg-white/10 dark:text-paper/50">
+              ⌘K
+            </kbd>
+          </button>
+          <ThemeToggle />
           <LanguageToggle />
           <Link
             href="/login"
-            className="rounded-full px-4 py-2 text-sm font-semibold text-canopy transition-colors hover:bg-canopy-50"
+            className="rounded-full px-4 py-2 text-sm font-semibold text-canopy transition-colors hover:bg-canopy-50 dark:text-paper dark:hover:bg-white/10"
           >
             {t("nav.signIn")}
           </Link>
@@ -101,16 +119,27 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open ? "true" : "false"}
-          onClick={() => setOpen((v) => !v)}
-          className="rounded-md p-2 text-canopy lg:hidden"
-        >
-          {open ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile actions */}
+        <div className="flex items-center gap-1 lg:hidden">
+          <button
+            type="button"
+            onClick={openPalette}
+            aria-label="Open search"
+            className="rounded-md p-2 text-canopy dark:text-paper"
+          >
+            <Search size={22} />
+          </button>
+          <ThemeToggle />
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open ? "true" : "false"}
+            onClick={() => setOpen((v) => !v)}
+            className="rounded-md p-2 text-canopy dark:text-paper"
+          >
+            {open ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </nav>
       </header>
 
@@ -119,7 +148,7 @@ export default function Navbar() {
           containing block (which would otherwise collapse the panel height). */}
       <div
         className={cn(
-          "fixed inset-x-0 top-[4.5rem] bottom-0 z-40 overflow-y-auto bg-white lg:hidden",
+          "fixed inset-x-0 top-[4.5rem] bottom-0 z-40 overflow-y-auto bg-white dark:bg-canopy-900 lg:hidden",
           open ? "block" : "hidden"
         )}
       >
@@ -136,7 +165,7 @@ export default function Navbar() {
                     setExpanded((cur) => (cur === item.label ? null : item.label))
                   }
                   aria-expanded={expanded === item.label ? "true" : "false"}
-                  className="flex w-full items-center justify-between px-2 py-2.5 text-left text-base font-semibold text-canopy"
+                  className="flex w-full items-center justify-between px-2 py-2.5 text-left text-base font-semibold text-canopy dark:text-paper"
                 >
                   {navT(item.label)}
                   <ChevronDown
@@ -154,7 +183,7 @@ export default function Navbar() {
                         key={child.href + child.label}
                         href={child.href}
                         onClick={() => setOpen(false)}
-                        className="block rounded-lg px-3 py-2 text-sm text-ink/70 hover:bg-paper hover:text-canopy"
+                        className="block rounded-lg px-3 py-2 text-sm text-ink/70 hover:bg-paper hover:text-canopy dark:text-paper/70 dark:hover:bg-white/5 dark:hover:text-paper"
                       >
                         {child.label}
                       </Link>
@@ -167,7 +196,7 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-canopy/5 px-2 py-3 text-base font-semibold text-canopy"
+                className="border-b border-canopy/5 px-2 py-3 text-base font-semibold text-canopy dark:border-white/5 dark:text-paper"
               >
                 {navT(item.label)}
               </Link>

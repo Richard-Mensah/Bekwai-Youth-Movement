@@ -28,7 +28,7 @@ const PILLARS = [
 /** Why BYM is trustworthy — principles & traditional authority. */
 export default function CredibilityBand() {
   return (
-    <section className="section bg-paper">
+    <section className="section bg-paper dark:bg-canopy-900">
       <div className="container-content">
         <Reveal>
           <SectionHeading
@@ -41,14 +41,14 @@ export default function CredibilityBand() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {PILLARS.map(({ icon: Icon, title, body }, i) => (
             <Reveal key={title} delay={(i % 4) * 0.07}>
-              <div className="flex h-full flex-col rounded-2xl border border-canopy/10 bg-white p-6 shadow-card">
+              <div className="flex h-full flex-col rounded-2xl border border-canopy/10 bg-white p-6 shadow-card dark:border-white/10 dark:bg-canopy-800">
                 <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold-50 text-gold-600">
                   <Icon size={22} />
                 </span>
                 <h3 className="mt-4 font-display text-lg font-semibold text-canopy">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink/65">{body}</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink/65 dark:text-paper/65">{body}</p>
               </div>
             </Reveal>
           ))}

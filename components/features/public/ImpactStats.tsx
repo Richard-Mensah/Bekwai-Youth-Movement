@@ -14,7 +14,7 @@ export default async function ImpactStats() {
   ]
 
   return (
-    <section className="border-y border-canopy/10 bg-paper">
+    <section className="border-y border-canopy/10 bg-paper dark:border-white/10 dark:bg-canopy-900">
       <div className="container-content py-14">
         <Reveal className="text-center">
           <p className="eyebrow justify-center">
@@ -25,11 +25,11 @@ export default async function ImpactStats() {
         <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
           {STATS.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.06} className="text-center">
-              <p className="font-display text-4xl font-semibold text-canopy sm:text-5xl">
+              <p className="font-display text-4xl font-semibold text-canopy sm:text-5xl dark:text-paper">
                 <Counter to={s.to} suffix={s.suffix} />
               </p>
-              <p className="mt-2 text-sm font-semibold text-ink/80">{s.label}</p>
-              <p className="mt-0.5 text-xs text-ink/50">{s.hint}</p>
+              <p className="mt-2 text-sm font-semibold text-ink/80 dark:text-paper/80">{s.label}</p>
+              <p className="mt-0.5 text-xs text-ink/50 dark:text-paper/50">{s.hint}</p>
             </Reveal>
           ))}
         </div>

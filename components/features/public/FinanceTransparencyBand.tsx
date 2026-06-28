@@ -20,7 +20,7 @@ export default async function FinanceTransparencyBand() {
       icon: TrendingDown,
       label: "Total expenditure published",
       value: summary.totalExpenditure,
-      tone: "text-canopy",
+      tone: "text-canopy dark:text-paper",
     },
     {
       icon: Wallet,
@@ -45,37 +45,37 @@ export default async function FinanceTransparencyBand() {
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
           {CARDS.map(({ icon: Icon, label, value, tone }, i) => (
             <Reveal key={label} delay={(i % 3) * 0.07}>
-              <div className="flex h-full flex-col rounded-2xl border border-canopy/10 bg-white p-6 shadow-card">
+              <div className="flex h-full flex-col rounded-2xl border border-canopy/10 bg-white p-6 shadow-card dark:border-white/10 dark:bg-canopy-800">
                 <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold-50 text-gold-600">
                   <Icon size={22} />
                 </span>
                 <p className={`mt-4 font-display text-3xl font-semibold ${tone}`}>
                   <Counter to={Math.abs(value)} prefix="GHS " />
                 </p>
-                <p className="mt-1 text-sm font-medium text-ink/65">{label}</p>
+                <p className="mt-1 text-sm font-medium text-ink/65 dark:text-paper/65">{label}</p>
               </div>
             </Reveal>
           ))}
         </div>
 
         <Reveal delay={0.1}>
-          <div className="mt-8 overflow-hidden rounded-2xl border border-canopy/10 bg-white shadow-card">
+          <div className="mt-8 overflow-hidden rounded-2xl border border-canopy/10 bg-white shadow-card dark:border-white/10 dark:bg-canopy-800">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-canopy/10 text-xs uppercase tracking-wider text-ink/50">
+              <thead className="border-b border-canopy/10 text-xs uppercase tracking-wider text-ink/50 dark:border-white/10 dark:text-paper/50">
                 <tr>
                   <th className="px-5 py-3 font-semibold">Period</th>
                   <th className="px-5 py-3 text-right font-semibold">Income (GHS)</th>
                   <th className="px-5 py-3 text-right font-semibold">Expenditure (GHS)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-canopy/5">
+              <tbody className="divide-y divide-canopy/5 dark:divide-white/5">
                 {summary.recent.map((b) => (
                   <tr key={b.id}>
-                    <td className="px-5 py-3 font-medium text-canopy">{b.title}</td>
-                    <td className="px-5 py-3 text-right text-ink/70">
+                    <td className="px-5 py-3 font-medium text-canopy dark:text-paper">{b.title}</td>
+                    <td className="px-5 py-3 text-right text-ink/70 dark:text-paper/70">
                       {b.incomeGhs.toLocaleString()}
                     </td>
-                    <td className="px-5 py-3 text-right text-ink/70">
+                    <td className="px-5 py-3 text-right text-ink/70 dark:text-paper/70">
                       {b.expenditureGhs.toLocaleString()}
                     </td>
                   </tr>

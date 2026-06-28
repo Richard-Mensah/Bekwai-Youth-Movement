@@ -16,16 +16,16 @@ export default function MissionIntro() {
           <h2 className="mt-3 font-display text-3xl font-semibold text-canopy text-balance sm:text-4xl">
             A grassroots movement, now building lasting institutions
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-ink/70 text-pretty">
+          <p className="mt-5 text-lg leading-relaxed text-ink/70 dark:text-paper/70 text-pretty">
             The Bekwai Youth Movement exists to harness the potential of all young
             people in Sefwi Bekwai and its 31 surrounding sub-communities — through
             structured governance, community intelligence, volunteerism, and
             sustained leadership development, aligned with the UN SDGs.
           </p>
-          <p className="mt-4 leading-relaxed text-ink/65">
+          <p className="mt-4 leading-relaxed text-ink/65 dark:text-paper/65">
             To deliver on that promise, the movement is bringing on board two
-            flagship initiatives — a <strong className="text-canopy">Youth
-            General Assembly</strong> and a <strong className="text-canopy">Bekwai
+            flagship initiatives — a <strong className="text-canopy dark:text-paper">Youth
+            General Assembly</strong> and a <strong className="text-canopy dark:text-paper">Bekwai
             Youth Parliament</strong> — supported by a Community Intelligence
             Network that gives every community a voice and every decision an
             evidence base.
@@ -57,9 +57,9 @@ export default function MissionIntro() {
               </div>
             </div>
             <div className="space-y-4 pt-8">
-              <div className="rounded-2xl border border-canopy/10 bg-paper p-5">
-                <p className="font-display text-3xl font-semibold text-canopy">31</p>
-                <p className="mt-1 text-sm text-ink/65">
+              <div className="rounded-2xl border border-canopy/10 bg-paper p-5 dark:border-white/10 dark:bg-canopy-800">
+                <p className="font-display text-3xl font-semibold text-canopy dark:text-paper">31</p>
+                <p className="mt-1 text-sm text-ink/65 dark:text-paper/65">
                   sub-communities united under one movement
                 </p>
               </div>

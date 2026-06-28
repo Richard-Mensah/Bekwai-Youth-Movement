@@ -11,6 +11,7 @@ import NewsHighlights from "@/components/features/public/NewsHighlights"
 import RepresentationBand from "@/components/features/public/RepresentationBand"
 import MembersWall from "@/components/features/public/MembersWall"
 import MemberVoices from "@/components/features/public/MemberVoices"
+import ImpactTicker from "@/components/features/public/ImpactTicker"
 import CredibilityBand from "@/components/features/public/CredibilityBand"
 import FinanceTransparencyBand from "@/components/features/public/FinanceTransparencyBand"
 import PartnersStrip from "@/components/features/public/PartnersStrip"
@@ -27,6 +28,7 @@ export default async function HomePage() {
         subtitle={settings.heroSubtitle}
         foundingDate={settings.foundingDate}
       />
+      <ImpactTicker />
       <TrustBar />
       <MissionIntro />
       <ImpactStats />

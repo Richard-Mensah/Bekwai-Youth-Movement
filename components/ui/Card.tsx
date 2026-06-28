@@ -29,7 +29,7 @@ export default function Card({
     <div
       id={id}
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-canopy/10 bg-white p-6 shadow-card",
+        "relative overflow-hidden rounded-2xl border border-canopy/10 bg-white p-6 shadow-card dark:border-white/10 dark:bg-canopy-800",
         accent !== "none" &&
           "before:absolute before:inset-x-0 before:top-0 before:h-1 before:content-['']",
         ACCENT[accent],

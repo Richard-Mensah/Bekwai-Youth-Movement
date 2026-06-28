@@ -39,7 +39,7 @@ export default function SdgShowcase() {
         <Reveal delay={0.15}>
           <Link
             href="/sdgs"
-            className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-canopy hover:text-canopy-600"
+            className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-canopy hover:text-canopy-600 dark:text-paper dark:hover:text-gold-200"
           >
             See our full SDG alignment framework
             <ArrowRight size={16} />

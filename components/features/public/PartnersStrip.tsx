@@ -8,7 +8,7 @@ export default async function PartnersStrip() {
   if (partners.length === 0) return null
 
   return (
-    <section className="border-y border-canopy/10 bg-white">
+    <section className="border-y border-canopy/10 bg-white dark:border-white/10 dark:bg-canopy-900">
       <div className="container-content py-12">
         <Reveal className="text-center">
           <p className="eyebrow justify-center">
@@ -27,7 +27,7 @@ export default async function PartnersStrip() {
                 className="h-12 w-auto object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0"
               />
             ) : (
-              <span className="text-sm font-semibold text-ink/50">{p.name}</span>
+              <span className="text-sm font-semibold text-ink/50 dark:text-paper/50">{p.name}</span>
             )
             return p.url ? (
               <a key={p.id} href={p.url} target="_blank" rel="noopener noreferrer" title={p.name}>

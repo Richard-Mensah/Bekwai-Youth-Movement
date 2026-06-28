@@ -29,7 +29,7 @@ export default async function ImpactStoriesCarousel() {
             const meta = PROJECT_STATUS_META[p.status]
             return (
               <Reveal key={p.id} delay={(i % 3) * 0.07}>
-                <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-canopy/10 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+                <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-canopy/10 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover dark:border-white/10 dark:bg-canopy-800">
                   <div className="relative h-44 w-full bg-canopy-50">
                     {p.coverUrl ? (
                       <Image
@@ -52,12 +52,12 @@ export default async function ImpactStoriesCarousel() {
                     <h3 className="font-display text-lg font-semibold text-canopy">
                       {p.name}
                     </h3>
-                    <p className="mt-1 inline-flex items-center gap-1.5 text-xs text-ink/55">
+                    <p className="mt-1 inline-flex items-center gap-1.5 text-xs text-ink/55 dark:text-paper/55">
                       <MapPin size={13} className="text-gold-500" />
                       {p.communityName}
                     </p>
                     {p.description && (
-                      <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-ink/65">
+                      <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-ink/65 dark:text-paper/65">
                         {p.description}
                       </p>
                     )}
