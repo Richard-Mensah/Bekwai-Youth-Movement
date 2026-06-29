@@ -5,7 +5,9 @@ import { motion, useReducedMotion, type Variants } from "framer-motion"
 import { ArrowRight, CalendarDays } from "lucide-react"
 import Button from "@/components/ui/Button"
 import Countdown from "@/components/ui/Countdown"
+import HeroCarousel from "@/components/features/public/HeroCarousel"
 import { ORG } from "@/constants/nav"
+import { GALLERY_PHOTOS } from "@/constants/gallery"
 import { useLanguage } from "@/components/i18n/LanguageProvider"
 
 type Props = {
@@ -13,6 +15,8 @@ type Props = {
   title?: string
   subtitle?: string
   foundingDate?: string
+  /** Photos for the hero carousel; falls back to the curated gallery. */
+  images?: string[]
 }
 
 export default function Hero({
@@ -20,7 +24,12 @@ export default function Hero({
   title = "Harnessing the potential of every young person in Sefwi Bekwai",
   subtitle = "A non-political youth movement building structured governance, community intelligence, and volunteerism across 32 communities, aligned with the UN Sustainable Development Goals.",
   foundingDate = ORG.foundingDate,
+  images,
 }: Props) {
+  const heroImages =
+    images && images.length > 0
+      ? images
+      : GALLERY_PHOTOS.map((p) => p.path)
   const reduce = useReducedMotion()
   const { lang, t } = useLanguage()
   // In English, show the editable copy from Site Settings; in Twi, show the
@@ -112,22 +121,12 @@ export default function Hero({
           </motion.div>
         </div>
 
-        {/* Seal */}
+        {/* Photo carousel (replaces the static seal) */}
         <motion.div
           variants={item}
           className="hidden items-center justify-center md:flex"
         >
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-full bg-gold-400/10 blur-2xl" />
-            <Image
-              src="/images/logo.jpg"
-              alt={`${ORG.name} official seal`}
-              width={300}
-              height={300}
-              priority
-              className="relative rounded-full ring-1 ring-gold-400/40 ring-offset-4 ring-offset-canopy"
-            />
-          </div>
+          <HeroCarousel images={heroImages} />
         </motion.div>
       </motion.div>
     </section>

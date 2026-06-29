@@ -16,10 +16,10 @@ import CredibilityBand from "@/components/features/public/CredibilityBand"
 import FinanceTransparencyBand from "@/components/features/public/FinanceTransparencyBand"
 import PartnersStrip from "@/components/features/public/PartnersStrip"
 import GetInvolved from "@/components/features/public/GetInvolved"
-import { getSettings } from "@/lib/data/content"
+import { getSettings, getGallery } from "@/lib/data/content"
 
 export default async function HomePage() {
-  const settings = await getSettings()
+  const [settings, gallery] = await Promise.all([getSettings(), getGallery()])
   return (
     <>
       <Hero
@@ -27,6 +27,7 @@ export default async function HomePage() {
         title={settings.heroTitle}
         subtitle={settings.heroSubtitle}
         foundingDate={settings.foundingDate}
+        images={gallery.slice(0, 8).map((g) => g.url)}
       />
       <ImpactTicker />
       <TrustBar />
