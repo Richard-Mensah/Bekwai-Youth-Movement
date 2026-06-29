@@ -46,13 +46,16 @@ export default function Hero({
       {/* Background photograph */}
       <div className="absolute inset-0">
         <Image
-          src="/images/history/472533608_1643728982885427_6727051425384547508_n.jpg"
+          src="/images/history/482247163_1201043701742295_4815130360104201400_n.jpg"
           alt=""
           fill
           priority
-          className="object-cover object-center opacity-25"
+          className="object-cover object-center opacity-45"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-canopy via-canopy/95 to-canopy-700/95" />
+        {/* Left-dark, right-light overlay keeps the heading readable while
+            letting the community photo show through on the right. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-canopy via-canopy/85 to-canopy/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-canopy/80 via-transparent to-canopy/30" />
         <div className="absolute inset-0 canopy-texture" />
       </div>
 
