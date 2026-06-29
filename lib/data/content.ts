@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache"
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
 import { publicUrl } from "@/lib/media"
 import { slugify } from "@/lib/cms"
@@ -138,6 +139,7 @@ const TIER_META = LEADERSHIP_TIERS.map((t) => ({
 
 // ---------- Reads (DB with fallback) ----------
 export async function getPublishedPosts(limit?: number): Promise<Post[]> {
+  noStore()
   if (!isSupabaseConfigured()) return limit ? newsToPosts().slice(0, limit) : newsToPosts()
   const supabase = await createClient()
   let q = supabase
@@ -147,9 +149,7 @@ export async function getPublishedPosts(limit?: number): Promise<Post[]> {
     .order("published_at", { ascending: false })
   if (limit) q = q.limit(limit)
   const { data } = await q
-  if (!data || data.length === 0)
-    return limit ? newsToPosts().slice(0, limit) : newsToPosts()
-  return data.map(mapPost)
+  return (data ?? []).map(mapPost)
 }
 
 export async function getAllPosts(): Promise<Post[]> {
@@ -163,11 +163,12 @@ export async function getAllPosts(): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const fromFallback = () => newsToPosts().find((p) => p.slug === slug) ?? null
-  if (!isSupabaseConfigured()) return fromFallback()
+  noStore()
+  if (!isSupabaseConfigured())
+    return newsToPosts().find((p) => p.slug === slug) ?? null
   const supabase = await createClient()
   const { data } = await supabase.from("posts").select("*").eq("slug", slug).single()
-  return data ? mapPost(data) : fromFallback()
+  return data ? mapPost(data) : null
 }
 
 export async function getPostById(id: string): Promise<Post | null> {
@@ -178,6 +179,7 @@ export async function getPostById(id: string): Promise<Post | null> {
 }
 
 export async function getLeaderTiers(): Promise<LeaderTierGroup[]> {
+  noStore()
   if (!isSupabaseConfigured()) return fallbackTiers()
   const supabase = await createClient()
   const { data } = await supabase
@@ -185,8 +187,7 @@ export async function getLeaderTiers(): Promise<LeaderTierGroup[]> {
     .select("*")
     .eq("is_published", true)
     .order("sort_order", { ascending: true })
-  if (!data || data.length === 0) return fallbackTiers()
-  const members = data.map(mapLeader)
+  const members = (data ?? []).map(mapLeader)
   return TIER_META.map((t) => ({
     ...t,
     members: members.filter((m) => m.tier === t.id),
@@ -218,14 +219,14 @@ export async function getGallery(): Promise<GalleryItem[]> {
     caption: p.caption,
     sortOrder: i,
   }))
+  noStore()
   if (!isSupabaseConfigured()) return fallback
   const supabase = await createClient()
   const { data } = await supabase
     .from("gallery_images")
     .select("*")
     .order("sort_order", { ascending: true })
-  if (!data || data.length === 0) return fallback
-  return data.map((r) => ({
+  return (data ?? []).map((r) => ({
     id: r.id,
     url: publicUrl(r.path) ?? "",
     caption: r.caption ?? "",
@@ -249,6 +250,7 @@ export async function getAllGallery(): Promise<GalleryItem[]> {
 }
 
 export async function getPublishedEvents(): Promise<EventItem[]> {
+  noStore()
   if (!isSupabaseConfigured()) return fallbackEvents()
   const supabase = await createClient()
   const { data } = await supabase
@@ -256,8 +258,7 @@ export async function getPublishedEvents(): Promise<EventItem[]> {
     .select("*")
     .eq("is_published", true)
     .order("starts_at", { ascending: true })
-  if (!data || data.length === 0) return fallbackEvents()
-  return data.map(mapEvent)
+  return (data ?? []).map(mapEvent)
 }
 
 export async function getAllEvents(): Promise<EventItem[]> {
@@ -278,6 +279,7 @@ export async function getEventById(id: string): Promise<EventItem | null> {
 }
 
 export async function getPartners(): Promise<PartnerItem[]> {
+  noStore()
   if (!isSupabaseConfigured()) return []
   const supabase = await createClient()
   const { data } = await supabase
@@ -306,6 +308,7 @@ export async function getPartnerById(id: string): Promise<PartnerItem | null> {
 }
 
 export async function getSettings(): Promise<SiteSettings> {
+  noStore()
   if (!isSupabaseConfigured()) return DEFAULT_SETTINGS
   const supabase = await createClient()
   const { data } = await supabase
@@ -324,6 +327,7 @@ export async function getSettings(): Promise<SiteSettings> {
 export type CommunityItem = { id: number; name: string; isTown: boolean; slug: string }
 
 export async function getCommunities(): Promise<CommunityItem[]> {
+  noStore()
   const fallback = COMMUNITIES.map((c) => ({
     id: c.id,
     name: c.name,
@@ -385,6 +389,7 @@ export async function getAllCommunities(): Promise<CommunityItem[]> {
 }
 
 export async function getCommunityBySlug(slug: string): Promise<CommunityDetail | null> {
+  noStore()
   const fromFallback = (): CommunityDetail | null => {
     const c = COMMUNITIES.find((x) => slugify(x.name) === slug)
     if (!c) return null
@@ -442,6 +447,7 @@ export async function getCommunityDetailById(id: number): Promise<CommunityDetai
 
 /** Verified BYM representatives for a community, from the public view. */
 export async function getCommunityReps(communityId: number): Promise<CommunityRep[]> {
+  noStore()
   if (!isSupabaseConfigured()) return []
   const supabase = await createClient()
   const { data } = await supabase
@@ -471,6 +477,7 @@ export type PublicMember = {
 export async function getPublicMembersData(
   limit = 18
 ): Promise<{ members: PublicMember[]; total: number }> {
+  noStore()
   if (!isSupabaseConfigured()) return { members: [], total: 0 }
   const supabase = await createClient()
   const [{ data }, { count }] = await Promise.all([
@@ -535,6 +542,7 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
 ]
 
 export async function getTestimonials(): Promise<Testimonial[]> {
+  noStore()
   if (!isSupabaseConfigured()) return FALLBACK_TESTIMONIALS
   const supabase = await createClient()
   const { data } = await supabase
@@ -542,8 +550,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     .select("*")
     .eq("is_published", true)
     .order("sort_order", { ascending: true })
-  if (!data || data.length === 0) return FALLBACK_TESTIMONIALS
-  return data.map(mapTestimonial)
+  return (data ?? []).map(mapTestimonial)
 }
 
 export async function getAllTestimonials(): Promise<Testimonial[]> {
