@@ -91,19 +91,6 @@ export default function Navbar() {
 
         {/* Desktop auth */}
         <div className="hidden items-center gap-2 lg:flex">
-          <button
-            type="button"
-            onClick={openPalette}
-            aria-label="Open search (Command or Control + K)"
-            className="inline-flex items-center gap-2 rounded-full border border-canopy/15 px-3 py-1.5 text-xs font-medium text-ink/60 transition-colors hover:border-canopy/30 hover:text-canopy dark:border-white/15 dark:text-paper/60 dark:hover:text-paper"
-          >
-            <Search size={14} />
-            <span className="hidden xl:inline">Search</span>
-            <kbd className="rounded bg-canopy/5 px-1.5 py-0.5 font-sans text-[10px] font-semibold text-ink/50 dark:bg-white/10 dark:text-paper/50">
-              ⌘K
-            </kbd>
-          </button>
-          <ThemeToggle />
           <LanguageToggle />
           <Link
             href="/login"
