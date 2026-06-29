@@ -58,7 +58,7 @@ export default function HeroCarousel({ images, interval = 4500 }: Props) {
               alt=""
               fill
               priority={index === 0}
-              sizes="(max-width: 768px) 0px, 24rem"
+              sizes="(max-width: 768px) 90vw, 24rem"
               className="object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-canopy/40 to-transparent" />

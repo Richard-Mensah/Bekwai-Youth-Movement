@@ -124,7 +124,7 @@ export default function Hero({
         {/* Photo carousel (replaces the static seal) */}
         <motion.div
           variants={item}
-          className="hidden items-center justify-center md:flex"
+          className="flex items-center justify-center"
         >
           <HeroCarousel images={heroImages} />
         </motion.div>
