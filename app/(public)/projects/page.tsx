@@ -11,7 +11,7 @@ import { placeholderImage } from "@/lib/images"
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Community development projects delivered by BYM across 32 communities — each with a budget, SDG alignment, timeline, and progress reports.",
+    "Community development projects delivered by BYM across 32 communities, each with a budget, SDG alignment, timeline, and progress reports.",
 }
 
 export default async function ProjectsPage() {

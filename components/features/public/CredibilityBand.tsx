@@ -11,7 +11,7 @@ const PILLARS = [
   {
     icon: Landmark,
     title: "Rooted in traditional authority",
-    body: "A Traditional Advisory Council — the Paramount Chief, sub-chiefs, and Queenmother — guards our values and legitimacy.",
+    body: "A Traditional Advisory Council, made up of the Paramount Chief, sub-chiefs, and Queenmother, guards our values and legitimacy.",
   },
   {
     icon: ScrollText,
@@ -34,7 +34,7 @@ export default function CredibilityBand() {
           <SectionHeading
             eyebrow="Why we're trusted"
             title="Built on principle, accountable by design"
-            description="Credibility isn't claimed — it's structured into how the movement operates."
+            description="Credibility isn't claimed. It's structured into how the movement operates."
             centered
           />
         </Reveal>

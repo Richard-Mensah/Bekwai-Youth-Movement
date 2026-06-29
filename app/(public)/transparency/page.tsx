@@ -18,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: "Transparency Portal",
   description:
-    "Public access to BYM's published budgets, community scorecards, annual and SDG reports — accountability by design.",
+    "Public access to BYM's published budgets, community scorecards, annual and SDG reports. Accountability by design.",
 }
 
 export default async function TransparencyPage() {
@@ -35,7 +35,7 @@ export default async function TransparencyPage() {
       <PageHeader
         eyebrow="Accountability"
         title="Transparency Portal"
-        description="BYM publishes its finances, community data, and project outcomes openly — so members and stakeholders can hold the Assembly to account."
+        description="BYM publishes its finances, community data, and project outcomes openly, so members and stakeholders can hold the Assembly to account."
       />
 
       <section className="container-content py-16">

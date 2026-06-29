@@ -18,15 +18,15 @@ export default function MissionIntro() {
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-ink/70 dark:text-paper/70 text-pretty">
             The Bekwai Youth Movement exists to harness the potential of all young
-            people in Sefwi Bekwai and its 31 surrounding sub-communities — through
+            people in Sefwi Bekwai and its 31 surrounding sub-communities, through
             structured governance, community intelligence, volunteerism, and
             sustained leadership development, aligned with the UN SDGs.
           </p>
           <p className="mt-4 leading-relaxed text-ink/65 dark:text-paper/65">
             To deliver on that promise, the movement is bringing on board two
-            flagship initiatives — a <strong className="text-canopy dark:text-paper">Youth
+            flagship initiatives: a <strong className="text-canopy dark:text-paper">Youth
             General Assembly</strong> and a <strong className="text-canopy dark:text-paper">Bekwai
-            Youth Parliament</strong> — supported by a Community Intelligence
+            Youth Parliament</strong>, supported by a Community Intelligence
             Network that gives every community a voice and every decision an
             evidence base.
           </p>

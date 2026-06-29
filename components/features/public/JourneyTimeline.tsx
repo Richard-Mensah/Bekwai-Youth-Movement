@@ -10,7 +10,7 @@ const MILESTONES = [
   {
     year: "2023",
     title: "On the global stage",
-    body: "BYM delegates engage internationally — the African Youth Summit on Biodiversity in Morocco, the MAI Foundation Sustainability Week, and UN SDG forums.",
+    body: "BYM delegates engage internationally, from the African Youth Summit on Biodiversity in Morocco to the MAI Foundation Sustainability Week and UN SDG forums.",
   },
   {
     year: "2026",
@@ -20,7 +20,7 @@ const MILESTONES = [
   {
     year: "2027",
     title: "Founding Day",
-    body: "The Youth General Assembly and Bekwai Youth Parliament are formally launched — 12 January 2027.",
+    body: "The Youth General Assembly and Bekwai Youth Parliament are formally launched on 12 January 2027.",
     highlight: true,
   },
 ]
@@ -34,7 +34,7 @@ export default function JourneyTimeline() {
           <SectionHeading
             eyebrow="Our journey"
             title="From a local movement to a youth institution"
-            description="Real momentum — built community by community, and recognised well beyond Ghana."
+            description="Real momentum, built community by community and recognised well beyond Ghana."
             invert
             centered
           />

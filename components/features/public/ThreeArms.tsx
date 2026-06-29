@@ -16,7 +16,7 @@ const ARMS = [
     title: "Bekwai Youth Parliament",
     tag: "Legislative · New initiative",
     href: "/parliament",
-    body: "A Speaker-led chamber giving legislative voice to youth aged 10–45 — with bills, motions, debates, and Youth Recommendations, one Member per community.",
+    body: "A Speaker-led chamber giving legislative voice to youth aged 10–45, with bills, motions, debates, and Youth Recommendations, one Member per community.",
   },
   {
     icon: Radar,
@@ -35,7 +35,7 @@ export default function ThreeArms() {
           <SectionHeading
             eyebrow="How BYM is organised"
             title="Three arms of youth governance"
-            description="A separation of powers adapted to the Ghanaian community context — an executive, a legislature, and a grassroots intelligence network working as one."
+            description="A separation of powers adapted to the Ghanaian community context: an executive, a legislature, and a grassroots intelligence network working as one."
             centered
           />
         </Reveal>

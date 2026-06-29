@@ -31,7 +31,7 @@ export async function generateMetadata({
   const community = await getCommunityBySlug(slug)
   if (!community) return { title: "Community not found" }
   return {
-    title: `${community.name} — Community`,
+    title: `${community.name} Community`,
     description:
       community.about ??
       `${community.name}, ${
@@ -86,7 +86,7 @@ export default async function CommunityPage({
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/75">
             {community.about ??
-              `${community.name} is part of the Sefwi Bekwai Traditional Area in the Western North Region of Ghana — one of the communities represented within the Bekwai Youth Movement.`}
+              `${community.name} is part of the Sefwi Bekwai Traditional Area in the Western North Region of Ghana, one of the communities represented within the Bekwai Youth Movement.`}
           </p>
         </div>
       </section>

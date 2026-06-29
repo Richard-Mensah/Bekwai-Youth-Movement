@@ -23,7 +23,7 @@ export default async function NewsHighlights() {
           <SectionHeading
             eyebrow="On the global stage"
             title="Youth from Sefwi Bekwai, engaging the world"
-            description="Stories, summits, and milestones from the movement — published straight from our newsroom."
+            description="Stories, summits, and milestones from the movement, published straight from our newsroom."
           />
           <Link
             href="/news"

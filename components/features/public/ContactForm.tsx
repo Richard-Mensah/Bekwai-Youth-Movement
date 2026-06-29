@@ -52,7 +52,7 @@ export default function ContactForm() {
           Message sent
         </h3>
         <p className="mt-1 text-sm text-ink/65">
-          Thank you for reaching out — the Secretariat will get back to you soon.
+          Thank you for reaching out. The Secretariat will get back to you soon.
         </p>
       </div>
     )

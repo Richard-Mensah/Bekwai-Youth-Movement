@@ -26,7 +26,7 @@ export default function GetInvolved() {
             Be part of the change in your community
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/75">
-            There&apos;s a place for every young person in Sefwi Bekwai — whether you
+            There&apos;s a place for every young person in Sefwi Bekwai, whether you
             want to lead, volunteer, represent, or simply stay informed.
           </p>
         </Reveal>

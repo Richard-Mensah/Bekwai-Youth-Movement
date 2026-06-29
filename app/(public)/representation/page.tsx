@@ -6,7 +6,7 @@ import Card from "@/components/ui/Card"
 export const metadata: Metadata = {
   title: "Community Representation",
   description:
-    "No community left without a voice — every one of BYM's 32 communities is entitled to three dedicated representatives.",
+    "No community left without a voice: every one of BYM's 32 communities is entitled to three dedicated representatives.",
 }
 
 const INTERIM_TIERS = [
@@ -33,7 +33,7 @@ export default function RepresentationPage() {
       <PageHeader
         eyebrow="Our Impact"
         title="No community left without a voice"
-        description="Representation is a promise, not a privilege. Every community — town or remote — holds three seats in the movement, and an interim protocol ensures none goes unheard."
+        description="Representation is a promise, not a privilege. Every community, town or remote, holds three seats in the movement, and an interim protocol ensures none goes unheard."
       />
 
       <RepresentationBand />
@@ -50,7 +50,7 @@ export default function RepresentationPage() {
             </h2>
             <p className="mt-4 leading-relaxed text-ink/70">
               If a community produces no qualified candidate after two nomination
-              cycles, representation is guaranteed through escalating tiers — and a
+              cycles, representation is guaranteed through escalating tiers, and a
               fresh recruitment drive runs every six months until a resident is
               appointed.
             </p>

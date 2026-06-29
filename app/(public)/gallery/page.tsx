@@ -6,7 +6,7 @@ import { getGallery } from "@/lib/data/content"
 export const metadata: Metadata = {
   title: "Gallery",
   description:
-    "Moments from the Bekwai Youth Movement — community activities, leadership, and volunteering.",
+    "Moments from the Bekwai Youth Movement, from community activities to leadership and volunteering.",
 }
 
 export default async function GalleryPage() {

@@ -115,7 +115,7 @@ export const LEADERSHIP_TIERS: LeaderTier[] = [
     eyebrow: "The Intelligence",
     title: "Community Intelligence Network leadership",
     description:
-      "The CIN turns lived community experience into evidence — coordinating one intelligence officer in each of the 32 communities and a monthly reporting cycle.",
+      "The CIN turns lived community experience into evidence, coordinating one intelligence officer in each of the 32 communities and a monthly reporting cycle.",
     members: [
       {
         title: "Director of Community Intelligence",
@@ -140,7 +140,7 @@ export const LEADERSHIP_TIERS: LeaderTier[] = [
     eyebrow: "Honorary Guardianship",
     title: "Traditional Advisory Council",
     description:
-      "The highest honorary body — holding no executive power but commanding moral authority, community trust, and cultural legitimacy as guardian of BYM's non-political values.",
+      "The highest honorary body, holding no executive power but commanding moral authority, community trust, and cultural legitimacy as guardian of BYM's non-political values.",
     members: [
       {
         title: "Patron of the Assembly",

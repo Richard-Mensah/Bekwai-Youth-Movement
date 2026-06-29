@@ -22,7 +22,7 @@ export default async function MembersWall() {
             title={`Join ${total.toLocaleString()} young leader${
               total === 1 ? "" : "s"
             } building the movement`}
-            description="Real young people from across our 32 communities — volunteering, representing, and shaping Sefwi Bekwai's future together."
+            description="Real young people from across our 32 communities, volunteering, representing, and shaping Sefwi Bekwai's future together."
             centered
           />
         </Reveal>

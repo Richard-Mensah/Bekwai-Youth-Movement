@@ -13,7 +13,7 @@ export default function SdgShowcase() {
           <SectionHeading
             eyebrow="Global alignment"
             title="Aligned with 12 UN Sustainable Development Goals"
-            description="Every unit, programme, and governance activity maps to the UN 2030 Agenda — making BYM's work globally recognised and fundable by development partners."
+            description="Every unit, programme, and governance activity maps to the UN 2030 Agenda, making BYM's work globally recognised and fundable by development partners."
           />
         </Reveal>
 

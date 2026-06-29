@@ -9,7 +9,7 @@ import { ORG } from "@/constants/nav"
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with the Bekwai Youth Movement Secretariat in Sefwi Bekwai, Western North Region, Ghana — for partnerships, media, or membership.",
+    "Get in touch with the Bekwai Youth Movement Secretariat in Sefwi Bekwai, Western North Region, Ghana, for partnerships, media, or membership.",
 }
 
 const INFO = [
@@ -28,7 +28,7 @@ export default function ContactPage() {
       <PageHeader
         eyebrow="Get in touch"
         title="Contact the Secretariat"
-        description="For partnerships, media, membership, or community engagement enquiries — we'd love to hear from you."
+        description="For partnerships, media, membership, or community engagement enquiries. We'd love to hear from you."
       />
 
       <section className="section">

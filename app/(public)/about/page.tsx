@@ -16,7 +16,7 @@ import JourneyTimeline from "@/components/features/public/JourneyTimeline"
 export const metadata: Metadata = {
   title: "About",
   description:
-    "The story of the Bekwai Youth Movement — from its grassroots beginnings to a structured youth governance movement serving 32 communities.",
+    "The story of the Bekwai Youth Movement, from its grassroots beginnings to a structured youth governance movement serving 32 communities.",
 }
 
 const PRINCIPLES: [LucideIcon, string, string][] = [
@@ -40,7 +40,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="Who we are"
         title="About the Bekwai Youth Movement"
-        description="A non-political youth movement in Sefwi Bekwai, Western North Region, Ghana — built to harness the potential of every young person."
+        description="A non-political youth movement in Sefwi Bekwai, Western North Region, Ghana, built to harness the potential of every young person."
       />
 
       {/* Our story */}
@@ -58,7 +58,7 @@ export default function AboutPage() {
                 The movement is now formalising its governance: a Youth General
                 Assembly modelled on the UK Cabinet, a Bekwai Youth Parliament
                 mirroring the Parliament of Ghana, and a Community Intelligence
-                Network rooted in all 32 communities — all aligned with the UN SDGs.
+                Network rooted in all 32 communities, all aligned with the UN SDGs.
               </p>
               <p>
                 Our mission is to harness the potential of all young people in Sefwi
@@ -130,7 +130,7 @@ export default function AboutPage() {
             <SectionHeading
               eyebrow="Honorary oversight"
               title="The Traditional Advisory Council"
-              description="The highest honorary body in the movement — it holds no executive power but commands moral authority, community trust, and cultural legitimacy, and guards BYM's non-political values."
+              description="The highest honorary body in the movement. It holds no executive power but commands moral authority, community trust, and cultural legitimacy, and guards BYM's non-political values."
             />
           </Reveal>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">

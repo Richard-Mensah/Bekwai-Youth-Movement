@@ -8,7 +8,7 @@ import { COMMUNITY_COUNT } from "@/constants/communities"
 export const metadata: Metadata = {
   title: "Community Intelligence Network",
   description:
-    "The Community Intelligence Network (CIN) — 32 officers gathering monthly evidence on health, education, employment, sanitation, and infrastructure to drive data-led governance.",
+    "The Community Intelligence Network (CIN): 32 officers gathering monthly evidence on health, education, employment, sanitation, and infrastructure to drive data-led governance.",
 }
 
 const CATEGORIES = [
@@ -34,7 +34,7 @@ export default function CinPage() {
       <PageHeader
         eyebrow="The Intelligence Arm"
         title="Community Intelligence Network"
-        description={`The grassroots evidence base of BYM — ${COMMUNITY_COUNT} Community Intelligence Officers, one per community, reporting monthly.`}
+        description={`The grassroots evidence base of BYM: ${COMMUNITY_COUNT} Community Intelligence Officers, one per community, reporting monthly.`}
       />
 
       <section className="container-content py-16">

@@ -9,7 +9,7 @@ import { getLeaderTiers } from "@/lib/data/content"
 export const metadata: Metadata = {
   title: "Leadership & Cabinet",
   description:
-    "The Bekwai Youth Movement leadership — a 19-member Civic Cabinet led by the Director-General, with the Youth Parliament, Community Intelligence Network, and Traditional Advisory Council.",
+    "The Bekwai Youth Movement leadership: a 19-member Civic Cabinet led by the Director-General, with the Youth Parliament, Community Intelligence Network, and Traditional Advisory Council.",
 }
 
 export default async function LeadershipPage() {
@@ -21,7 +21,7 @@ export default async function LeadershipPage() {
       <PageHeader
         eyebrow="Our Governance"
         title="The people who lead the movement"
-        description="Modelled on the UK Cabinet system and Ghana's constitutional tradition — clear portfolio accountability under the Director-General, anchored by traditional authority."
+        description="Modelled on the UK Cabinet system and Ghana's constitutional tradition, with clear portfolio accountability under the Director-General, anchored by traditional authority."
       />
 
       {/* Supreme authority note */}
@@ -39,7 +39,7 @@ export default async function LeadershipPage() {
               <p className="mt-3 max-w-3xl text-white/75">
                 A non-elected, non-partisan body above all Assembly structures. It
                 ratifies the Constitution, approves senior Cabinet appointments, and
-                holds final authority on strategic direction — the guardian of the
+                holds final authority on strategic direction, the guardian of the
                 movement&apos;s values.
               </p>
             </div>

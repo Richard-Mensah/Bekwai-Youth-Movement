@@ -12,7 +12,7 @@ export default function ProgramsGrid() {
           <SectionHeading
             eyebrow="What we do"
             title="Seven programme units, one shared agenda"
-            description="Each unit carries a clear mandate, a portfolio officer, and a direct line to the UN Global Goals — turning youth energy into measurable community change."
+            description="Each unit carries a clear mandate, a portfolio officer, and a direct line to the UN Global Goals, turning youth energy into measurable community change."
             centered
           />
         </Reveal>

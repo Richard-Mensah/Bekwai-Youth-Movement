@@ -8,7 +8,7 @@ import { getPublishedEvents } from "@/lib/data/content"
 export const metadata: Metadata = {
   title: "Events",
   description:
-    "Upcoming and past events from the Bekwai Youth Movement — durbars, parliamentary sittings, launches, and community programmes.",
+    "Upcoming and past events from the Bekwai Youth Movement, including durbars, parliamentary sittings, launches, and community programmes.",
 }
 
 function fmt(iso: string | null) {
@@ -61,7 +61,7 @@ export default async function EventsPage() {
 
           {events.length === 0 && (
             <Card>
-              <p className="text-sm text-ink/55">No events published yet — check back soon.</p>
+              <p className="text-sm text-ink/55">No events published yet. Check back soon.</p>
             </Card>
           )}
         </div>

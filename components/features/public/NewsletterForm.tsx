@@ -27,7 +27,7 @@ export default function NewsletterForm() {
     return (
       <div className="flex w-full max-w-md items-center gap-2.5 rounded-full border border-gold-400/40 bg-white/5 px-5 py-3 text-sm text-white md:ml-auto">
         <Check size={18} className="text-gold-300" />
-        You&apos;re on the list — thank you for joining the movement.
+        You&apos;re on the list. Thank you for joining the movement.
       </div>
     )
   }

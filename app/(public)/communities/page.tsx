@@ -7,7 +7,7 @@ import { getAllCommunities } from "@/lib/data/content"
 export const metadata: Metadata = {
   title: "Communities",
   description:
-    "Explore all of BYM's communities across the Sefwi Bekwai Traditional Area — each with its chief, elders, and BYM representatives.",
+    "Explore all of BYM's communities across the Sefwi Bekwai Traditional Area, each with its chief, elders, and BYM representatives.",
 }
 
 export default async function CommunitiesPage() {
@@ -18,7 +18,7 @@ export default async function CommunitiesPage() {
       <PageHeader
         eyebrow="Our reach"
         title="Our communities"
-        description="From Sefwi Bekwai town to the furthest sub-community, every community has a seat at the table. Explore each one — its chief and elders, and its BYM representatives."
+        description="From Sefwi Bekwai town to the furthest sub-community, every community has a seat at the table. Explore each one: its chief and elders, and its BYM representatives."
       />
 
       <section className="container-content py-16">

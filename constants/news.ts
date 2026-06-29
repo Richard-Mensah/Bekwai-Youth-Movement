@@ -66,7 +66,7 @@ export const NEWS: NewsItem[] = [
     context: "International volunteering",
     date: "2023-11-04",
     summary:
-      "A BYM delegate took part in international volunteer work focused on youth education empowerment — extending our commitment to young people beyond borders.",
+      "A BYM delegate took part in international volunteer work focused on youth education empowerment, extending our commitment to young people beyond borders.",
     href: "https://bekwaiyouthmovement.medium.com/",
     sdg: [4],
   },

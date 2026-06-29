@@ -10,7 +10,7 @@ import { ORG } from "@/constants/nav"
 export const metadata: Metadata = {
   title: "News & Press",
   description:
-    "Bekwai Youth Movement on the local and global stage — summits, partnerships, and stories from our communities.",
+    "Bekwai Youth Movement on the local and global stage: summits, partnerships, and stories from our communities.",
 }
 
 function formatDate(iso: string | null) {
@@ -30,7 +30,7 @@ export default async function NewsPage() {
       <PageHeader
         eyebrow="Media"
         title="News & press"
-        description="From grassroots Sefwi Bekwai to international summits — a record of where the movement has shown up and what we've learned."
+        description="From grassroots Sefwi Bekwai to international summits, a record of where the movement has shown up and what we've learned."
       />
 
       <section className="section">

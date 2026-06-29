@@ -39,7 +39,7 @@ export default function CommunityExplorer({
         {communities.length}
       </p>
       <p className="mt-1 text-sm text-white/70">
-        communities — tap any to explore its representation
+        communities. Tap any to explore its representation
       </p>
       <div className="mt-6 flex flex-wrap gap-1.5">
         {communities.map((c) => (

@@ -27,7 +27,7 @@ export default async function Footer() {
             </h3>
             <p className="mt-2 max-w-md text-sm text-white/70">
               Get community reports, programme news, and updates on the road to
-              Founding Day — straight to your inbox.
+              Founding Day, straight to your inbox.
             </p>
           </div>
           <NewsletterForm />
@@ -58,7 +58,7 @@ export default async function Footer() {
           </div>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/65">
             A non-political youth governance movement harnessing the potential of
-            every young person in Sefwi Bekwai and its 31 sub-communities — through
+            every young person in Sefwi Bekwai and its 31 sub-communities, through
             the Youth General Assembly, Bekwai Youth Parliament, and Community
             Intelligence Network.
           </p>

@@ -18,7 +18,7 @@ type Props = {
 export default function Hero({
   eyebrow = ORG.region,
   title = "Harnessing the potential of every young person in Sefwi Bekwai",
-  subtitle = "A non-political youth movement building structured governance, community intelligence, and volunteerism across 32 communities — aligned with the UN Sustainable Development Goals.",
+  subtitle = "A non-political youth movement building structured governance, community intelligence, and volunteerism across 32 communities, aligned with the UN Sustainable Development Goals.",
   foundingDate = ORG.foundingDate,
 }: Props) {
   const reduce = useReducedMotion()
@@ -101,7 +101,7 @@ export default function Hero({
                 <CalendarDays size={14} /> {t("hero.foundingEyebrow")}
               </p>
               <p className="mt-1.5 text-sm text-white/75">
-                Official Launch of the Youth General Assembly —{" "}
+                Official Launch of the Youth General Assembly on{" "}
                 <span className="font-semibold text-white">12 January 2027</span>
               </p>
             </div>

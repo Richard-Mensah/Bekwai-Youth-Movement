@@ -15,7 +15,7 @@ export default function SdgsPage() {
       <PageHeader
         eyebrow="UN Agenda 2030"
         title="SDG Alignment Framework"
-        description="BYM aligns all its work with the United Nations Sustainable Development Goals — making it globally recognised and fundable by development partners."
+        description="BYM aligns all its work with the United Nations Sustainable Development Goals, making it globally recognised and fundable by development partners."
       />
 
       <section className="container-content py-16">

@@ -6,7 +6,7 @@ import Card from "@/components/ui/Card"
 export const metadata: Metadata = {
   title: "Bekwai Youth Parliament",
   description:
-    "The Bekwai Youth Parliament — a Speaker-led legislative chamber giving youth a voice through bills, motions, debates, committees, and Youth Recommendations.",
+    "The Bekwai Youth Parliament: a Speaker-led legislative chamber giving youth a voice through bills, motions, debates, committees, and Youth Recommendations.",
 }
 
 const BILL_STAGES = [
@@ -44,7 +44,7 @@ export default function ParliamentPage() {
       <PageHeader
         eyebrow="The Legislative Arm"
         title="Bekwai Youth Parliament"
-        description="Mirroring the Parliament of Ghana and governed by its own Standing Orders — the supreme deliberative voice of the Movement's youth."
+        description="Mirroring the Parliament of Ghana and governed by its own Standing Orders, the supreme deliberative voice of the Movement's youth."
       />
 
       <section className="container-content py-16">

@@ -26,7 +26,7 @@ export const I18N: Record<Lang, Dict> = {
     "hero.eyebrow": "Sefwi Bekwai · Western North Region · Ghana",
     "hero.title": "Harnessing the potential of every young person in Sefwi Bekwai",
     "hero.subtitle":
-      "A non-political youth movement building structured governance, community intelligence, and volunteerism across 32 communities — aligned with the UN Sustainable Development Goals.",
+      "A non-political youth movement building structured governance, community intelligence, and volunteerism across 32 communities, aligned with the UN Sustainable Development Goals.",
     "hero.ctaJoin": "Join the Movement",
     "hero.ctaExplore": "Explore our work",
     "hero.foundingEyebrow": "The road to Founding Day",
@@ -43,7 +43,7 @@ export const I18N: Record<Lang, Dict> = {
     "hero.eyebrow": "Sefwi Bekwai · Atɔeɛ Atifi Mantam · Ghana",
     "hero.title": "Yɛreboa mmabunu biara wɔ Sefwi Bekwai ma wɔnya wɔn tumi",
     "hero.subtitle":
-      "Mmabunu kuo a ɛnni amanyɔ mu, a ɛreyɛ amammuo, mpɔtam nimdeɛ, ne adɔeyɛ wɔ mpɔtam 32 mu — a ɛne UN Nkɔsoɔ Botaeɛ hyia.",
+      "Mmabunu kuo a ɛnni amanyɔ mu, a ɛreyɛ amammuo, mpɔtam nimdeɛ, ne adɔeyɛ wɔ mpɔtam 32 mu, a ɛne UN Nkɔsoɔ Botaeɛ hyia.",
     "hero.ctaJoin": "Bɛka Kuo no ho",
     "hero.ctaExplore": "Hwɛ yɛn adwuma",
     "hero.foundingEyebrow": "Ɛkwan a ɛkɔ Nnyinasoɛ Da no",

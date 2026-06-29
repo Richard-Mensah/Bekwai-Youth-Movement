@@ -9,19 +9,19 @@ const SEATS = [
     icon: Vote,
     title: "Youth Parliament Member",
     age: "Ages 10–45",
-    body: "Legislative voice — debates issues and submits Youth Recommendations.",
+    body: "Legislative voice: debates issues and submits Youth Recommendations.",
   },
   {
     icon: Users,
     title: "Council Representative",
     age: "Ages 18–45",
-    body: "Executive voice — carries community priorities into the Assembly.",
+    body: "Executive voice: carries community priorities into the Assembly.",
   },
   {
     icon: Radar,
     title: "Community Intelligence Officer",
     age: "Ages 18+",
-    body: "Evidence voice — reports monthly on what's really happening on the ground.",
+    body: "Evidence voice: reports monthly on what's really happening on the ground.",
   },
 ]
 
@@ -41,8 +41,8 @@ export default async function RepresentationBand() {
             No community left without a voice
           </h2>
           <p className="mt-5 leading-relaxed text-ink/70 dark:text-paper/70">
-            Every one of our {communities.length} communities — from Sefwi Bekwai town to the
-            furthest sub-community — is entitled to three dedicated representatives.
+            Every one of our {communities.length} communities, from Sefwi Bekwai town to the
+            furthest sub-community, is entitled to three dedicated representatives.
             Tap any community to explore it; open its page to meet its chief, elders,
             and BYM representatives.
           </p>

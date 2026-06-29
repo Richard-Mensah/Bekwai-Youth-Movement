@@ -23,7 +23,7 @@ export const ROLE_META: Record<
   cin_officer: {
     label: "CIN Officer",
     dashboard: "/dashboard/cin",
-    description: "Community Intelligence Officer — monthly reporting.",
+    description: "Community Intelligence Officer: monthly reporting.",
   },
   mp: {
     label: "Parliament Member",
@@ -38,7 +38,7 @@ export const ROLE_META: Record<
   elder: {
     label: "Traditional Elder",
     dashboard: "/dashboard/elder",
-    description: "Traditional Advisory Council — read-only + endorsements.",
+    description: "Traditional Advisory Council: read-only + endorsements.",
   },
   admin: {
     label: "Administrator",

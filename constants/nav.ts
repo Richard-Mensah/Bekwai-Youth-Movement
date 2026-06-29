@@ -50,12 +50,12 @@ export const PUBLIC_NAV: NavItem[] = [
       {
         label: "Youth General Assembly",
         href: "/leadership",
-        description: "The executive — a 19-member Civic Cabinet",
+        description: "The executive: a 19-member Civic Cabinet",
       },
       {
         label: "Bekwai Youth Parliament",
         href: "/parliament",
-        description: "The legislature — Speaker-led, ages 10–45",
+        description: "The legislature: Speaker-led, ages 10–45",
       },
       {
         label: "Leadership & Cabinet",
