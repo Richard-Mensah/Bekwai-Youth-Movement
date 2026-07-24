@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Mail, Download } from "lucide-react"
+import { Mail, Download, FileText, MapPin, Video, Sparkles } from "lucide-react"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import StatCard from "@/components/ui/StatCard"
 import Card from "@/components/ui/Card"
@@ -15,6 +15,15 @@ const STATUS_TONE: Record<string, "amber" | "green" | "blue" | "red" | "gray"> =
   accepted: "green",
   rejected: "red",
   archived: "gray",
+}
+
+const VETTING_META: Record<
+  string,
+  { label: string; icon: typeof MapPin }
+> = {
+  in_person: { label: "In-person (S/Bekwai)", icon: MapPin },
+  virtual: { label: "Virtual", icon: Video },
+  either: { label: "Either", icon: Sparkles },
 }
 
 export const metadata = { title: "Leadership Applications" }
@@ -110,6 +119,25 @@ export default async function ApplicationsPage() {
                     <Badge tone="canopy">{a.roleApplied}</Badge>
                     {a.altRole && (
                       <span className="text-xs text-ink/50">2nd choice: {a.altRole}</span>
+                    )}
+                    {a.vettingPref && VETTING_META[a.vettingPref] && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-brand-blue-700 ring-1 ring-inset ring-brand-blue-100">
+                        {(() => {
+                          const Icon = VETTING_META[a.vettingPref].icon
+                          return <Icon size={12} />
+                        })()}
+                        {VETTING_META[a.vettingPref].label}
+                      </span>
+                    )}
+                    {a.cvUrl && (
+                      <a
+                        href={a.cvUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-full bg-gold-50 px-2.5 py-0.5 text-xs font-semibold text-gold-700 ring-1 ring-inset ring-gold-200 hover:bg-gold-100"
+                      >
+                        <FileText size={12} /> Download CV
+                      </a>
                     )}
                   </div>
 

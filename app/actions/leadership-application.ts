@@ -14,8 +14,17 @@ function escapeHtml(s: string) {
 }
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
+const CV_BUCKET = "applications"
+const CV_MAX_BYTES = 5 * 1024 * 1024 // 5 MB
+const CV_EXT = ["pdf", "doc", "docx", "odt", "rtf", "jpg", "jpeg", "png"]
 
-/** Stores a leadership-role application. Public — no auth required. */
+const VETTING_LABEL: Record<string, string> = {
+  in_person: "In-person (Sefwi Bekwai)",
+  virtual: "Virtual (online)",
+  either: "Either / not sure yet",
+}
+
+/** Stores a leadership-role application (+ optional CV). Public — no auth. */
 export async function submitApplication(
   formData: FormData
 ): Promise<ApplicationResult> {
@@ -34,7 +43,9 @@ export async function submitApplication(
   const availability = String(formData.get("availability") ?? "").trim()
   const refereeName = String(formData.get("refereeName") ?? "").trim()
   const refereeContact = String(formData.get("refereeContact") ?? "").trim()
+  const vettingPref = String(formData.get("vettingPref") ?? "").trim()
   const consent = formData.get("consent") === "on" || formData.get("consent") === "true"
+  const cv = formData.get("cv")
 
   if (!fullName) return { ok: false, error: "Please enter your full name." }
   if (!EMAIL_RE.test(email))
@@ -61,6 +72,23 @@ export async function submitApplication(
   }
 
   const supabase = await createClient()
+
+  // Optional CV upload → private "applications" bucket.
+  let cvPath: string | null = null
+  if (cv instanceof File && cv.size > 0) {
+    if (cv.size > CV_MAX_BYTES)
+      return { ok: false, error: "Your CV is larger than 5 MB. Please upload a smaller file." }
+    const ext = (cv.name.split(".").pop() || "").toLowerCase()
+    if (!CV_EXT.includes(ext))
+      return { ok: false, error: "Please upload a PDF, Word, or image file." }
+    const key = `cv/${crypto.randomUUID()}.${ext}`
+    const { error: upErr } = await supabase.storage
+      .from(CV_BUCKET)
+      .upload(key, cv, { upsert: false, contentType: cv.type || undefined })
+    if (upErr) return { ok: false, error: "Could not upload your CV. Please try again." }
+    cvPath = key
+  }
+
   const { error } = await supabase.from("leadership_applications").insert({
     full_name: fullName,
     email,
@@ -78,10 +106,14 @@ export async function submitApplication(
     availability: availability || null,
     referee_name: refereeName || null,
     referee_contact: refereeContact || null,
+    vetting_pref: vettingPref || null,
+    cv_path: cvPath,
     consent,
   })
 
   if (error) {
+    // Roll back the orphaned CV so storage doesn't accumulate junk.
+    if (cvPath) await supabase.storage.from(CV_BUCKET).remove([cvPath])
     return {
       ok: false,
       error: "Could not submit your application. Please try again.",
@@ -90,6 +122,13 @@ export async function submitApplication(
 
   // Best-effort admin notification (only if Resend is configured).
   if (emailEnabled()) {
+    let cvLink = "—"
+    if (cvPath) {
+      const { data: signed } = await supabase.storage
+        .from(CV_BUCKET)
+        .createSignedUrl(cvPath, 60 * 60 * 24 * 14) // 14-day link
+      if (signed?.signedUrl) cvLink = signed.signedUrl
+    }
     const rows: [string, string][] = [
       ["Role", roleApplied],
       ["2nd choice", altRole || "—"],
@@ -103,21 +142,27 @@ export async function submitApplication(
       ["Qualifications", qualifications || "—"],
       ["Experience", experience || "—"],
       ["Availability", availability || "—"],
+      ["Vetting preference", VETTING_LABEL[vettingPref] ?? "—"],
       ["Referee", refereeName ? `${refereeName} (${refereeContact || "—"})` : "—"],
+      ["CV", cvLink],
       ["Motivation", motivation],
     ]
+    const htmlCell = (k: string, v: string) => {
+      const val =
+        k === "CV" && v.startsWith("http")
+          ? `<a href="${v}">Download CV</a>`
+          : escapeHtml(v).replace(/\n/g, "<br/>")
+      return `<tr><td style="vertical-align:top;padding:4px 10px 4px 0"><strong>${escapeHtml(
+        k
+      )}</strong></td><td style="padding:4px 0">${val}</td></tr>`
+    }
     await sendEmail({
       to: ADMIN_EMAIL,
       replyTo: email,
       subject: `New leadership application — ${roleApplied} — ${fullName}`,
       text: rows.map(([k, v]) => `${k}: ${v}`).join("\n"),
-      html: `<h2>New leadership application</h2><table cellpadding="6" style="border-collapse:collapse">${rows
-        .map(
-          ([k, v]) =>
-            `<tr><td style="vertical-align:top"><strong>${escapeHtml(
-              k
-            )}</strong></td><td>${escapeHtml(v).replace(/\n/g, "<br/>")}</td></tr>`
-        )
+      html: `<h2 style="font-family:sans-serif">New leadership application</h2><table style="font-family:sans-serif;border-collapse:collapse">${rows
+        .map(([k, v]) => htmlCell(k, v))
         .join("")}</table>`,
     })
   }

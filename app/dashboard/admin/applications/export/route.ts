@@ -16,7 +16,7 @@ export async function GET() {
   const { data } = await supabase
     .from("leadership_applications")
     .select(
-      "full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, referee_name, referee_contact, status, created_at"
+      "full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, vetting_pref, referee_name, referee_contact, cv_path, status, created_at"
     )
     .order("created_at", { ascending: false })
 
@@ -35,8 +35,10 @@ export async function GET() {
     "experience",
     "motivation",
     "availability",
+    "vetting_pref",
     "referee_name",
     "referee_contact",
+    "has_cv",
     "status",
     "submitted_at",
   ]
@@ -58,8 +60,10 @@ export async function GET() {
         r.experience,
         r.motivation,
         r.availability,
+        r.vetting_pref,
         r.referee_name,
         r.referee_contact,
+        r.cv_path ? "yes" : "no",
         r.status,
         r.created_at,
       ]

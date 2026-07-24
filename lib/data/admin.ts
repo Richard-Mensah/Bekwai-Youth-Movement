@@ -132,13 +132,16 @@ export type LeadershipApplication = {
   availability: string | null
   refereeName: string | null
   refereeContact: string | null
+  vettingPref: string | null
+  cvUrl: string | null
   status: string
   createdAt: string
 }
 
 /**
  * Leadership-role applications, newest first. Returns [] in demo mode or if
- * the table hasn't been created yet (migration 0016 not applied).
+ * the table hasn't been created yet (migration 0016 not applied). CV paths are
+ * resolved to short-lived signed download URLs (private bucket, admin-only).
  */
 export async function getLeadershipApplications(): Promise<
   LeadershipApplication[]
@@ -148,11 +151,26 @@ export async function getLeadershipApplications(): Promise<
   const { data } = await supabase
     .from("leadership_applications")
     .select(
-      "id, full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, referee_name, referee_contact, status, created_at"
+      "id, full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, referee_name, referee_contact, vetting_pref, cv_path, status, created_at"
     )
     .order("created_at", { ascending: false })
     .limit(500)
-  return (data ?? []).map((r) => ({
+
+  const rows = data ?? []
+
+  // Sign CV download links for rows that have one (1-hour expiry).
+  const paths = rows.map((r) => r.cv_path).filter(Boolean) as string[]
+  const signed = new Map<string, string>()
+  if (paths.length > 0) {
+    const { data: urls } = await supabase.storage
+      .from("applications")
+      .createSignedUrls(paths, 60 * 60)
+    for (const u of urls ?? []) {
+      if (u.path && u.signedUrl) signed.set(u.path, u.signedUrl)
+    }
+  }
+
+  return rows.map((r) => ({
     id: r.id,
     fullName: r.full_name ?? "",
     email: r.email ?? "",
@@ -170,6 +188,8 @@ export async function getLeadershipApplications(): Promise<
     availability: r.availability,
     refereeName: r.referee_name,
     refereeContact: r.referee_contact,
+    vettingPref: r.vetting_pref,
+    cvUrl: r.cv_path ? signed.get(r.cv_path) ?? null : null,
     status: r.status ?? "new",
     createdAt: r.created_at,
   }))
