@@ -114,6 +114,67 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
   }))
 }
 
+export type LeadershipApplication = {
+  id: string
+  fullName: string
+  email: string
+  phone: string | null
+  community: string | null
+  age: number | null
+  gender: string | null
+  roleArm: string | null
+  roleApplied: string
+  altRole: string | null
+  occupation: string | null
+  qualifications: string | null
+  experience: string | null
+  motivation: string
+  availability: string | null
+  refereeName: string | null
+  refereeContact: string | null
+  status: string
+  createdAt: string
+}
+
+/**
+ * Leadership-role applications, newest first. Returns [] in demo mode or if
+ * the table hasn't been created yet (migration 0016 not applied).
+ */
+export async function getLeadershipApplications(): Promise<
+  LeadershipApplication[]
+> {
+  if (!isSupabaseConfigured()) return []
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from("leadership_applications")
+    .select(
+      "id, full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, referee_name, referee_contact, status, created_at"
+    )
+    .order("created_at", { ascending: false })
+    .limit(500)
+  return (data ?? []).map((r) => ({
+    id: r.id,
+    fullName: r.full_name ?? "",
+    email: r.email ?? "",
+    phone: r.phone,
+    community: r.community,
+    age: r.age,
+    gender: r.gender,
+    roleArm: r.role_arm,
+    roleApplied: r.role_applied ?? "",
+    altRole: r.alt_role,
+    occupation: r.occupation,
+    qualifications: r.qualifications,
+    experience: r.experience,
+    motivation: r.motivation ?? "",
+    availability: r.availability,
+    refereeName: r.referee_name,
+    refereeContact: r.referee_contact,
+    status: r.status ?? "new",
+    createdAt: r.created_at,
+  }))
+}
+
 /**
  * Newsletter subscribers, newest first. Returns [] in demo mode or if the
  * table hasn't been created yet (migration 0011 not applied).

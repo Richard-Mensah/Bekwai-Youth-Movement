@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import PageHeader from "@/components/layout/PageHeader"
 import SectionHeading from "@/components/ui/SectionHeading"
 import Reveal from "@/components/ui/Reveal"
@@ -67,6 +69,36 @@ export default async function LeadershipPage() {
             appointments: 2026). Office holders shown without a name are pending
             formal appointment.
           </p>
+        </div>
+      </section>
+
+      {/* Enrolment CTA */}
+      <section className="section">
+        <div className="container-content">
+          <Reveal>
+            <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-gold-400 p-8 text-canopy sm:flex-row sm:items-center sm:p-10">
+              <div className="max-w-2xl">
+                <p className="text-xs font-bold uppercase tracking-widest text-canopy/70">
+                  Enrolment is open
+                </p>
+                <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
+                  Step forward to serve
+                </h2>
+                <p className="mt-2 text-canopy/80">
+                  Every office, from Director-General to the last role, is open
+                  for application. If you are ready to lead, we want to hear from
+                  you.
+                </p>
+              </div>
+              <Link
+                href="/leadership/apply"
+                className="inline-flex shrink-0 items-center gap-2 rounded-full bg-canopy px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
+              >
+                Apply for a role
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 

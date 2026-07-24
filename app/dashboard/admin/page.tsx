@@ -9,6 +9,7 @@ import { getGenderCompliance } from "@/lib/data/governance"
 import { getMemberStats } from "@/lib/data/admin"
 
 const NEW_FEATURES: [string, string, string][] = [
+  ["Leadership Applications", "Enrolment submissions from the public 'Apply for a role' form. Every office, DG to community seats.", "/dashboard/admin/applications"],
   ["Nomination & Vetting Pipeline", "8-week, 5-step applicant tracking to Letters of Appointment.", "/dashboard/admin/vetting"],
   ['"No Community Left Without a Voice"', "Gap tracker for vacant seats + 3-tier interim protocol.", "/dashboard/admin/representation"],
   ["Traditional Authority Workflow", "Courtesy calls, endorsements, durbar accountability.", "/dashboard/elder"],
