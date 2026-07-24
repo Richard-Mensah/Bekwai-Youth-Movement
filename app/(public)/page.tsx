@@ -14,6 +14,7 @@ import MemberVoices from "@/components/features/public/MemberVoices"
 import ImpactTicker from "@/components/features/public/ImpactTicker"
 import CredibilityBand from "@/components/features/public/CredibilityBand"
 import EnrolmentBanner from "@/components/features/public/EnrolmentBanner"
+import GalleryHighlights from "@/components/features/public/GalleryHighlights"
 import FinanceTransparencyBand from "@/components/features/public/FinanceTransparencyBand"
 import PartnersStrip from "@/components/features/public/PartnersStrip"
 import GetInvolved from "@/components/features/public/GetInvolved"
@@ -28,7 +29,7 @@ export default async function HomePage() {
         title={settings.heroTitle}
         subtitle={settings.heroSubtitle}
         foundingDate={settings.foundingDate}
-        images={gallery.slice(0, 8).map((g) => g.url)}
+        images={gallery.slice(0, 12).map((g) => g.url)}
       />
       <ImpactTicker />
       <EnrolmentBanner />
@@ -45,6 +46,7 @@ export default async function HomePage() {
       <RepresentationBand />
       <MembersWall />
       <MemberVoices />
+      <GalleryHighlights />
       <CredibilityBand />
       <PartnersStrip />
       <GetInvolved />

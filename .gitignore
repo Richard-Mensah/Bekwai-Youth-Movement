@@ -31,3 +31,7 @@ yarn-error.log*
 # editor
 .vscode/
 .idea/
+
+# raw source photo/video dumps (curated copies live in public/images)
+/New BYM Pictures/
+/old images when we started in 2021 to 2024/
