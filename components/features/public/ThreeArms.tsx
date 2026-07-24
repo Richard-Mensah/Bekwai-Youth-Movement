@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Landmark, Vote, Radar, ArrowRight } from "lucide-react"
+import { Landmark, Vote, Radar, Crown, ArrowRight } from "lucide-react"
 import SectionHeading from "@/components/ui/SectionHeading"
 import Reveal from "@/components/ui/Reveal"
 
@@ -29,6 +29,14 @@ const ARMS = [
     img: "/images/history/275513517_145137107982869_5887215383066194674_n.jpg",
     body: "32 Community Intelligence Officers gather monthly evidence on health, education, employment, and infrastructure to drive data-led governance.",
   },
+  {
+    icon: Crown,
+    title: "Traditional Advisory Council",
+    tag: "Guardianship · Honorary",
+    href: "/about#tac",
+    img: "/images/history/484805464_1201043848408947_1782099523686643406_n.jpg",
+    body: "An honorary council of chiefs, elders, and patrons — no executive power, but the moral authority, community trust, and cultural legitimacy that anchor BYM's non-political values.",
+  },
 ]
 
 export default function ThreeArms() {
@@ -38,12 +46,12 @@ export default function ThreeArms() {
         <Reveal>
           <SectionHeading
             eyebrow="How BYM is organised"
-            title="Three arms of youth governance"
-            description="A separation of powers adapted to the Ghanaian community context: an executive, a legislature, and a grassroots intelligence network working as one."
+            title="The pillars of youth governance"
+            description="A separation of powers adapted to the Ghanaian community context: an executive, a legislature, and a grassroots intelligence network, anchored by traditional authority."
             centered
           />
         </Reveal>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {ARMS.map(({ icon: Icon, title, tag, body, href, img }, i) => (
             <Reveal key={title} delay={i * 0.08}>
               <Link href={href} className="group block h-full">
