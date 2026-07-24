@@ -73,6 +73,22 @@ export async function submitApplication(
 
   const supabase = await createClient()
 
+  // Applying requires an account (which carries the unique membership ID).
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    return {
+      ok: false,
+      error: "Please sign in to your account before submitting your application.",
+    }
+  }
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("membership_id")
+    .eq("id", user.id)
+    .single()
+
   // Optional CV upload → private "applications" bucket.
   let cvPath: string | null = null
   if (cv instanceof File && cv.size > 0) {
@@ -108,6 +124,8 @@ export async function submitApplication(
     referee_contact: refereeContact || null,
     vetting_pref: vettingPref || null,
     cv_path: cvPath,
+    user_id: user.id,
+    membership_id: profile?.membership_id ?? null,
     consent,
   })
 
@@ -132,6 +150,7 @@ export async function submitApplication(
     const rows: [string, string][] = [
       ["Role", roleApplied],
       ["2nd choice", altRole || "—"],
+      ["BYM ID", profile?.membership_id ?? "—"],
       ["Name", fullName],
       ["Email", email],
       ["Phone", phone || "—"],

@@ -79,8 +79,20 @@ const VETTING = [
   },
 ]
 
+type Account = {
+  fullName: string
+  email: string
+  phone: string
+  community: string
+  membershipId: string
+}
+
 /** Public form to apply for a BYM leadership role → leadership_applications. */
-export default function LeadershipApplicationForm() {
+export default function LeadershipApplicationForm({
+  account,
+}: {
+  account?: Account
+}) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
@@ -151,16 +163,34 @@ export default function LeadershipApplicationForm() {
       {/* 1 — About you */}
       <Section n={1} icon={UserRound} title="About you">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Input label="Full name" name="fullName" placeholder="Full name" error={errors.fullName} />
+          <Input
+            label="Full name"
+            name="fullName"
+            placeholder="Full name"
+            defaultValue={account?.fullName}
+            error={errors.fullName}
+          />
           <Input
             label="Email"
             name="email"
             type="email"
             placeholder="you@example.com"
+            defaultValue={account?.email}
             error={errors.email}
           />
-          <Input label="Phone / WhatsApp" name="phone" type="tel" placeholder="+233 …" />
-          <Input label="Community" name="community" placeholder="Your community" />
+          <Input
+            label="Phone / WhatsApp"
+            name="phone"
+            type="tel"
+            placeholder="+233 …"
+            defaultValue={account?.phone}
+          />
+          <Input
+            label="Community"
+            name="community"
+            placeholder="Your community"
+            defaultValue={account?.community}
+          />
           <Input label="Age" name="age" type="number" min={10} max={120} placeholder="e.g. 24" />
           <div>
             <label htmlFor="gender" className={labelClass}>

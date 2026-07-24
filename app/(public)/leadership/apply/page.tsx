@@ -8,8 +8,41 @@ import {
   Video,
   ArrowDown,
 } from "lucide-react"
+import { BadgeCheck } from "lucide-react"
 import Reveal from "@/components/ui/Reveal"
 import LeadershipApplicationForm from "@/components/features/public/LeadershipApplicationForm"
+import ApplyAccountGate from "@/components/features/public/ApplyAccountGate"
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
+
+type Account = {
+  fullName: string
+  email: string
+  phone: string
+  community: string
+  membershipId: string
+}
+
+async function getAccount(): Promise<Account | null> {
+  if (!isSupabaseConfigured()) return null
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return null
+  const { data } = await supabase
+    .from("profiles")
+    .select("full_name, email, phone, membership_id, communities(name)")
+    .eq("id", user.id)
+    .single()
+  return {
+    fullName: (data?.full_name as string) ?? "",
+    email: (data?.email as string) ?? user.email ?? "",
+    phone: (data?.phone as string) ?? "",
+    community:
+      ((data?.communities as { name?: string } | null)?.name as string) ?? "",
+    membershipId: (data?.membership_id as string) ?? "",
+  }
+}
 
 export const metadata: Metadata = {
   title: "Apply for a Leadership Role",
@@ -35,7 +68,8 @@ const STEPS = [
   },
 ]
 
-export default function LeadershipApplyPage() {
+export default async function LeadershipApplyPage() {
+  const account = await getAccount()
   return (
     <>
       {/* Hero */}
@@ -54,7 +88,7 @@ export default function LeadershipApplyPage() {
             </span>
           </Reveal>
           <Reveal delay={0.05}>
-            <h1 className="mt-5 max-w-3xl font-display text-3xl font-semibold text-balance sm:text-5xl">
+            <h1 className="mt-5 max-w-3xl font-display text-3xl font-semibold text-white text-balance sm:text-5xl">
               Step forward to lead the movement
             </h1>
           </Reveal>
@@ -136,16 +170,48 @@ export default function LeadershipApplyPage() {
                 Put your name forward
               </h2>
               <p className="mx-auto mt-2 max-w-xl text-sm text-ink/60">
-                It takes about 5 minutes. Fields without an “optional” tag are
-                required. Your details go straight to the Secretariat.
+                {account
+                  ? "It takes about 5 minutes. Fields without an “optional” tag are required. Your details go straight to the Secretariat."
+                  : "Applications are tied to an account so the process stays fair and traceable."}
               </p>
             </div>
           </Reveal>
-          <Reveal delay={0.1}>
-            <div className="rounded-3xl border border-canopy/10 bg-white p-6 shadow-card sm:p-9">
-              <LeadershipApplicationForm />
-            </div>
-          </Reveal>
+
+          {account ? (
+            <Reveal delay={0.1}>
+              {/* Signed-in identity banner with the applicant's unique BYM ID */}
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-canopy/10 bg-canopy p-4 text-white canopy-texture">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-400/20 text-gold-200">
+                    <BadgeCheck size={20} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-white">
+                      {account.fullName || "Signed in"}
+                    </p>
+                    <p className="text-xs text-white/60">Applying as a verified account</p>
+                  </div>
+                </div>
+                {account.membershipId && (
+                  <div className="text-right">
+                    <p className="text-[11px] uppercase tracking-wider text-white/50">
+                      Your BYM ID
+                    </p>
+                    <p className="font-mono text-sm font-semibold text-gold-200">
+                      {account.membershipId}
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="rounded-3xl border border-canopy/10 bg-white p-6 shadow-card sm:p-9">
+                <LeadershipApplicationForm account={account} />
+              </div>
+            </Reveal>
+          ) : (
+            <Reveal delay={0.1}>
+              <ApplyAccountGate />
+            </Reveal>
+          )}
         </div>
       </section>
 

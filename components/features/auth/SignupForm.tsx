@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { registerSchema } from "@/lib/validations"
@@ -14,8 +14,14 @@ const SUPABASE_READY =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
+/** Only allow same-site relative redirects (avoid open-redirect). */
+function safeNext(v: string | null): string {
+  return v && v.startsWith("/") && !v.startsWith("//") ? v : ""
+}
+
 export default function SignupForm() {
   const router = useRouter()
+  const next = safeNext(useSearchParams().get("next"))
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -39,10 +45,14 @@ export default function SignupForm() {
     setLoading(true)
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
       options: {
+        emailRedirectTo:
+          typeof window !== "undefined"
+            ? `${window.location.origin}${next || "/dashboard"}`
+            : undefined,
         data: {
           full_name: parsed.data.fullName,
           gender: parsed.data.gender,
@@ -58,7 +68,14 @@ export default function SignupForm() {
       setServerError(error.message)
       return
     }
-    router.push("/verify-pending")
+    // If email confirmation is disabled, Supabase returns a live session and the
+    // applicant can go straight on; otherwise send them to verify their email.
+    if (data.session) {
+      router.push(next || "/dashboard")
+      router.refresh()
+    } else {
+      router.push(`/verify-pending${next ? `?next=${encodeURIComponent(next)}` : ""}`)
+    }
   }
 
   return (
@@ -121,7 +138,10 @@ export default function SignupForm() {
 
       <p className="mt-5 text-center text-sm text-gray-500">
         Already a member?{" "}
-        <Link href="/login" className="font-medium text-brand-green hover:underline">
+        <Link
+          href={`/login${next ? `?next=${encodeURIComponent(next)}` : ""}`}
+          className="font-medium text-brand-green hover:underline"
+        >
           Sign in
         </Link>
       </p>

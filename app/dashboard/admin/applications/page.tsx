@@ -96,7 +96,14 @@ export default async function ApplicationsPage() {
                 <Card>
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="font-semibold text-canopy">{a.fullName}</p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-semibold text-canopy">{a.fullName}</p>
+                        {a.membershipId && (
+                          <span className="rounded bg-canopy-50 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-canopy">
+                            {a.membershipId}
+                          </span>
+                        )}
+                      </div>
                       <a
                         href={`mailto:${a.email}`}
                         className="text-sm text-brand-blue hover:underline"

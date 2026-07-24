@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { loginSchema } from "@/lib/validations"
@@ -13,8 +13,14 @@ const SUPABASE_READY =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
+/** Only allow same-site relative redirects (avoid open-redirect). */
+function safeNext(v: string | null): string {
+  return v && v.startsWith("/") && !v.startsWith("//") ? v : "/dashboard"
+}
+
 export default function LoginForm() {
   const router = useRouter()
+  const next = safeNext(useSearchParams().get("next"))
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -44,7 +50,7 @@ export default function LoginForm() {
       setServerError(error.message)
       return
     }
-    router.push("/dashboard")
+    router.push(next)
     router.refresh()
   }
 
@@ -72,7 +78,10 @@ export default function LoginForm() {
 
       <p className="mt-5 text-center text-sm text-gray-500">
         Not a member yet?{" "}
-        <Link href="/join" className="font-medium text-brand-green hover:underline">
+        <Link
+          href={`/join${next !== "/dashboard" ? `?next=${encodeURIComponent(next)}` : ""}`}
+          className="font-medium text-brand-green hover:underline"
+        >
           Join BYM
         </Link>
       </p>

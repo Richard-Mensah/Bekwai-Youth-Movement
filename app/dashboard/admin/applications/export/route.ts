@@ -16,11 +16,12 @@ export async function GET() {
   const { data } = await supabase
     .from("leadership_applications")
     .select(
-      "full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, vetting_pref, referee_name, referee_contact, cv_path, status, created_at"
+      "membership_id, full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, vetting_pref, referee_name, referee_contact, cv_path, status, created_at"
     )
     .order("created_at", { ascending: false })
 
   const header = [
+    "membership_id",
     "full_name",
     "email",
     "phone",
@@ -46,6 +47,7 @@ export async function GET() {
     header.join(","),
     ...(data ?? []).map((r) =>
       [
+        r.membership_id,
         r.full_name,
         r.email,
         r.phone,

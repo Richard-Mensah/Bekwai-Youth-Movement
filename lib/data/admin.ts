@@ -134,6 +134,7 @@ export type LeadershipApplication = {
   refereeContact: string | null
   vettingPref: string | null
   cvUrl: string | null
+  membershipId: string | null
   status: string
   createdAt: string
 }
@@ -151,7 +152,7 @@ export async function getLeadershipApplications(): Promise<
   const { data } = await supabase
     .from("leadership_applications")
     .select(
-      "id, full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, referee_name, referee_contact, vetting_pref, cv_path, status, created_at"
+      "id, full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, referee_name, referee_contact, vetting_pref, cv_path, membership_id, status, created_at"
     )
     .order("created_at", { ascending: false })
     .limit(500)
@@ -190,6 +191,7 @@ export async function getLeadershipApplications(): Promise<
     refereeContact: r.referee_contact,
     vettingPref: r.vetting_pref,
     cvUrl: r.cv_path ? signed.get(r.cv_path) ?? null : null,
+    membershipId: r.membership_id,
     status: r.status ?? "new",
     createdAt: r.created_at,
   }))
