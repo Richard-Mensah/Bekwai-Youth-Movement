@@ -12,12 +12,12 @@ import type { Community } from "@/types"
  * IDs and counts are fixed — only edit the `name` values.
  */
 const SUB_COMMUNITY_NAMES = [
-  "Awaso", "Anhwiaso", "Chirano", "Kunkumso", "Aprutu", "Sayerano",
-  "Adabokrom", "Dominase", "Subriso", "Kojina", "Pataboso", "Ahokwaa",
-  "Nkatieso", "Bekwai Nkwanta", "Nyamebekyere", "Datano", "Kwakukrom",
-  "Adjoafua", "Asempaneye", "Bopa", "Camp", "Old Town", "New Town",
-  "Zongo", "Krofofrom", "Mile Eight", "Akoti", "Brapakrom", "Yawkrom",
-  "Asanteman", "Wreckers",
+  "Humjibre", "Kojina", "Apenkrom", "Nyitina", "Adobewura No.1", "Adobewura No.2",
+  "Akaasu", "Kofikrom", "Ashiam", "Naama/Clinic Top", "Bekwai Township", "Zongo",
+  "Surano", "Donkorkrom", "Dansokrom", "Bankromisa", "Market Square",
+  "Post Office/Ayiam", "Sukusukuu", "Lowcost/Axle Weight", "Chira", "Bakromisa", "Sonkoli",
+  "Atwima", "Muoho", "Bakokrom", "Atronsu", "Ampez", "Achimota",
+  "Peaceland", "Pimtibikrom", "Difo Nkansah Area",
 ]
 
 export const COMMUNITIES: Community[] = [
