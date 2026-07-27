@@ -26,6 +26,17 @@ export const registerSchema = z
 
 export type RegisterInput = z.infer<typeof registerSchema>
 
+/** Choosing a new password — from the reset link, or from account settings. */
+export const newPasswordSchema = z
+  .object({
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(1, "Re-enter your password to confirm"),
+  })
+  .refine((v) => v.password === v.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
+
 /** CIN monthly report submission. */
 export const cinReportSchema = z.object({
   category: z.string().min(1, "Select a category"),

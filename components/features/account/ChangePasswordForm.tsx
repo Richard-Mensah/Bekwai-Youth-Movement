@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { newPasswordSchema } from "@/lib/validations"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 
@@ -16,18 +17,15 @@ export default function ChangePasswordForm() {
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = e.currentTarget
-    const data = new FormData(form)
-    const password = String(data.get("password") ?? "")
-    const confirm = String(data.get("confirm") ?? "")
+    const parsed = newPasswordSchema.safeParse(
+      Object.fromEntries(new FormData(form).entries())
+    )
 
-    if (password.length < 8) {
-      setMsg({ ok: false, text: "Password must be at least 8 characters." })
+    if (!parsed.success) {
+      setMsg({ ok: false, text: parsed.error.issues[0].message })
       return
     }
-    if (password !== confirm) {
-      setMsg({ ok: false, text: "Passwords do not match." })
-      return
-    }
+    const { password } = parsed.data
     if (!SUPABASE_READY) {
       setMsg({ ok: false, text: "Connect Supabase to change your password." })
       return
@@ -64,7 +62,7 @@ export default function ChangePasswordForm() {
         hint="At least 8 characters."
       />
       <PasswordInput
-        name="confirm"
+        name="confirmPassword"
         label="Confirm new password"
         autoComplete="new-password"
       />

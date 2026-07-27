@@ -1,0 +1,16 @@
+import type { Metadata } from "next"
+import { Suspense } from "react"
+import ForgotPasswordForm from "@/components/features/auth/ForgotPasswordForm"
+
+export const metadata: Metadata = {
+  title: "Reset your password",
+  robots: { index: false },
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense>
+      <ForgotPasswordForm />
+    </Suspense>
+  )
+}
