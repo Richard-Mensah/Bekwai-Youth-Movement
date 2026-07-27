@@ -1,4 +1,3 @@
-import Link from "next/link"
 import {
   getBudgets,
   getScorecards,
@@ -21,13 +20,9 @@ export default async function AdminTransparencyPage() {
 
   return (
     <>
-      <Link
-        href="/dashboard/admin"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Back to Administration
-      </Link>
-      <DashboardHeading
+<DashboardHeading
+        backHref="/dashboard/admin"
+        backLabel="Administration"
         title="Transparency publishing"
         subtitle="Control what appears on the public Transparency Portal"
       />
@@ -38,9 +33,9 @@ export default async function AdminTransparencyPage() {
             <h3 className="text-sm font-bold text-canopy">Budgets</h3>
             <ul className="mt-3 space-y-2">
               {budgets.map((b) => (
-                <li key={b.id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3">
+                <li key={b.id} className="flex items-center justify-between gap-3 rounded-lg border border-canopy/[0.08] p-3">
                   <div>
-                    <p className="text-sm font-medium text-gray-700">{b.title}</p>
+                    <p className="text-sm font-medium text-ink/75">{b.title}</p>
                     <p className="text-xs text-ink/45">
                       Income {ghs(b.incomeGhs)} · Spend {ghs(b.expenditureGhs)}
                     </p>
@@ -55,8 +50,8 @@ export default async function AdminTransparencyPage() {
             <h3 className="text-sm font-bold text-canopy">Public reports</h3>
             <ul className="mt-3 space-y-2">
               {reports.map((r) => (
-                <li key={r.id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3">
-                  <p className="text-sm font-medium text-gray-700">{r.title}</p>
+                <li key={r.id} className="flex items-center justify-between gap-3 rounded-lg border border-canopy/[0.08] p-3">
+                  <p className="text-sm font-medium text-ink/75">{r.title}</p>
                   <PublishToggle table="public_reports" id={r.id} isPublished={r.isPublished} />
                 </li>
               ))}
@@ -67,8 +62,8 @@ export default async function AdminTransparencyPage() {
             <h3 className="text-sm font-bold text-canopy">Annual & SDG reports</h3>
             <ul className="mt-3 space-y-2">
               {annual.map((a) => (
-                <li key={a.id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3">
-                  <p className="text-sm font-medium text-gray-700">{a.title} · {a.year}</p>
+                <li key={a.id} className="flex items-center justify-between gap-3 rounded-lg border border-canopy/[0.08] p-3">
+                  <p className="text-sm font-medium text-ink/75">{a.title} · {a.year}</p>
                   <PublishToggle table="annual_reports" id={a.id} isPublished={a.isPublished} />
                 </li>
               ))}
@@ -79,8 +74,8 @@ export default async function AdminTransparencyPage() {
             <h3 className="text-sm font-bold text-canopy">Community scorecards</h3>
             <ul className="mt-3 space-y-2">
               {scorecards.map((s) => (
-                <li key={s.id} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3">
-                  <p className="text-sm font-medium text-gray-700">
+                <li key={s.id} className="flex items-center justify-between gap-3 rounded-lg border border-canopy/[0.08] p-3">
+                  <p className="text-sm font-medium text-ink/75">
                     {s.communityName} · {s.period} · {s.score ?? "—"}
                   </p>
                   <PublishToggle table="community_scorecards" id={s.id} isPublished={s.isPublished} />

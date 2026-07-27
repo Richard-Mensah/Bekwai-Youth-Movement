@@ -28,7 +28,7 @@ export default function SdgsPage() {
           {SDG_GOALS.map((sdg) => (
             <div
               key={sdg.goal}
-              className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+              className="overflow-hidden rounded-xl border border-canopy/10 bg-white shadow-sm"
             >
               <div
                 className="flex items-center gap-3 px-5 py-4 text-white"

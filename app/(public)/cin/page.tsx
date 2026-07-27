@@ -64,7 +64,7 @@ export default function CinPage() {
           />
           <div className="mt-10 grid gap-3 md:grid-cols-5">
             {FLOW.map(([title, desc], i) => (
-              <div key={title} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+              <div key={title} className="rounded-lg border border-canopy/10 bg-white p-4 shadow-sm">
                 <span className="text-xs font-bold text-brand-red">STEP {i + 1}</span>
                 <p className="mt-1 text-sm font-bold text-canopy">{title}</p>
                 <p className="mt-1 text-xs text-ink/65">{desc}</p>

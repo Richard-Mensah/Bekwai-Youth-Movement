@@ -15,12 +15,12 @@ export default function SdgProgress({ data }: { data: Datum[] }) {
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between">
-              <span className="truncate text-xs text-gray-600">{d.title}</span>
-              <span className="ml-2 shrink-0 text-xs font-medium text-gray-500">
+              <span className="truncate text-xs text-ink/65">{d.title}</span>
+              <span className="ml-2 shrink-0 text-xs font-medium text-ink/55">
                 {d.projects}
               </span>
             </div>
-            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-canopy-50">
               <div
                 className="h-full rounded-full"
                 style={{

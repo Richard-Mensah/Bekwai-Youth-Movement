@@ -35,11 +35,11 @@ export default async function ElderDashboard() {
           ) : (
             <ul className="mt-3 space-y-2">
               {pending.map((e) => (
-                <li key={e.id} className="rounded-lg border border-gray-100 p-3">
+                <li key={e.id} className="rounded-lg border border-canopy/[0.08] p-3">
                   <p className="text-xs font-semibold uppercase tracking-wider text-brand-red">
                     {humanize(e.subjectType)}
                   </p>
-                  <p className="mt-0.5 text-sm font-medium text-gray-700">{e.subjectLabel}</p>
+                  <p className="mt-0.5 text-sm font-medium text-ink/75">{e.subjectLabel}</p>
                   <div className="mt-2">
                     <EndorsementActions id={e.id} />
                   </div>
@@ -65,9 +65,9 @@ export default async function ElderDashboard() {
           <h3 className="text-sm font-bold text-canopy">Recent engagements</h3>
           <ul className="mt-3 space-y-2">
             {engagements.map((g) => (
-              <li key={g.id} className="flex items-start justify-between gap-3 rounded-lg border border-gray-100 p-3">
+              <li key={g.id} className="flex items-start justify-between gap-3 rounded-lg border border-canopy/[0.08] p-3">
                 <div>
-                  <p className="text-sm font-medium text-gray-700">{humanize(g.kind)}</p>
+                  <p className="text-sm font-medium text-ink/75">{humanize(g.kind)}</p>
                   <p className="text-xs text-ink/55">{g.communityName}{g.summary ? ` — ${g.summary}` : ""}</p>
                 </div>
                 <span className="shrink-0 text-xs text-ink/45">{formatDate(g.occurredOn)}</span>

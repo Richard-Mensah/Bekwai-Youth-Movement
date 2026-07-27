@@ -15,18 +15,17 @@ export default async function PostsListPage() {
 
   return (
     <>
-      <Link
-        href="/dashboard/admin/content"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Content Studio
-      </Link>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <DashboardHeading title="Posts & Blog" subtitle="Write, edit and publish articles" />
-        <Button href="/dashboard/admin/content/posts/new">
-          <Plus size={16} /> New post
-        </Button>
-      </div>
+      <DashboardHeading
+        backHref="/dashboard/admin/content"
+        backLabel="Content Studio"
+        title="Posts & Blog"
+        subtitle="Write, edit and publish articles"
+        actions={
+          <Button href="/dashboard/admin/content/posts/new">
+            <Plus size={16} /> New post
+          </Button>
+        }
+      />
 
       {posts.length === 0 ? (
         <Card>

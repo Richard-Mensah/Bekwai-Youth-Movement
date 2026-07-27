@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getBillById, getVoteTally } from "@/lib/data/parliament"
 import { BILL_STATUS_META } from "@/constants/parliament"
@@ -24,13 +23,9 @@ export default async function BillDetailPage({
 
   return (
     <>
-      <Link
-        href="/dashboard/mp"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Back to Parliament
-      </Link>
-      <DashboardHeading title={bill.title} subtitle={bill.reference ?? undefined} />
+<DashboardHeading
+        backHref="/dashboard/mp"
+        backLabel="Parliament" title={bill.title} subtitle={bill.reference ?? undefined} />
 
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <Card>
@@ -50,7 +45,7 @@ export default async function BillDetailPage({
             {bill.summary ?? "No summary provided."}
           </p>
 
-          <div className="mt-6 border-t border-gray-100 pt-4">
+          <div className="mt-6 border-t border-canopy/[0.08] pt-4">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink/45">
               Presiding actions
             </p>

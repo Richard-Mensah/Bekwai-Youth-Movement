@@ -13,7 +13,7 @@ export default function Error({
       <h1 className="text-2xl font-bold text-brand-green-700">
         Something went wrong
       </h1>
-      <p className="mt-2 max-w-md text-gray-600">
+      <p className="mt-2 max-w-md text-ink/65">
         An unexpected error occurred. Please try again.
       </p>
       <div className="mt-6 flex gap-3">

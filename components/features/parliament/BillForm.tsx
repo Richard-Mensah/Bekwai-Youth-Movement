@@ -10,7 +10,7 @@ const SUPABASE_READY =
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
 const SELECT =
-  "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+  "mt-1 block w-full rounded-lg border border-canopy/20 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
 
 type Kind = "bill" | "motion"
 
@@ -33,7 +33,7 @@ export default function BillForm() {
 
   return (
     <div>
-      <div className="mb-3 inline-flex rounded-lg border border-gray-200 p-0.5 text-xs">
+      <div className="mb-3 inline-flex rounded-lg border border-canopy/10 p-0.5 text-xs">
         {(["bill", "motion"] as Kind[]).map((k) => (
           <button
             key={k}
@@ -41,7 +41,7 @@ export default function BillForm() {
             className={
               kind === k
                 ? "rounded-md bg-brand-green px-3 py-1 font-medium text-white"
-                : "px-3 py-1 font-medium text-gray-600"
+                : "px-3 py-1 font-medium text-ink/65"
             }
           >
             {k === "bill" ? "Bill" : "Motion"}
@@ -63,7 +63,7 @@ export default function BillForm() {
       <form onSubmit={onSubmit} className="space-y-3">
         <Input name="title" label="Title" />
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-ink/75">
             {kind === "bill" ? "Summary" : "Body"}
           </label>
           <textarea name={kind === "bill" ? "summary" : "body"} rows={3} className={SELECT} />

@@ -14,18 +14,17 @@ export default async function PartnersListPage() {
   const partners = await getAllPartners()
   return (
     <>
-      <Link
-        href="/dashboard/admin/content"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Content Studio
-      </Link>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <DashboardHeading title="Partners & Sponsors" subtitle="Logos shown on the site" />
-        <Button href="/dashboard/admin/content/partners/new">
-          <Plus size={16} /> Add partner
-        </Button>
-      </div>
+      <DashboardHeading
+        backHref="/dashboard/admin/content"
+        backLabel="Content Studio"
+        title="Partners & Sponsors"
+        subtitle="Logos shown on the site"
+        actions={
+          <Button href="/dashboard/admin/content/partners/new">
+            <Plus size={16} /> Add partner
+          </Button>
+        }
+      />
 
       {partners.length === 0 ? (
         <Card>

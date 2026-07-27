@@ -6,7 +6,7 @@ import type { CinReportRow } from "@/lib/data/cin"
 export default function ReportsTable({ rows }: { rows: CinReportRow[] }) {
   if (rows.length === 0) {
     return (
-      <p className="rounded-lg border border-dashed border-gray-300 bg-paper p-6 text-center text-sm text-gray-500">
+      <p className="rounded-lg border border-dashed border-canopy/20 bg-paper p-6 text-center text-sm text-ink/55">
         No reports yet. Submit your first monthly community report.
       </p>
     )
@@ -16,7 +16,7 @@ export default function ReportsTable({ rows }: { rows: CinReportRow[] }) {
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-gray-400">
+          <tr className="border-b border-canopy/10 text-xs uppercase tracking-wider text-ink/40">
             <th className="py-2 pr-4 font-medium">Category</th>
             <th className="py-2 pr-4 font-medium">Community</th>
             <th className="py-2 pr-4 font-medium">Severity</th>
@@ -26,14 +26,14 @@ export default function ReportsTable({ rows }: { rows: CinReportRow[] }) {
         </thead>
         <tbody>
           {rows.slice(0, 25).map((r) => (
-            <tr key={r.id} className="border-b border-gray-100">
-              <td className="py-2.5 pr-4 font-medium text-gray-700">{r.category}</td>
-              <td className="py-2.5 pr-4 text-gray-600">{r.communityName}</td>
-              <td className="py-2.5 pr-4 text-gray-600">{humanize(r.severity)}</td>
+            <tr key={r.id} className="border-b border-canopy/[0.08]">
+              <td className="py-2.5 pr-4 font-medium text-ink/75">{r.category}</td>
+              <td className="py-2.5 pr-4 text-ink/65">{r.communityName}</td>
+              <td className="py-2.5 pr-4 text-ink/65">{humanize(r.severity)}</td>
               <td className="py-2.5 pr-4">
                 <Badge tone={STATUS_TONE[r.status]}>{humanize(r.status)}</Badge>
               </td>
-              <td className="py-2.5 pr-4 text-gray-500">
+              <td className="py-2.5 pr-4 text-ink/55">
                 {r.reportedAt ? formatDate(r.reportedAt) : "—"}
               </td>
             </tr>

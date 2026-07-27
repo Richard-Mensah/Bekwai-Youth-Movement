@@ -18,13 +18,13 @@ export default async function IdCard({
   if (!officer) notFound()
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-5 bg-gray-100 p-6 print:bg-white">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-5 bg-canopy-50 p-6 print:bg-white">
       <div className="print:hidden">
         <PrintButton />
       </div>
 
       {/* Standard CR80 card ratio (~3.37 x 2.13 in) */}
-      <div className="w-[340px] overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-gray-200">
+      <div className="w-[340px] overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-canopy/10">
         <div className="flex items-center gap-2 bg-brand-green px-4 py-2.5 text-white">
           <Image src="/images/logo.jpg" alt="BYM" width={28} height={28} className="rounded-full" />
           <div className="leading-tight">
@@ -34,7 +34,7 @@ export default async function IdCard({
         </div>
 
         <div className="flex gap-3 p-4">
-          <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-md bg-gray-100">
+          <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-md bg-canopy-50">
             <Image
               src={avatarUrl(officer.fullName, 128)}
               alt={officer.fullName}
@@ -45,21 +45,21 @@ export default async function IdCard({
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-brand-green-700">{officer.fullName}</p>
-            <p className="truncate text-[11px] text-gray-600">{officer.positionTitle}</p>
-            <div className="mt-2 space-y-0.5 text-[10px] text-gray-500">
+            <p className="truncate text-[11px] text-ink/65">{officer.positionTitle}</p>
+            <div className="mt-2 space-y-0.5 text-[10px] text-ink/55">
               <p>ID: BYM-{officer.id.slice(0, 6).toUpperCase()}</p>
               <p>Valid to: {officer.termEnd ? formatDate(officer.termEnd) : "—"}</p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-4 py-1.5 text-[8px] text-gray-400">
+        <div className="flex items-center justify-between border-t border-canopy/[0.08] bg-paper px-4 py-1.5 text-[8px] text-ink/40">
           <span>Sefwi Bekwai · Western North · Ghana</span>
           <span>OFFICIAL</span>
         </div>
       </div>
 
-      <p className="max-w-xs text-center text-xs text-gray-400 print:hidden">
+      <p className="max-w-xs text-center text-xs text-ink/40 print:hidden">
         Print double-sided on a CR80 card, or save as PDF.
       </p>
     </main>

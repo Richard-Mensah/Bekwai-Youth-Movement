@@ -13,10 +13,9 @@ export default async function TenurePage() {
 
   return (
     <>
-      <Link href="/dashboard/admin" className="mb-3 inline-block text-sm text-brand-green hover:underline">
-        ← Back to Administration
-      </Link>
-      <DashboardHeading
+<DashboardHeading
+        backHref="/dashboard/admin"
+        backLabel="Administration"
         title="Term-Limit & Tenure Registry"
         subtitle="Tenure tracking with printable appointment letters & ID cards (Governance §9.6)"
       />
@@ -32,7 +31,7 @@ export default async function TenurePage() {
           <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-ink/45">
+                <tr className="border-b border-canopy/10 text-xs uppercase tracking-wider text-ink/45">
                   <th className="py-2 pr-4 font-medium">Officer</th>
                   <th className="py-2 pr-4 font-medium">Position</th>
                   <th className="py-2 pr-4 font-medium">Term</th>
@@ -42,8 +41,8 @@ export default async function TenurePage() {
               </thead>
               <tbody>
                 {rows.map((r) => (
-                  <tr key={r.id} className="border-b border-gray-100">
-                    <td className="py-2.5 pr-4 font-medium text-gray-700">{r.fullName}</td>
+                  <tr key={r.id} className="border-b border-canopy/[0.08]">
+                    <td className="py-2.5 pr-4 font-medium text-ink/75">{r.fullName}</td>
                     <td className="py-2.5 pr-4 text-ink/65">{r.positionTitle}</td>
                     <td className="py-2.5 pr-4 text-xs text-ink/55">
                       {r.termStart ? formatDate(r.termStart) : "—"} →{" "}
@@ -77,10 +76,10 @@ export default async function TenurePage() {
           {/* Mobile: stacked cards */}
           <ul className="space-y-3 md:hidden">
             {rows.map((r) => (
-              <li key={r.id} className="rounded-xl border border-gray-200 p-4">
+              <li key={r.id} className="rounded-xl border border-canopy/10 p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-medium text-gray-700">{r.fullName}</p>
+                    <p className="font-medium text-ink/75">{r.fullName}</p>
                     <p className="text-xs text-ink/65">{r.positionTitle}</p>
                   </div>
                   {r.expired ? (
@@ -95,7 +94,7 @@ export default async function TenurePage() {
                   {r.termStart ? formatDate(r.termStart) : "—"} →{" "}
                   {r.termEnd ? formatDate(r.termEnd) : "—"}
                 </p>
-                <div className="mt-3 flex gap-4 border-t border-gray-100 pt-3">
+                <div className="mt-3 flex gap-4 border-t border-canopy/[0.08] pt-3">
                   <Link href={`/print/appointment/${r.id}`} className="text-xs font-medium text-brand-green hover:underline">
                     Letter
                   </Link>

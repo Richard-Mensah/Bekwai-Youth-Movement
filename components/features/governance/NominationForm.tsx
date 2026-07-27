@@ -12,7 +12,7 @@ const SUPABASE_READY =
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
 const SELECT =
-  "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+  "mt-1 block w-full rounded-lg border border-canopy/20 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
 
 export default function NominationForm() {
   const [pending, startTransition] = useTransition()
@@ -43,7 +43,7 @@ export default function NominationForm() {
       )}
       <Input name="fullName" label="Nominee full name" />
       <div>
-        <label className="block text-sm font-medium text-gray-700">Community</label>
+        <label className="block text-sm font-medium text-ink/75">Community</label>
         <select name="communityId" className={SELECT}>
           <option value="">Select…</option>
           {COMMUNITIES.map((c) => (
@@ -52,7 +52,7 @@ export default function NominationForm() {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Seat</label>
+        <label className="block text-sm font-medium text-ink/75">Seat</label>
         <select name="seatType" className={SELECT}>
           <option value="">Select…</option>
           {SEAT_TYPES.map((s) => (

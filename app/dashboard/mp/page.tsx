@@ -60,9 +60,9 @@ export default async function MpDashboard() {
             <h3 className="text-sm font-bold text-canopy">Motions</h3>
             <ul className="mt-3 space-y-2">
               {motions.map((m) => (
-                <li key={m.id} className="rounded-lg border border-gray-100 p-3">
+                <li key={m.id} className="rounded-lg border border-canopy/[0.08] p-3">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-medium text-gray-700">{m.title}</p>
+                    <p className="text-sm font-medium text-ink/75">{m.title}</p>
                     <Badge tone="blue">{m.status}</Badge>
                   </div>
                   {m.body && <p className="mt-1 text-xs text-ink/55">{m.body}</p>}
@@ -77,8 +77,8 @@ export default async function MpDashboard() {
             </h3>
             <ul className="mt-3 space-y-2">
               {recs.map((r) => (
-                <li key={r.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
-                  <p className="text-sm font-medium text-gray-700">{r.title}</p>
+                <li key={r.id} className="flex items-center justify-between rounded-lg border border-canopy/[0.08] p-3">
+                  <p className="text-sm font-medium text-ink/75">{r.title}</p>
                   <Badge tone="green">{r.status}</Badge>
                 </li>
               ))}
@@ -92,8 +92,8 @@ export default async function MpDashboard() {
           <h3 className="text-sm font-bold text-canopy">Sessions</h3>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {sessions.map((s) => (
-              <div key={s.id} className="rounded-lg border border-gray-100 p-3 text-sm">
-                <p className="font-medium text-gray-700">{s.name}</p>
+              <div key={s.id} className="rounded-lg border border-canopy/[0.08] p-3 text-sm">
+                <p className="font-medium text-ink/75">{s.name}</p>
                 <p className="text-xs text-ink/55">
                   {s.opensOn ?? "—"} → {s.closesOn ?? "—"}
                 </p>

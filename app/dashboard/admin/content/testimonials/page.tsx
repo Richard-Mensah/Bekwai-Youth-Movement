@@ -14,21 +14,17 @@ export default async function TestimonialsListPage() {
 
   return (
     <>
-      <Link
-        href="/dashboard/admin/content"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Content Studio
-      </Link>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <DashboardHeading
-          title="Member voices"
-          subtitle="Quotes shown in the testimonials band on the homepage"
-        />
-        <Button href="/dashboard/admin/content/testimonials/new">
-          <Plus size={16} /> New testimonial
-        </Button>
-      </div>
+      <DashboardHeading
+        backHref="/dashboard/admin/content"
+        backLabel="Content Studio"
+        title="Member voices"
+        subtitle="Quotes shown in the testimonials band on the homepage"
+        actions={
+          <Button href="/dashboard/admin/content/testimonials/new">
+            <Plus size={16} /> New testimonial
+          </Button>
+        }
+      />
 
       {items.length === 0 ? (
         <Card>

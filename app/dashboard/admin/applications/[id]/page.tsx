@@ -191,7 +191,7 @@ export default async function ReviewApplicationPage({ params }: Props) {
               <dt className="text-[11px] uppercase tracking-wider text-ink/40 dark:text-paper/40">
                 Why they want to serve
               </dt>
-              <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-ink/72 dark:text-paper/70">
+              <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-ink/70 dark:text-paper/70">
                 {application.motivation}
               </p>
             </div>

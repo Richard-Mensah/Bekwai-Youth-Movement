@@ -13,7 +13,7 @@ const SUPABASE_READY =
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
 const SELECT =
-  "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+  "mt-1 block w-full rounded-lg border border-canopy/20 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
 
 export default function ProjectForm() {
   const [pending, startTransition] = useTransition()
@@ -44,12 +44,12 @@ export default function ProjectForm() {
       )}
       <Input name="name" label="Project name" />
       <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
+        <label className="block text-sm font-medium text-ink/75">Description</label>
         <textarea name="description" rows={2} className={SELECT} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Community</label>
+          <label className="block text-sm font-medium text-ink/75">Community</label>
           <select name="communityId" className={SELECT}>
             <option value="">Select…</option>
             {COMMUNITIES.map((c) => (
@@ -58,7 +58,7 @@ export default function ProjectForm() {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Unit</label>
+          <label className="block text-sm font-medium text-ink/75">Unit</label>
           <select name="unitId" className={SELECT}>
             <option value="">Select…</option>
             {UNITS.map((u) => (

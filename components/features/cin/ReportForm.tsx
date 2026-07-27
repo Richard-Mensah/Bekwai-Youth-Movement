@@ -12,7 +12,7 @@ const SUPABASE_READY =
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
 const SELECT =
-  "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+  "mt-1 block w-full rounded-lg border border-canopy/20 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
 
 export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?: number }) {
   const [pending, startTransition] = useTransition()
@@ -54,7 +54,7 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Category</label>
+          <label className="block text-sm font-medium text-ink/75">Category</label>
           <select name="category" className={SELECT}>
             <option value="">Select…</option>
             {CIN_CATEGORIES.map((c) => (
@@ -63,7 +63,7 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Severity</label>
+          <label className="block text-sm font-medium text-ink/75">Severity</label>
           <select name="severity" className={SELECT} defaultValue="medium">
             {SEVERITIES.map((s) => (
               <option key={s.value} value={s.value}>{s.label}</option>
@@ -73,7 +73,7 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Community</label>
+        <label className="block text-sm font-medium text-ink/75">Community</label>
         <select name="communityId" className={SELECT} defaultValue={defaultCommunityId ?? ""}>
           <option value="">Select…</option>
           {COMMUNITIES.map((c) => (
@@ -83,7 +83,7 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
+        <label className="block text-sm font-medium text-ink/75">Description</label>
         <textarea
           name="description"
           rows={3}
@@ -93,14 +93,14 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-ink/75">
           Evidence photo (optional)
         </label>
         <input
           type="file"
           name="evidence"
           accept="image/*"
-          className="mt-1 block w-full text-sm text-gray-600 file:mr-3 file:rounded-md file:border-0 file:bg-brand-green-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-brand-green"
+          className="mt-1 block w-full text-sm text-ink/65 file:mr-3 file:rounded-md file:border-0 file:bg-brand-green-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-brand-green"
         />
       </div>
 

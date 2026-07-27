@@ -1,5 +1,4 @@
-import Link from "next/link"
-import { Download } from "lucide-react"
+import { Download, Hourglass, UserCheck, Users } from "lucide-react"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import StatCard from "@/components/ui/StatCard"
 import Card from "@/components/ui/Card"
@@ -21,29 +20,37 @@ export default async function MembersPage() {
 
   return (
     <>
-      <Link
-        href="/dashboard/admin"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Administration
-      </Link>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <DashboardHeading
-          title="Members directory"
-          subtitle="Verify registrations, then export or email members directly"
-        />
-        <a
-          href="/dashboard/admin/members/export"
-          className="inline-flex items-center gap-2 rounded-full border border-canopy/25 bg-white px-4 py-2 text-sm font-semibold text-canopy hover:bg-canopy-50"
-        >
-          <Download size={16} /> Export CSV
-        </a>
-      </div>
+      <DashboardHeading
+        backHref="/dashboard/admin"
+        backLabel="Administration"
+        title="Members directory"
+        subtitle="Verify registrations, then export or email members directly"
+        actions={
+          <a
+            href="/dashboard/admin/members/export"
+            className="inline-flex items-center gap-2 rounded-full border border-canopy/25 bg-white px-4 py-2 text-sm font-semibold text-canopy transition-all hover:-translate-y-0.5 hover:bg-canopy-50 dark:border-white/15 dark:bg-transparent dark:text-paper dark:hover:bg-white/10"
+          >
+            <Download size={16} aria-hidden /> Export CSV
+          </a>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Total members" value={total} />
-        <StatCard label="Verified" value={verified} accent="gold" />
-        <StatCard label="Pending" value={pending} accent="red" />
+        <StatCard label="Total members" value={total} icon={Users} />
+        <StatCard
+          label="Verified"
+          value={verified}
+          accent="gold"
+          icon={UserCheck}
+          hint="Full dashboard access"
+        />
+        <StatCard
+          label="Pending"
+          value={pending}
+          accent="red"
+          icon={Hourglass}
+          hint={pending > 0 ? "Awaiting your decision" : "Nothing waiting"}
+        />
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.4fr] lg:items-start">
@@ -66,9 +73,9 @@ export default async function MembersPage() {
               </p>
             </Card>
           ) : (
-            <div className="overflow-x-auto rounded-2xl border border-canopy/10 bg-white shadow-card">
+            <div className="surface overflow-x-auto">
               <table className="w-full min-w-[640px] text-left text-sm">
-                <thead className="border-b border-canopy/10 text-xs uppercase tracking-wider text-ink/50">
+                <thead className="border-b border-canopy/10 bg-paper/50 text-xs uppercase tracking-wider text-ink/50 dark:border-white/10 dark:bg-white/[0.03] dark:text-paper/50">
                   <tr>
                     <th className="px-4 py-3 font-semibold">Name</th>
                     <th className="px-4 py-3 font-semibold">Email</th>
@@ -78,10 +85,13 @@ export default async function MembersPage() {
                     <th className="px-4 py-3 font-semibold">Wall</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-canopy/5">
+                <tbody className="divide-y divide-canopy/5 dark:divide-white/5">
                   {members.map((m) => (
-                    <tr key={m.id} className="align-middle">
-                      <td className="px-4 py-3 font-medium text-canopy">
+                    <tr
+                      key={m.id}
+                      className="align-middle transition-colors hover:bg-paper/60 dark:hover:bg-white/[0.03]"
+                    >
+                      <td className="px-4 py-3 font-medium text-canopy dark:text-paper">
                         {m.fullName || "—"}
                         {m.phone && (
                           <span className="block text-xs font-normal text-ink/45">

@@ -38,12 +38,12 @@ export default function PublishToggle({ table, id, isPublished }: Props) {
         className={
           isPublished
             ? "rounded-full bg-brand-green-50 px-3 py-1 text-xs font-medium text-brand-green-700 ring-1 ring-inset ring-brand-green-100 disabled:opacity-50"
-            : "rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-200 disabled:opacity-50"
+            : "rounded-full bg-canopy-50 px-3 py-1 text-xs font-medium text-ink/55 ring-1 ring-inset ring-canopy/10 disabled:opacity-50"
         }
       >
         {pending ? "…" : isPublished ? "Published — unpublish" : "Draft — publish"}
       </button>
-      {note && <span className="text-[11px] text-gray-400">{note}</span>}
+      {note && <span className="text-[11px] text-ink/40">{note}</span>}
     </div>
   )
 }

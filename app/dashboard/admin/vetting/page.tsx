@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { getNominations } from "@/lib/data/governance"
 import { NOMINATION_FLOW } from "@/constants/governance"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
@@ -16,10 +15,9 @@ export default async function VettingPage() {
 
   return (
     <>
-      <Link href="/dashboard/admin" className="mb-3 inline-block text-sm text-brand-green hover:underline">
-        ← Back to Administration
-      </Link>
-      <DashboardHeading
+<DashboardHeading
+        backHref="/dashboard/admin"
+        backLabel="Administration"
         title="Nomination & Vetting Pipeline"
         subtitle="The 8-week, 5-step selection process (Governance §4.3)"
       />

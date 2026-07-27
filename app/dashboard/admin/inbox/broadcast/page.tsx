@@ -1,4 +1,3 @@
-import Link from "next/link"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import Card from "@/components/ui/Card"
 import Badge from "@/components/ui/Badge"
@@ -17,13 +16,9 @@ export default async function BroadcastPage() {
 
   return (
     <>
-      <Link
-        href="/dashboard/admin/inbox"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Inbox
-      </Link>
-      <DashboardHeading
+<DashboardHeading
+        backHref="/dashboard/admin/inbox"
+        backLabel="Inbox"
         title="Newsletter broadcast"
         subtitle="Send an update to everyone who subscribed from the site"
       />

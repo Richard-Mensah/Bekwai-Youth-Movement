@@ -25,7 +25,7 @@ export default function ReadingsProgress({ status }: { status: BillStatus }) {
               "flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium",
               active && "bg-brand-green text-white",
               done && "bg-brand-green-50 text-brand-green-700",
-              !active && !done && "bg-gray-100 text-gray-400"
+              !active && !done && "bg-canopy-50 text-ink/40"
             )}
           >
             <span

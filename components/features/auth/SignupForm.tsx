@@ -174,7 +174,7 @@ export default function SignupForm() {
         </Button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-gray-500">
+      <p className="mt-5 text-center text-sm text-ink/55">
         Already a member?{" "}
         <Link
           href={`/login${next ? `?next=${encodeURIComponent(next)}` : ""}`}

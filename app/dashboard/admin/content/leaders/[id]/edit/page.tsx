@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import LeaderForm from "../../LeaderForm"
@@ -17,13 +16,9 @@ export default async function EditLeaderPage({
 
   return (
     <>
-      <Link
-        href="/dashboard/admin/content/leaders"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Leadership
-      </Link>
-      <DashboardHeading title="Edit person" subtitle={leader.name ?? leader.title} />
+<DashboardHeading
+        backHref="/dashboard/admin/content/leaders"
+        backLabel="Leadership" title="Edit person" subtitle={leader.name ?? leader.title} />
       <LeaderForm leader={leader} />
     </>
   )

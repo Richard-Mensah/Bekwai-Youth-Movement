@@ -2,13 +2,14 @@
   "name": "bym-governance-platform",
   "version": "0.1.0",
   "private": true,
-  "description": "Bekwai Youth Movement — Digital Governance Platform",
+  "description": "Bekwai Youth Movement \u2014 Digital Governance Platform",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "lint": "next lint && node scripts/check-tailwind-opacity.mjs",
+    "typecheck": "tsc --noEmit",
+    "check:css": "node scripts/check-tailwind-opacity.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

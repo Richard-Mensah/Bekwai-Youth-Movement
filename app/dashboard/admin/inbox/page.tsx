@@ -24,13 +24,9 @@ export default async function InboxPage() {
 
   return (
     <>
-      <Link
-        href="/dashboard/admin"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Back to Administration
-      </Link>
-      <DashboardHeading
+<DashboardHeading
+        backHref="/dashboard/admin"
+        backLabel="Administration"
         title="Inbox"
         subtitle="Contact enquiries and newsletter subscribers from the public site"
       />
@@ -89,10 +85,10 @@ export default async function InboxPage() {
                       </span>
                     </div>
                   </div>
-                  <p className="mt-3 whitespace-pre-wrap border-t border-gray-100 pt-3 text-sm leading-relaxed text-ink/70">
+                  <p className="mt-3 whitespace-pre-wrap border-t border-canopy/[0.08] pt-3 text-sm leading-relaxed text-ink/70">
                     {m.message}
                   </p>
-                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-3">
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-canopy/[0.08] pt-3">
                     <a
                       href={`mailto:${m.email}?subject=Re: your message to Bekwai Youth Movement`}
                       className="inline-flex items-center gap-1.5 text-sm font-semibold text-canopy hover:underline"
@@ -142,7 +138,7 @@ export default async function InboxPage() {
               <div className="hidden overflow-x-auto md:block">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-ink/45">
+                    <tr className="border-b border-canopy/10 text-xs uppercase tracking-wider text-ink/45">
                       <th className="py-2 pr-4 font-medium">Email</th>
                       <th className="py-2 pr-4 font-medium">Source</th>
                       <th className="py-2 pr-4 font-medium">Subscribed</th>
@@ -150,7 +146,7 @@ export default async function InboxPage() {
                   </thead>
                   <tbody>
                     {subscribers.map((s) => (
-                      <tr key={s.id} className="border-b border-gray-100">
+                      <tr key={s.id} className="border-b border-canopy/[0.08]">
                         <td className="py-2.5 pr-4">
                           <a
                             href={`mailto:${s.email}`}
@@ -173,7 +169,7 @@ export default async function InboxPage() {
                 {subscribers.map((s) => (
                   <li
                     key={s.id}
-                    className="flex items-center justify-between gap-3 border-b border-gray-100 pb-2 last:border-0"
+                    className="flex items-center justify-between gap-3 border-b border-canopy/[0.08] pb-2 last:border-0"
                   >
                     <a
                       href={`mailto:${s.email}`}

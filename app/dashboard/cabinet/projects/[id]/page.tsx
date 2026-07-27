@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getProjectById, getExpenditures } from "@/lib/data/projects"
@@ -29,18 +28,14 @@ export default async function ProjectDetailPage({
 
   return (
     <>
-      <Link
-        href="/dashboard/cabinet"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Back to Cabinet
-      </Link>
-      <DashboardHeading title={project.name} subtitle={project.communityName} />
+<DashboardHeading
+        backHref="/dashboard/cabinet"
+        backLabel="Cabinet" title={project.name} subtitle={project.communityName} />
 
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="space-y-6">
           <Card>
-            <div className="relative -mx-6 -mt-6 mb-4 h-44 w-[calc(100%+3rem)] overflow-hidden rounded-t-xl bg-gray-100">
+            <div className="relative -mx-6 -mt-6 mb-4 h-44 w-[calc(100%+3rem)] overflow-hidden rounded-t-xl bg-canopy-50">
               <Image
                 src={project.coverUrl ?? placeholderImage(project.id, 800, 360)}
                 alt={project.name}
@@ -58,7 +53,7 @@ export default async function ProjectDetailPage({
             <p className="mt-4 text-sm leading-relaxed text-ink/65">
               {project.description ?? "No description provided."}
             </p>
-            <div className="mt-5 border-t border-gray-100 pt-4">
+            <div className="mt-5 border-t border-canopy/[0.08] pt-4">
               <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink/45">
                 Lifecycle actions
               </p>
@@ -71,7 +66,7 @@ export default async function ProjectDetailPage({
             <div className="mt-3 hidden overflow-x-auto md:block">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-ink/45">
+                  <tr className="border-b border-canopy/10 text-xs uppercase tracking-wider text-ink/45">
                     <th className="py-2 pr-4 font-medium">Date</th>
                     <th className="py-2 pr-4 font-medium">Payee</th>
                     <th className="py-2 pr-4 font-medium">Purpose</th>
@@ -80,11 +75,11 @@ export default async function ProjectDetailPage({
                 </thead>
                 <tbody>
                   {expenditures.map((e) => (
-                    <tr key={e.id} className="border-b border-gray-100">
+                    <tr key={e.id} className="border-b border-canopy/[0.08]">
                       <td className="py-2 pr-4 text-ink/55">{formatDate(e.spentOn)}</td>
-                      <td className="py-2 pr-4 text-gray-700">{e.payee}</td>
+                      <td className="py-2 pr-4 text-ink/75">{e.payee}</td>
                       <td className="py-2 pr-4 text-ink/65">{e.purpose}</td>
-                      <td className="py-2 pr-4 text-right font-medium text-gray-700">
+                      <td className="py-2 pr-4 text-right font-medium text-ink/75">
                         {ghs(e.amountGhs)}
                       </td>
                     </tr>
@@ -103,22 +98,22 @@ export default async function ProjectDetailPage({
             {/* Mobile: stacked cards */}
             <ul className="mt-3 space-y-2 md:hidden">
               {expenditures.map((e) => (
-                <li key={e.id} className="rounded-xl border border-gray-200 p-3">
+                <li key={e.id} className="rounded-xl border border-canopy/10 p-3">
                   <div className="flex items-baseline justify-between gap-3">
-                    <p className="font-medium text-gray-700">{e.payee}</p>
-                    <p className="shrink-0 font-medium text-gray-700">{ghs(e.amountGhs)}</p>
+                    <p className="font-medium text-ink/75">{e.payee}</p>
+                    <p className="shrink-0 font-medium text-ink/75">{ghs(e.amountGhs)}</p>
                   </div>
                   <p className="mt-0.5 text-xs text-ink/65">{e.purpose}</p>
                   <p className="mt-1 text-[11px] text-ink/45">{formatDate(e.spentOn)}</p>
                 </li>
               ))}
               {expenditures.length === 0 && (
-                <li className="rounded-xl border border-dashed border-gray-200 p-4 text-center text-xs text-ink/45">
+                <li className="rounded-xl border border-dashed border-canopy/10 p-4 text-center text-xs text-ink/45">
                   No expenditure recorded yet.
                 </li>
               )}
             </ul>
-            <div className="mt-4 border-t border-gray-100 pt-4">
+            <div className="mt-4 border-t border-canopy/[0.08] pt-4">
               <ExpenditureForm projectId={project.id} />
             </div>
           </Card>

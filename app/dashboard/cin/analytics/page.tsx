@@ -88,9 +88,9 @@ export default async function CinAnalyticsPage() {
             {needAttention.map((c, i) => (
               <li
                 key={c.communityId}
-                className="flex items-center justify-between rounded-lg border border-gray-100 px-3 py-2 text-sm"
+                className="flex items-center justify-between rounded-lg border border-canopy/[0.08] px-3 py-2 text-sm"
               >
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-ink/75">
                   {i + 1}. {c.communityName}
                 </span>
                 <span className="text-xs text-ink/55">

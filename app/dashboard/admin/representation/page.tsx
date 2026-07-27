@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { getRepresentationGaps, gapStats } from "@/lib/data/governance"
 import { INTERIM_TIERS } from "@/constants/governance"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
@@ -29,10 +28,9 @@ export default async function RepresentationPage() {
 
   return (
     <>
-      <Link href="/dashboard/admin" className="mb-3 inline-block text-sm text-brand-green hover:underline">
-        ← Back to Administration
-      </Link>
-      <DashboardHeading
+<DashboardHeading
+        backHref="/dashboard/admin"
+        backLabel="Administration"
         title="No Community Left Without a Voice"
         subtitle="Representation gap tracker across all 32 communities (Governance §4.4)"
       />
@@ -54,9 +52,9 @@ export default async function RepresentationPage() {
             {gaps.map((g) => (
               <div
                 key={g.communityId}
-                className="flex items-center justify-between rounded-lg border border-gray-100 px-3 py-2"
+                className="flex items-center justify-between rounded-lg border border-canopy/[0.08] px-3 py-2"
               >
-                <span className="truncate text-xs font-medium text-gray-700">
+                <span className="truncate text-xs font-medium text-ink/75">
                   {g.communityName}
                 </span>
                 <span className="ml-2 flex shrink-0 gap-1">
@@ -80,7 +78,7 @@ export default async function RepresentationPage() {
           </p>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {INTERIM_TIERS.map((t) => (
-              <div key={t.tier} className="rounded-lg border border-gray-100 p-4">
+              <div key={t.tier} className="rounded-lg border border-canopy/[0.08] p-4">
                 <span className="text-xs font-bold text-brand-red">TIER {t.tier}</span>
                 <p className="mt-1 text-sm font-bold text-canopy">{t.name}</p>
                 <p className="mt-1 text-xs text-ink/65">{t.note}</p>

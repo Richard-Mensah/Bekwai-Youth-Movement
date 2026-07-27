@@ -22,18 +22,17 @@ export default async function LeadersListPage() {
 
   return (
     <>
-      <Link
-        href="/dashboard/admin/content"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Content Studio
-      </Link>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <DashboardHeading title="Leadership & Team" subtitle="People shown on the Leadership page" />
-        <Button href="/dashboard/admin/content/leaders/new">
-          <Plus size={16} /> Add person
-        </Button>
-      </div>
+      <DashboardHeading
+        backHref="/dashboard/admin/content"
+        backLabel="Content Studio"
+        title="Leadership & Team"
+        subtitle="People shown on the Leadership page"
+        actions={
+          <Button href="/dashboard/admin/content/leaders/new">
+            <Plus size={16} /> Add person
+          </Button>
+        }
+      />
 
       {leaders.length === 0 ? (
         <Card>

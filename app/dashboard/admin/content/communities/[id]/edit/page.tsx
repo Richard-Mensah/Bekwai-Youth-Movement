@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import CommunityDetailsForm from "../../CommunityDetailsForm"
@@ -17,13 +16,9 @@ export default async function EditCommunityPage({
 
   return (
     <>
-      <Link
-        href="/dashboard/admin/content/communities"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Communities
-      </Link>
-      <DashboardHeading
+<DashboardHeading
+        backHref="/dashboard/admin/content/communities"
+        backLabel="Communities"
         title={`Edit ${community.name}`}
         subtitle="About, chief, and elders shown on the public community page"
       />

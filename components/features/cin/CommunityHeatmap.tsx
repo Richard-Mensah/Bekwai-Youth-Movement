@@ -24,7 +24,7 @@ export default function CommunityHeatmap({ scores }: { scores: CommunityScore[] 
           </div>
         ))}
       </div>
-      <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-gray-500">
+      <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-ink/55">
         <Legend color="#14342B" label="80+ strong" />
         <Legend color="#4C9F38" label="65–79" />
         <Legend color="#FD9D24" label="50–64" />

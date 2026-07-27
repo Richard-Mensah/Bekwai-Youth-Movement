@@ -66,6 +66,9 @@ export default function Hero({
         <div className="absolute inset-0 bg-gradient-to-r from-canopy via-canopy/85 to-canopy/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-canopy/80 via-transparent to-canopy/30" />
         <div className="absolute inset-0 canopy-texture" />
+        {/* Vignette — pulls the eye to the centre and stops the photograph
+            bleeding brightly into the corners. */}
+        <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_40%,transparent_45%,rgba(5,14,11,0.55)_100%)]" />
       </div>
 
       <motion.div
@@ -82,7 +85,7 @@ export default function Hero({
 
           <motion.h1
             variants={item}
-            className="mt-5 max-w-2xl font-display text-4xl font-semibold leading-[1.05] text-white text-balance sm:text-5xl lg:text-6xl"
+            className="mt-5 max-w-2xl font-display text-4xl font-semibold leading-[1.04] tracking-[-0.02em] text-white text-balance sm:text-5xl lg:text-6xl xl:text-[4.25rem]"
           >
             {heroTitle}
           </motion.h1>
@@ -95,8 +98,20 @@ export default function Hero({
           </motion.p>
 
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
-            <Button href="/join" size="lg" variant="primary" className="bg-brand-red hover:bg-brand-red-600 focus-visible:ring-brand-red">
-              {t("hero.ctaJoin")} <ArrowRight size={18} />
+            {/* `secondary` is the brand red — this was `primary` with the red
+                pasted back over it in className, so the variant it declared and
+                the colour it rendered disagreed. */}
+            <Button
+              href="/join"
+              size="lg"
+              variant="secondary"
+              className="group shadow-card hover:shadow-card-hover"
+            >
+              {t("hero.ctaJoin")}
+              <ArrowRight
+                size={18}
+                className="transition-transform duration-200 group-hover:translate-x-0.5"
+              />
             </Button>
             <Button href="/about" size="lg" variant="light">
               {t("hero.ctaExplore")}
@@ -106,7 +121,7 @@ export default function Hero({
           {/* Founding Day ribbon */}
           <motion.div
             variants={item}
-            className="mt-12 flex flex-col gap-5 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between"
+            className="mt-12 flex flex-col gap-5 rounded-2xl border border-white/[0.12] bg-white/[0.06] p-5 shadow-elevated backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between"
           >
             <div>
               <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-gold-300">
@@ -129,6 +144,13 @@ export default function Hero({
           <HeroCarousel images={heroImages} />
         </motion.div>
       </motion.div>
+
+      {/* Softens the join between the hero and whatever follows, so the page
+          reads as one surface rather than two slabs butted together. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white dark:to-canopy-900"
+      />
     </section>
   )
 }

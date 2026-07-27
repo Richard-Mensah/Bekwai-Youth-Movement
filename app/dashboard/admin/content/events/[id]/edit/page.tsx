@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import EventForm from "../../EventForm"
@@ -16,13 +15,9 @@ export default async function EditEventPage({
   if (!event) notFound()
   return (
     <>
-      <Link
-        href="/dashboard/admin/content/events"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Events
-      </Link>
-      <DashboardHeading title="Edit event" subtitle={event.title} />
+<DashboardHeading
+        backHref="/dashboard/admin/content/events"
+        backLabel="Events" title="Edit event" subtitle={event.title} />
       <EventForm event={event} />
     </>
   )

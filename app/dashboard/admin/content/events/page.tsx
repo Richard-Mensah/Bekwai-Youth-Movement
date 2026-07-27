@@ -14,18 +14,17 @@ export default async function EventsListPage() {
   const events = await getAllEvents()
   return (
     <>
-      <Link
-        href="/dashboard/admin/content"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Content Studio
-      </Link>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <DashboardHeading title="Events" subtitle="Durbars, sittings, launches" />
-        <Button href="/dashboard/admin/content/events/new">
-          <Plus size={16} /> New event
-        </Button>
-      </div>
+      <DashboardHeading
+        backHref="/dashboard/admin/content"
+        backLabel="Content Studio"
+        title="Events"
+        subtitle="Durbars, sittings, launches"
+        actions={
+          <Button href="/dashboard/admin/content/events/new">
+            <Plus size={16} /> New event
+          </Button>
+        }
+      />
 
       {events.length === 0 ? (
         <Card>

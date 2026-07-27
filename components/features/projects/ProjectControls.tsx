@@ -64,7 +64,7 @@ export default function ProjectControls({ projectId, status }: Props) {
           </Button>
         )}
       </div>
-      {note && <p className="text-xs text-gray-500">{note}</p>}
+      {note && <p className="text-xs text-ink/55">{note}</p>}
     </div>
   )
 }

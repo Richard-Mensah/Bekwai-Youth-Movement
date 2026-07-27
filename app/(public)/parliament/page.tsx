@@ -57,12 +57,12 @@ export default function ParliamentPage() {
           {BILL_STAGES.map((stage, i) => (
             <li
               key={stage}
-              className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm"
+              className="flex items-center gap-3 rounded-lg border border-canopy/10 bg-white px-4 py-3 shadow-sm"
             >
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-green text-xs font-bold text-white">
                 {i + 1}
               </span>
-              <span className="text-sm font-medium text-gray-700">{stage}</span>
+              <span className="text-sm font-medium text-ink/75">{stage}</span>
             </li>
           ))}
         </ol>
@@ -75,7 +75,7 @@ export default function ParliamentPage() {
               <SectionHeading eyebrow="Officers" title="Who runs Parliament" />
               <div className="mt-6 space-y-3">
                 {OFFICERS.map(([role, desc]) => (
-                  <div key={role} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+                  <div key={role} className="rounded-lg border border-canopy/10 bg-white p-4 shadow-sm">
                     <p className="text-sm font-bold text-canopy">{role}</p>
                     <p className="mt-1 text-sm text-ink/65">{desc}</p>
                   </div>
@@ -87,7 +87,7 @@ export default function ParliamentPage() {
               <div className="mt-6 grid gap-3">
                 {COMMITTEES.map((c) => (
                   <Card key={c} className="py-4">
-                    <p className="text-sm font-medium text-gray-700">{c}</p>
+                    <p className="text-sm font-medium text-ink/75">{c}</p>
                   </Card>
                 ))}
               </div>

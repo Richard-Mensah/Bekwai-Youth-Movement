@@ -61,7 +61,7 @@ export default function VotePanel({ billId, initial }: Props) {
     <div>
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-bold text-brand-green-700">Live voting</h3>
-        <span className="text-xs text-gray-400">{total} votes</span>
+        <span className="text-xs text-ink/40">{total} votes</span>
       </div>
 
       <div className="mt-4 space-y-2">
@@ -70,11 +70,11 @@ export default function VotePanel({ billId, initial }: Props) {
           const pct = total ? Math.round((count / total) * 100) : 0
           return (
             <div key={c.value}>
-              <div className="flex justify-between text-xs text-gray-600">
+              <div className="flex justify-between text-xs text-ink/65">
                 <span>{c.label}</span>
                 <span>{count} · {pct}%</span>
               </div>
-              <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100">
+              <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-canopy-50">
                 <div
                   className="h-full rounded-full transition-all"
                   style={{ width: `${pct}%`, backgroundColor: c.color }}
@@ -91,13 +91,13 @@ export default function VotePanel({ billId, initial }: Props) {
             key={c.value}
             onClick={() => vote(c.value)}
             disabled={pending}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            className="rounded-lg border border-canopy/20 px-3 py-2 text-sm font-medium text-ink/75 hover:bg-paper disabled:opacity-50"
           >
             {c.label}
           </button>
         ))}
       </div>
-      {note && <p className="mt-3 text-xs text-gray-500">{note}</p>}
+      {note && <p className="mt-3 text-xs text-ink/55">{note}</p>}
       {SUPABASE_READY && (
         <p className="mt-2 text-[11px] text-brand-green">● Live — updates in real time</p>
       )}

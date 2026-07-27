@@ -17,19 +17,19 @@ export default async function AccountPage() {
           <dl className="mt-4 space-y-3 text-sm">
             <div className="flex justify-between">
               <dt className="text-ink/55">Name</dt>
-              <dd className="font-medium text-gray-700">{session.fullName}</dd>
+              <dd className="font-medium text-ink/75">{session.fullName}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-ink/55">Email</dt>
-              <dd className="font-medium text-gray-700">{session.email ?? "—"}</dd>
+              <dd className="font-medium text-ink/75">{session.email ?? "—"}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-ink/55">Role</dt>
-              <dd className="font-medium text-gray-700">{ROLE_META[session.role].label}</dd>
+              <dd className="font-medium text-ink/75">{ROLE_META[session.role].label}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-ink/55">Status</dt>
-              <dd className="font-medium text-gray-700 capitalize">
+              <dd className="font-medium text-ink/75 capitalize">
                 {session.verificationStatus}
               </dd>
             </div>

@@ -42,9 +42,9 @@ export default async function ProjectsPage() {
                 return (
                   <div
                     key={p.id}
-                    className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+                    className="overflow-hidden rounded-xl border border-canopy/10 bg-white shadow-sm"
                   >
-                    <div className="relative h-40 w-full bg-gray-100">
+                    <div className="relative h-40 w-full bg-canopy-50">
                       <Image
                         src={p.coverUrl ?? placeholderImage(p.id, 600, 360)}
                         alt={p.name}
@@ -63,7 +63,7 @@ export default async function ProjectsPage() {
                       <h3 className="mt-3 text-base font-bold text-canopy">
                         {p.name}
                       </h3>
-                      <p className="mt-1 text-xs text-gray-400">{p.communityName}</p>
+                      <p className="mt-1 text-xs text-ink/40">{p.communityName}</p>
                       {p.description && (
                         <p className="mt-2 text-sm text-ink/65">{p.description}</p>
                       )}

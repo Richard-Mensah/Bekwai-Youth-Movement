@@ -10,7 +10,7 @@ const SUPABASE_READY =
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
 const SELECT =
-  "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+  "mt-1 block w-full rounded-lg border border-canopy/20 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
 
 const KINDS = [
   ["courtesy_call", "Courtesy call"],
@@ -47,7 +47,7 @@ export default function TacEngagementForm() {
         </p>
       )}
       <div>
-        <label className="block text-sm font-medium text-gray-700">Type</label>
+        <label className="block text-sm font-medium text-ink/75">Type</label>
         <select name="kind" className={SELECT}>
           <option value="">Select…</option>
           {KINDS.map(([v, l]) => (
@@ -56,7 +56,7 @@ export default function TacEngagementForm() {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Community</label>
+        <label className="block text-sm font-medium text-ink/75">Community</label>
         <select name="communityId" className={SELECT}>
           <option value="">All / not specified</option>
           {COMMUNITIES.map((c) => (
@@ -65,7 +65,7 @@ export default function TacEngagementForm() {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Summary</label>
+        <label className="block text-sm font-medium text-ink/75">Summary</label>
         <textarea name="summary" rows={2} className={SELECT} />
       </div>
       <Button type="submit" disabled={!SUPABASE_READY || pending} size="sm">

@@ -8,7 +8,7 @@ export default function OfflinePage() {
       <h1 className="font-serif text-2xl font-bold text-brand-green-700">
         You&apos;re offline
       </h1>
-      <p className="mt-2 max-w-md text-gray-600">
+      <p className="mt-2 max-w-md text-ink/65">
         The Bekwai Youth Movement app needs a connection for this page. Please
         reconnect and try again.
       </p>

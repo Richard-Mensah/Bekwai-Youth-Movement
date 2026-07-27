@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import PartnerForm from "../../PartnerForm"
@@ -16,13 +15,9 @@ export default async function EditPartnerPage({
   if (!partner) notFound()
   return (
     <>
-      <Link
-        href="/dashboard/admin/content/partners"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Partners
-      </Link>
-      <DashboardHeading title="Edit partner" subtitle={partner.name} />
+<DashboardHeading
+        backHref="/dashboard/admin/content/partners"
+        backLabel="Partners" title="Edit partner" subtitle={partner.name} />
       <PartnerForm partner={partner} />
     </>
   )

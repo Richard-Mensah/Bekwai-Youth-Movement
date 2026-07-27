@@ -14,7 +14,7 @@ const SUPABASE_READY =
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
 const SELECT =
-  "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+  "mt-1 block w-full rounded-lg border border-canopy/20 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
 
 type Kind = "report" | "annual" | "budget"
 const TABS: { value: Kind; label: string }[] = [
@@ -43,7 +43,7 @@ export default function TransparencyForm() {
 
   return (
     <div>
-      <div className="mb-3 inline-flex flex-wrap rounded-lg border border-gray-200 p-0.5 text-xs">
+      <div className="mb-3 inline-flex flex-wrap rounded-lg border border-canopy/10 p-0.5 text-xs">
         {TABS.map((t) => (
           <button
             key={t.value}
@@ -51,7 +51,7 @@ export default function TransparencyForm() {
             className={
               kind === t.value
                 ? "rounded-md bg-brand-green px-3 py-1 font-medium text-white"
-                : "px-3 py-1 font-medium text-gray-600"
+                : "px-3 py-1 font-medium text-ink/65"
             }
           >
             {t.label}
@@ -74,7 +74,7 @@ export default function TransparencyForm() {
         <Input name="title" label="Title" />
         {kind === "report" && (
           <div>
-            <label className="block text-sm font-medium text-gray-700">Summary</label>
+            <label className="block text-sm font-medium text-ink/75">Summary</label>
             <textarea name="summary" rows={2} className={SELECT} />
           </div>
         )}

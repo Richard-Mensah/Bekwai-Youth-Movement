@@ -19,7 +19,7 @@ export default function AdvanceStageButton({ billId, status }: Props) {
   const next = nextStage(status)
 
   if (!next) {
-    return <p className="text-xs text-gray-400">Bill is at its final stage.</p>
+    return <p className="text-xs text-ink/40">Bill is at its final stage.</p>
   }
 
   function advance() {
@@ -38,7 +38,7 @@ export default function AdvanceStageButton({ billId, status }: Props) {
       <Button onClick={advance} disabled={pending} size="sm">
         {pending ? "Advancing…" : `Advance to ${BILL_STATUS_META[next].label}`}
       </Button>
-      {note && <p className="mt-2 text-xs text-gray-500">{note}</p>}
+      {note && <p className="mt-2 text-xs text-ink/55">{note}</p>}
     </div>
   )
 }

@@ -1,4 +1,3 @@
-import Link from "next/link"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import Card from "@/components/ui/Card"
 import Badge from "@/components/ui/Badge"
@@ -32,13 +31,9 @@ export default async function AuditPage() {
   const entries = await getAuditLog()
   return (
     <>
-      <Link
-        href="/dashboard/admin/content"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Content Studio
-      </Link>
-      <DashboardHeading
+<DashboardHeading
+        backHref="/dashboard/admin/content"
+        backLabel="Content Studio"
         title="Activity log"
         subtitle="Recent content changes, who made them and when"
       />
@@ -49,7 +44,7 @@ export default async function AuditPage() {
         </Card>
       ) : (
         <Card>
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-canopy/5">
             {entries.map((e) => (
               <li key={e.id} className="flex flex-wrap items-center justify-between gap-2 py-2.5">
                 <div className="flex min-w-0 items-center gap-2">

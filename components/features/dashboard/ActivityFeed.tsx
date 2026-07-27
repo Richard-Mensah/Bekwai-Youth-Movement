@@ -14,8 +14,8 @@ export default function ActivityFeed({ items }: Props) {
           <li key={i} className="flex gap-3">
             <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-green" />
             <div>
-              <p className="text-sm text-gray-700">{item.title}</p>
-              <p className="text-xs text-gray-400">{item.meta}</p>
+              <p className="text-sm text-ink/75">{item.title}</p>
+              <p className="text-xs text-ink/40">{item.meta}</p>
             </div>
           </li>
         ))}

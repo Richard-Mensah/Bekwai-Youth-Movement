@@ -23,7 +23,7 @@ export default function EndorsementActions({ id }: { id: string }) {
   }
 
   if (done === "endorsed" || done === "declined") {
-    return <span className="text-xs font-medium text-gray-500">Marked {done}.</span>
+    return <span className="text-xs font-medium text-ink/55">Marked {done}.</span>
   }
 
   return (
@@ -42,7 +42,7 @@ export default function EndorsementActions({ id }: { id: string }) {
       >
         Decline
       </button>
-      {done && <span className="text-[11px] text-gray-400">{done}</span>}
+      {done && <span className="text-[11px] text-ink/40">{done}</span>}
     </div>
   )
 }

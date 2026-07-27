@@ -48,7 +48,7 @@ export default async function TransparencyPage() {
               ) : (
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 text-xs uppercase tracking-wider text-gray-400">
+                    <tr className="border-b border-canopy/10 text-xs uppercase tracking-wider text-ink/40">
                       <th className="py-2 pr-4 font-medium">Period</th>
                       <th className="py-2 pr-4 font-medium text-right">Income</th>
                       <th className="py-2 pr-4 font-medium text-right">Expenditure</th>
@@ -56,8 +56,8 @@ export default async function TransparencyPage() {
                   </thead>
                   <tbody>
                     {budgets.map((b) => (
-                      <tr key={b.id} className="border-b border-gray-100">
-                        <td className="py-2 pr-4 font-medium text-gray-700">{b.title}</td>
+                      <tr key={b.id} className="border-b border-canopy/[0.08]">
+                        <td className="py-2 pr-4 font-medium text-ink/75">{b.title}</td>
                         <td className="py-2 pr-4 text-right text-ink/65">{ghs(b.incomeGhs)}</td>
                         <td className="py-2 pr-4 text-right text-ink/65">{ghs(b.expenditureGhs)}</td>
                       </tr>
@@ -84,7 +84,7 @@ export default async function TransparencyPage() {
               {scorecards.map((s) => (
                 <div
                   key={s.id}
-                  className="rounded-lg border border-gray-100 p-4 text-center"
+                  className="rounded-lg border border-canopy/[0.08] p-4 text-center"
                 >
                   <div
                     className="mx-auto flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold text-white"
@@ -92,8 +92,8 @@ export default async function TransparencyPage() {
                   >
                     {s.score ?? "—"}
                   </div>
-                  <p className="mt-2 text-sm font-medium text-gray-700">{s.communityName}</p>
-                  <p className="text-xs text-gray-400">{s.period}</p>
+                  <p className="mt-2 text-sm font-medium text-ink/75">{s.communityName}</p>
+                  <p className="text-xs text-ink/40">{s.period}</p>
                 </div>
               ))}
             </div>
@@ -105,10 +105,10 @@ export default async function TransparencyPage() {
             <SectionHeading title="Public reports" />
             <ul className="mt-4 space-y-2">
               {reports.map((r) => (
-                <li key={r.id} className="flex items-start gap-3 rounded-lg border border-gray-100 p-3">
+                <li key={r.id} className="flex items-start gap-3 rounded-lg border border-canopy/[0.08] p-3">
                   <FileText size={18} className="mt-0.5 shrink-0 text-brand-green" />
                   <div>
-                    <p className="text-sm font-medium text-gray-700">{r.title}</p>
+                    <p className="text-sm font-medium text-ink/75">{r.title}</p>
                     {r.summary && <p className="text-xs text-ink/55">{r.summary}</p>}
                   </div>
                 </li>
@@ -128,9 +128,9 @@ export default async function TransparencyPage() {
               ) : (
                 <ul className="space-y-2">
                   {annual.map((a) => (
-                    <li key={a.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
-                      <p className="text-sm font-medium text-gray-700">{a.title}</p>
-                      <span className="text-xs text-gray-400">{a.year}</span>
+                    <li key={a.id} className="flex items-center justify-between rounded-lg border border-canopy/[0.08] p-3">
+                      <p className="text-sm font-medium text-ink/75">{a.title}</p>
+                      <span className="text-xs text-ink/40">{a.year}</span>
                     </li>
                   ))}
                 </ul>

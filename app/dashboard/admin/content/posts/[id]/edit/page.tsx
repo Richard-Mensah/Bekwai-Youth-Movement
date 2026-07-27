@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import PostForm from "../../PostForm"
@@ -17,13 +16,9 @@ export default async function EditPostPage({
 
   return (
     <>
-      <Link
-        href="/dashboard/admin/content/posts"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
-      >
-        ← Posts
-      </Link>
-      <DashboardHeading title="Edit post" subtitle={post.title} />
+<DashboardHeading
+        backHref="/dashboard/admin/content/posts"
+        backLabel="Posts" title="Edit post" subtitle={post.title} />
       <PostForm post={post} />
     </>
   )

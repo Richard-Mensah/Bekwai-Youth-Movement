@@ -181,7 +181,7 @@ export default function OfficeDetail({
                       style.dot
                     )}
                   />
-                  <span className="text-sm leading-relaxed text-ink/72 dark:text-paper/70">
+                  <span className="text-sm leading-relaxed text-ink/70 dark:text-paper/70">
                     {r}
                   </span>
                 </li>
@@ -213,7 +213,7 @@ export default function OfficeDetail({
                     size={14}
                     className="mt-[3px] shrink-0 text-gold-600 dark:text-gold-300"
                   />
-                  <span className="text-sm leading-relaxed text-ink/72 dark:text-paper/70">
+                  <span className="text-sm leading-relaxed text-ink/70 dark:text-paper/70">
                     {e}
                   </span>
                 </li>
