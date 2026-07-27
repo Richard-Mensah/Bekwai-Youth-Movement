@@ -1,14 +1,14 @@
-import { CABINET_POSITIONS } from "@/constants/cabinet"
-import { LEADERSHIP_TIERS } from "@/constants/leadership"
+import { ARM_META, OFFICES, officeByTitle } from "@/constants/offices"
+import type { RoleArm } from "@/constants/offices"
 
 /**
- * Roles open for application, grouped by governance arm, for the public
- * "Apply for a leadership role" form. Derived from the canonical role data so
- * the list stays in sync with the Cabinet, Parliament, and CIN definitions.
- * The Traditional Advisory Council is honorary (appointed, not applied for)
- * and is deliberately excluded.
+ * Roles open for application, grouped by governance arm, for the leadership
+ * application flow. Derived from the office catalogue in `constants/offices.ts`
+ * so the dropdown, the role catalogue and server-side validation can never
+ * drift apart. The Traditional Advisory Council is honorary (appointed, not
+ * applied for) and is excluded there.
  */
-export type RoleArm = "cabinet" | "parliament" | "cin" | "community"
+export type { RoleArm }
 
 export type OpenRoleGroup = {
   arm: RoleArm
@@ -16,41 +16,25 @@ export type OpenRoleGroup = {
   roles: string[]
 }
 
-const parliamentTier = LEADERSHIP_TIERS.find((t) => t.id === "parliament")
-const cinTier = LEADERSHIP_TIERS.find((t) => t.id === "cin")
+const ARM_ORDER: RoleArm[] = ["cabinet", "parliament", "cin", "community"]
 
-export const OPEN_ROLE_GROUPS: OpenRoleGroup[] = [
-  {
-    arm: "cabinet",
-    label: "Civic Cabinet (Executive)",
-    // Director-General down to the last Cabinet office.
-    roles: CABINET_POSITIONS.map((p) => p.title),
-  },
-  {
-    arm: "parliament",
-    label: "Bekwai Youth Parliament (Legislature)",
-    roles: (parliamentTier?.members ?? []).map((m) => m.title),
-  },
-  {
-    arm: "cin",
-    label: "Community Intelligence Network",
-    roles: cinTier?.members.map((m) => m.title) ?? [],
-  },
-  {
-    arm: "community",
-    label: "Community-level seats",
-    roles: [
-      "Youth MP (ages 10–45)",
-      "Community Council Representative (18–45)",
-      "CIN Officer — Community (18+)",
-    ],
-  },
-]
+export const OPEN_ROLE_GROUPS: OpenRoleGroup[] = ARM_ORDER.map((arm) => ({
+  arm,
+  label: ARM_META[arm].label,
+  // Cabinet runs Director-General down to the last office; the other arms
+  // follow their own constitutional order.
+  roles: OFFICES.filter((o) => o.arm === arm).map((o) => o.title),
+}))
 
 /** Flat set of every valid role title, for server-side validation. */
-export const OPEN_ROLE_TITLES: string[] = OPEN_ROLE_GROUPS.flatMap((g) => g.roles)
+export const OPEN_ROLE_TITLES: string[] = OFFICES.map((o) => o.title)
 
 /** Maps a role title back to its arm (falls back to undefined if unknown). */
 export function armForRole(title: string): RoleArm | undefined {
-  return OPEN_ROLE_GROUPS.find((g) => g.roles.includes(title))?.arm
+  return officeByTitle(title)?.arm
+}
+
+/** Maps a role title to its catalogue slug, for linking to the role page. */
+export function slugForRole(title: string): string | undefined {
+  return officeByTitle(title)?.slug
 }

@@ -16,8 +16,10 @@ export async function GET() {
   const { data } = await supabase
     .from("leadership_applications")
     .select(
-      "membership_id, full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, vetting_pref, referee_name, referee_contact, cv_path, status, created_at"
+      "membership_id, full_name, email, phone, community, age, gender, role_arm, role_applied, role_slug, alt_role, occupation, qualifications, experience, motivation, availability, vetting_pref, referee_name, referee_contact, cv_path, status, score, reviewer_notes, submitted_at, decided_at, created_at"
     )
+    // Drafts are the applicant's own unfinished work, not pipeline data.
+    .neq("status", "draft")
     .order("created_at", { ascending: false })
 
   const header = [
@@ -30,6 +32,7 @@ export async function GET() {
     "gender",
     "role_arm",
     "role_applied",
+    "role_slug",
     "alt_role",
     "occupation",
     "qualifications",
@@ -41,7 +44,11 @@ export async function GET() {
     "referee_contact",
     "has_cv",
     "status",
+    "score",
+    "reviewer_notes",
     "submitted_at",
+    "decided_at",
+    "created_at",
   ]
   const lines = [
     header.join(","),
@@ -56,6 +63,7 @@ export async function GET() {
         r.gender,
         r.role_arm,
         r.role_applied,
+        r.role_slug,
         r.alt_role,
         r.occupation,
         r.qualifications,
@@ -67,6 +75,10 @@ export async function GET() {
         r.referee_contact,
         r.cv_path ? "yes" : "no",
         r.status,
+        r.score,
+        r.reviewer_notes,
+        r.submitted_at ?? r.created_at,
+        r.decided_at,
         r.created_at,
       ]
         .map(cell)

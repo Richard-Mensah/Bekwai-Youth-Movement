@@ -67,6 +67,11 @@ export const PUBLIC_NAV: NavItem[] = [
         href: "/cin",
         description: "Evidence from all 32 communities",
       },
+      {
+        label: "Open Roles",
+        href: "/leadership/roles",
+        description: "Every office open for application",
+      },
     ],
   },
   {

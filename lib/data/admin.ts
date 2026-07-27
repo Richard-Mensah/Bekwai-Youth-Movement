@@ -137,6 +137,11 @@ export type LeadershipApplication = {
   membershipId: string | null
   status: string
   createdAt: string
+  /** Catalogue slug, for linking to the role page. Null for legacy rows. */
+  roleSlug: string | null
+  submittedAt: string | null
+  reviewerNotes: string | null
+  score: number | null
 }
 
 /**
@@ -152,8 +157,10 @@ export async function getLeadershipApplications(): Promise<
   const { data } = await supabase
     .from("leadership_applications")
     .select(
-      "id, full_name, email, phone, community, age, gender, role_arm, role_applied, alt_role, occupation, qualifications, experience, motivation, availability, referee_name, referee_contact, vetting_pref, cv_path, membership_id, status, created_at"
+      "id, full_name, email, phone, community, age, gender, role_arm, role_applied, role_slug, alt_role, occupation, qualifications, experience, motivation, availability, referee_name, referee_contact, vetting_pref, cv_path, membership_id, status, reviewer_notes, score, submitted_at, created_at"
     )
+    // Drafts belong to the applicant and are not part of the pipeline.
+    .neq("status", "draft")
     .order("created_at", { ascending: false })
     .limit(500)
 
@@ -192,8 +199,12 @@ export async function getLeadershipApplications(): Promise<
     vettingPref: r.vetting_pref,
     cvUrl: r.cv_path ? signed.get(r.cv_path) ?? null : null,
     membershipId: r.membership_id,
-    status: r.status ?? "new",
+    status: r.status ?? "submitted",
     createdAt: r.created_at,
+    roleSlug: r.role_slug ?? null,
+    submittedAt: r.submitted_at ?? r.created_at,
+    reviewerNotes: r.reviewer_notes ?? null,
+    score: r.score ?? null,
   }))
 }
 

@@ -8,6 +8,11 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
     { label: "Overview", href: "/dashboard" },
     { label: "Account", href: "/dashboard/account" },
   ],
+  // Open to every role — a sitting MP may still apply for a Cabinet office.
+  apply: [
+    { label: "My applications", href: "/dashboard/apply" },
+    { label: "Browse offices", href: "/dashboard/apply/roles" },
+  ],
   member: [
     { label: "My profile", href: "/dashboard/member" },
     { label: "My community", href: "/dashboard/member#community" },
@@ -28,6 +33,7 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
   elder: [{ label: "Advisory Council", href: "/dashboard/elder" }],
   admin: [
     { label: "Administration", href: "/dashboard/admin" },
+    { label: "Applications pipeline", href: "/dashboard/admin/applications" },
     { label: "Members & vetting", href: "/dashboard/admin#members" },
     { label: "Members directory", href: "/dashboard/admin/members" },
     { label: "Compliance", href: "/dashboard/admin#compliance" },
@@ -51,13 +57,22 @@ export const DASHBOARD_NAV: Record<string, NavItem[]> = {
 
 /** Which sidebar groups each role sees. */
 export const ROLE_NAV_GROUPS: Record<Role, string[]> = {
-  public: ["base"],
-  member: ["base", "member"],
-  volunteer: ["base", "member"],
-  cin_officer: ["base", "cin"],
-  mp: ["base", "mp"],
-  secretary: ["base", "content", "cabinet"],
-  elder: ["base", "elder"],
-  admin: ["base", "admin", "content", "cin", "mp", "cabinet"],
-  super_admin: ["base", "admin", "content", "cin", "mp", "cabinet", "elder"],
+  public: ["base", "apply"],
+  member: ["base", "apply", "member"],
+  volunteer: ["base", "apply", "member"],
+  cin_officer: ["base", "apply", "cin"],
+  mp: ["base", "apply", "mp"],
+  secretary: ["base", "apply", "content", "cabinet"],
+  elder: ["base", "apply", "elder"],
+  admin: ["base", "apply", "admin", "content", "cin", "mp", "cabinet"],
+  super_admin: [
+    "base",
+    "apply",
+    "admin",
+    "content",
+    "cin",
+    "mp",
+    "cabinet",
+    "elder",
+  ],
 }

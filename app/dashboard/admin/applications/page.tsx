@@ -1,193 +1,92 @@
 import Link from "next/link"
-import { Mail, Download, FileText, MapPin, Video, Sparkles } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import StatCard from "@/components/ui/StatCard"
-import Card from "@/components/ui/Card"
-import Badge from "@/components/ui/Badge"
-import ApplicationStatusActions from "./ApplicationStatusActions"
+import ApplicationsConsole from "./ApplicationsConsole"
+import CoveragePanel from "./CoveragePanel"
 import { getLeadershipApplications } from "@/lib/data/admin"
-import { formatDate } from "@/lib/utils"
-
-const STATUS_TONE: Record<string, "amber" | "green" | "blue" | "red" | "gray"> = {
-  new: "amber",
-  shortlisted: "blue",
-  interview: "blue",
-  accepted: "green",
-  rejected: "red",
-  archived: "gray",
-}
-
-const VETTING_META: Record<
-  string,
-  { label: string; icon: typeof MapPin }
-> = {
-  in_person: { label: "In-person (S/Bekwai)", icon: MapPin },
-  virtual: { label: "Virtual", icon: Video },
-  either: { label: "Either", icon: Sparkles },
-}
+import type { LeadershipApplication } from "@/lib/data/admin"
 
 export const metadata = { title: "Leadership Applications" }
 
-function Field({ label, value }: { label: string; value: string | null }) {
-  if (!value) return null
-  return (
-    <div>
-      <dt className="text-[11px] uppercase tracking-wider text-ink/40">{label}</dt>
-      <dd className="whitespace-pre-wrap text-sm text-ink/75">{value}</dd>
-    </div>
+/** Median days from submission to a final decision, for decided applications. */
+function medianDaysToDecision(apps: LeadershipApplication[]): string {
+  const decided = apps.filter((a) =>
+    ["appointed", "sworn_in", "rejected"].includes(a.status)
   )
+  if (decided.length === 0) return "—"
+  const days = decided
+    .map((a) => {
+      const from = new Date(a.submittedAt ?? a.createdAt).getTime()
+      return (Date.now() - from) / 86_400_000
+    })
+    .sort((x, y) => x - y)
+  const mid = Math.floor(days.length / 2)
+  const median =
+    days.length % 2 === 0 ? (days[mid - 1] + days[mid]) / 2 : days[mid]
+  return `${Math.round(median)}d`
 }
 
 export default async function ApplicationsPage() {
   const apps = await getLeadershipApplications()
-  const newCount = apps.filter((a) => a.status === "new").length
-  const shortlisted = apps.filter(
-    (a) => a.status === "shortlisted" || a.status === "interview"
+
+  const awaiting = apps.filter((a) => a.status === "submitted").length
+  const inVetting = apps.filter((a) =>
+    ["received", "vetting", "recommended"].includes(a.status)
   ).length
+  const appointed = apps.filter((a) =>
+    ["appointed", "sworn_in"].includes(a.status)
+  ).length
+
+  const counts: Record<string, number> = {}
+  for (const a of apps) {
+    counts[a.roleApplied] = (counts[a.roleApplied] ?? 0) + 1
+  }
 
   return (
     <>
       <Link
         href="/dashboard/admin"
-        className="mb-3 inline-block text-sm text-brand-green hover:underline"
+        className="mb-3 inline-flex items-center gap-1.5 text-sm text-brand-green hover:underline dark:text-brand-green-100"
       >
-        ← Back to Administration
+        <ArrowLeft size={14} /> Back to Administration
       </Link>
       <DashboardHeading
-        title="Leadership Applications"
-        subtitle="Enrolment submissions from the public 'Apply for a role' form"
+        title="Applications pipeline"
+        subtitle="Every submission, moving through the appointment stages of Article 30.2."
       />
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Total applications" value={apps.length} hint="Most recent first" />
-        <StatCard label="New / unreviewed" value={newCount} hint="Awaiting review" accent="red" />
-        <StatCard label="In pipeline" value={shortlisted} hint="Shortlisted or interview" accent="gold" />
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          label="Total applications"
+          value={apps.length}
+          hint="Drafts excluded"
+        />
+        <StatCard
+          label="Awaiting first review"
+          value={awaiting}
+          hint="Submitted, not yet acknowledged"
+          accent="red"
+        />
+        <StatCard
+          label="In the pipeline"
+          value={inVetting}
+          hint="Received, vetting or recommended"
+          accent="gold"
+        />
+        <StatCard
+          label="Appointed"
+          value={appointed}
+          hint={`Median time to decision · ${medianDaysToDecision(apps)}`}
+        />
       </div>
 
       <div className="mt-8">
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-display text-base font-semibold text-canopy">
-            Applications
-          </h3>
-          {apps.length > 0 && (
-            <a
-              href="/dashboard/admin/applications/export"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-canopy hover:underline"
-            >
-              <Download size={14} /> Export CSV
-            </a>
-          )}
-        </div>
+        <ApplicationsConsole applications={apps} />
+      </div>
 
-        {apps.length === 0 ? (
-          <Card>
-            <p className="text-sm text-ink/55">
-              No applications yet. Submissions from the{" "}
-              <Link href="/leadership/apply" className="text-brand-blue hover:underline">
-                Apply for a role
-              </Link>{" "}
-              form appear here.
-            </p>
-          </Card>
-        ) : (
-          <ul className="space-y-3">
-            {apps.map((a) => (
-              <li key={a.id}>
-                <Card>
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <p className="font-semibold text-canopy">{a.fullName}</p>
-                        {a.membershipId && (
-                          <span className="rounded bg-canopy-50 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-canopy">
-                            {a.membershipId}
-                          </span>
-                        )}
-                      </div>
-                      <a
-                        href={`mailto:${a.email}`}
-                        className="text-sm text-brand-blue hover:underline"
-                      >
-                        {a.email}
-                      </a>
-                      {a.phone && (
-                        <span className="ml-3 text-sm text-ink/55">{a.phone}</span>
-                      )}
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge tone={STATUS_TONE[a.status] ?? "gray"}>{a.status}</Badge>
-                      <span className="text-xs text-ink/45">
-                        {formatDate(a.createdAt)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3">
-                    <Badge tone="canopy">{a.roleApplied}</Badge>
-                    {a.altRole && (
-                      <span className="text-xs text-ink/50">2nd choice: {a.altRole}</span>
-                    )}
-                    {a.vettingPref && VETTING_META[a.vettingPref] && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-brand-blue-700 ring-1 ring-inset ring-brand-blue-100">
-                        {(() => {
-                          const Icon = VETTING_META[a.vettingPref].icon
-                          return <Icon size={12} />
-                        })()}
-                        {VETTING_META[a.vettingPref].label}
-                      </span>
-                    )}
-                    {a.cvUrl && (
-                      <a
-                        href={a.cvUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-full bg-gold-50 px-2.5 py-0.5 text-xs font-semibold text-gold-700 ring-1 ring-inset ring-gold-200 hover:bg-gold-100"
-                      >
-                        <FileText size={12} /> Download CV
-                      </a>
-                    )}
-                  </div>
-
-                  <dl className="mt-3 grid gap-3 sm:grid-cols-2">
-                    <Field label="Community" value={a.community} />
-                    <Field label="Age / Gender" value={[a.age, a.gender].filter(Boolean).join(" · ") || null} />
-                    <Field label="Occupation" value={a.occupation} />
-                    <Field label="Availability" value={a.availability} />
-                    <Field label="Qualifications" value={a.qualifications} />
-                    <Field label="Experience" value={a.experience} />
-                    <Field
-                      label="Referee"
-                      value={
-                        a.refereeName
-                          ? `${a.refereeName}${a.refereeContact ? ` — ${a.refereeContact}` : ""}`
-                          : null
-                      }
-                    />
-                  </dl>
-
-                  <div className="mt-3">
-                    <dt className="text-[11px] uppercase tracking-wider text-ink/40">
-                      Motivation
-                    </dt>
-                    <p className="mt-0.5 whitespace-pre-wrap text-sm leading-relaxed text-ink/70">
-                      {a.motivation}
-                    </p>
-                  </div>
-
-                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-3">
-                    <a
-                      href={`mailto:${a.email}?subject=Your BYM leadership application — ${a.roleApplied}`}
-                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-canopy hover:underline"
-                    >
-                      <Mail size={15} /> Reply
-                    </a>
-                    <ApplicationStatusActions id={a.id} status={a.status} />
-                  </div>
-                </Card>
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="mt-8">
+        <CoveragePanel counts={counts} />
       </div>
     </>
   )

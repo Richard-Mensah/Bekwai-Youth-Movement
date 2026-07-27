@@ -90,3 +90,30 @@ export const loginSchema = z.object({
 })
 
 export type LoginInput = z.infer<typeof loginSchema>
+
+/**
+ * A completed leadership application, validated at submit time.
+ * Drafts are deliberately not validated — the wizard autosaves partial work,
+ * and only `submitDraft` requires the whole shape to hold together.
+ */
+export const applicationSchema = z.object({
+  fullName: z.string().trim().min(3, "Enter your full name"),
+  email: z.string().trim().email("Enter a valid email"),
+  roleApplied: z.string().trim().min(1, "Choose the office you are applying for"),
+  motivation: z
+    .string()
+    .trim()
+    .min(20, "Tell us in a sentence or two why you want to serve"),
+  age: z.coerce
+    .number()
+    .int()
+    .min(10, "Enter a valid age")
+    .max(120, "Enter a valid age")
+    .nullable()
+    .optional(),
+  consent: z.literal(true, {
+    message: "Please confirm the declaration to submit your application",
+  }),
+})
+
+export type ApplicationInput = z.infer<typeof applicationSchema>

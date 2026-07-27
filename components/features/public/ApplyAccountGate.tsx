@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { UserPlus, LogIn, BadgeCheck, Save, ListChecks } from "lucide-react"
 
-const NEXT = "/leadership/apply"
+/** Where signing in lands you: straight into the applications portal. */
+const NEXT = "/dashboard/apply"
 
 const PERKS = [
   {
@@ -17,7 +18,7 @@ const PERKS = [
   {
     icon: ListChecks,
     title: "Track your application",
-    body: "Signing in lets the Secretariat tie your application to a real, verified person.",
+    body: "Follow your progress through vetting and appointment from your own dashboard, at any time.",
   },
 ]
 
@@ -66,7 +67,7 @@ export default function ApplyAccountGate() {
         </Link>
       </div>
       <p className="mt-4 text-center text-xs text-ink/45">
-        After you sign in, you’ll come straight back here to finish applying.
+        After you sign in, you’ll land straight in your applications portal.
       </p>
     </div>
   )

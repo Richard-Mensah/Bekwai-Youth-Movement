@@ -91,10 +91,10 @@ export default async function LeadershipPage() {
                 </p>
               </div>
               <Link
-                href="/leadership/apply"
+                href="/leadership/roles"
                 className="inline-flex shrink-0 items-center gap-2 rounded-full bg-canopy px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
               >
-                Apply for a role
+                See the open roles
                 <ArrowRight size={16} />
               </Link>
             </div>

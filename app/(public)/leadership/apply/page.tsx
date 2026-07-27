@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import {
   Users,
   ShieldCheck,
@@ -7,18 +8,20 @@ import {
   MapPin,
   Video,
   ArrowDown,
+  ArrowRight,
+  Compass,
+  LayoutDashboard,
+  Save,
 } from "lucide-react"
 import { BadgeCheck } from "lucide-react"
 import Reveal from "@/components/ui/Reveal"
-import LeadershipApplicationForm from "@/components/features/public/LeadershipApplicationForm"
 import ApplyAccountGate from "@/components/features/public/ApplyAccountGate"
+import { OFFICES } from "@/constants/offices"
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
 
 type Account = {
   fullName: string
   email: string
-  phone: string
-  community: string
   membershipId: string
 }
 
@@ -31,18 +34,33 @@ async function getAccount(): Promise<Account | null> {
   if (!user) return null
   const { data } = await supabase
     .from("profiles")
-    .select("full_name, email, phone, membership_id, communities(name)")
+    .select("full_name, email, membership_id")
     .eq("id", user.id)
     .single()
   return {
     fullName: (data?.full_name as string) ?? "",
     email: (data?.email as string) ?? user.email ?? "",
-    phone: (data?.phone as string) ?? "",
-    community:
-      ((data?.communities as { name?: string } | null)?.name as string) ?? "",
     membershipId: (data?.membership_id as string) ?? "",
   }
 }
+
+const PORTAL_POINTS = [
+  {
+    icon: Compass,
+    title: "Read before you choose",
+    body: `All ${OFFICES.length} offices, each with its duties, eligibility and term set out in full.`,
+  },
+  {
+    icon: Save,
+    title: "Saves as you go",
+    body: "Answer a few questions at a time. Close the page and pick up exactly where you left off.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Follow your progress",
+    body: "See your application move through vetting, recommendation and appointment — no guessing.",
+  },
+]
 
 export const metadata: Metadata = {
   title: "Apply for a Leadership Role",
@@ -100,13 +118,22 @@ export default async function LeadershipApplyPage() {
             </p>
           </Reveal>
           <Reveal delay={0.15}>
-            <a
-              href="#apply"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold-400 px-6 py-3 text-sm font-semibold text-canopy shadow-lg transition-all hover:-translate-y-0.5 hover:bg-gold-300"
-            >
-              Start your application
-              <ArrowDown size={16} />
-            </a>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#apply"
+                className="inline-flex items-center gap-2 rounded-full bg-gold-400 px-6 py-3 text-sm font-semibold text-canopy shadow-lg transition-all hover:-translate-y-0.5 hover:bg-gold-300"
+              >
+                Start your application
+                <ArrowDown size={16} />
+              </a>
+              <Link
+                href="/leadership/roles"
+                className="inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-inset ring-white/20 transition-colors hover:bg-white/15"
+              >
+                <Compass size={16} />
+                See all {OFFICES.length} offices
+              </Link>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -157,7 +184,7 @@ export default async function LeadershipApplyPage() {
         </div>
       </section>
 
-      {/* Application form */}
+      {/* Entry into the applications portal */}
       <section id="apply" className="section scroll-mt-24 bg-paper">
         <div className="container-content max-w-3xl">
           <Reveal>
@@ -171,7 +198,7 @@ export default async function LeadershipApplyPage() {
               </h2>
               <p className="mx-auto mt-2 max-w-xl text-sm text-ink/60">
                 {account
-                  ? "It takes about 5 minutes. Fields without an “optional” tag are required. Your details go straight to the Secretariat."
+                  ? "About five minutes, in your own applications portal. Everything saves as you go."
                   : "Applications are tied to an account so the process stays fair and traceable."}
               </p>
             </div>
@@ -189,7 +216,9 @@ export default async function LeadershipApplyPage() {
                     <p className="text-sm font-semibold text-white">
                       {account.fullName || "Signed in"}
                     </p>
-                    <p className="text-xs text-white/60">Applying as a verified account</p>
+                    <p className="text-xs text-white/60">
+                      Applying as a verified account
+                    </p>
                   </div>
                 </div>
                 {account.membershipId && (
@@ -203,8 +232,42 @@ export default async function LeadershipApplyPage() {
                   </div>
                 )}
               </div>
+
               <div className="rounded-3xl border border-canopy/10 bg-white p-6 shadow-card sm:p-9">
-                <LeadershipApplicationForm account={account} />
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {PORTAL_POINTS.map(({ icon: Icon, title, body }) => (
+                    <div
+                      key={title}
+                      className="rounded-2xl border border-canopy/10 bg-paper/60 p-4"
+                    >
+                      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-canopy-50 text-canopy">
+                        <Icon size={17} />
+                      </span>
+                      <h3 className="mt-3 text-sm font-semibold text-canopy">
+                        {title}
+                      </h3>
+                      <p className="mt-1 text-xs leading-relaxed text-ink/60">
+                        {body}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                  <Link
+                    href="/dashboard/apply/new"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-canopy px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
+                  >
+                    Open my applications portal
+                    <ArrowRight size={16} />
+                  </Link>
+                  <Link
+                    href="/leadership/roles"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-canopy/25 bg-white px-6 py-3 text-sm font-semibold text-canopy transition-colors hover:bg-canopy-50"
+                  >
+                    <Compass size={16} /> Browse the offices first
+                  </Link>
+                </div>
               </div>
             </Reveal>
           ) : (
