@@ -3,21 +3,15 @@ import { Download } from "lucide-react"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import StatCard from "@/components/ui/StatCard"
 import Card from "@/components/ui/Card"
-import Badge from "@/components/ui/Badge"
 import { getMembers } from "@/lib/data/admin"
 import { emailEnabled } from "@/lib/email"
 import { formatDate } from "@/lib/utils"
 import MemberEmail from "./MemberEmail"
 import MemberPublicToggle from "./MemberPublicToggle"
+import MemberStatusActions from "./MemberStatusActions"
 
 export const metadata = { title: "Members" }
 export const dynamic = "force-dynamic"
-
-const STATUS_TONE: Record<string, "green" | "amber" | "red" | "gray"> = {
-  verified: "green",
-  pending: "amber",
-  rejected: "red",
-}
 
 export default async function MembersPage() {
   const members = await getMembers()
@@ -36,7 +30,7 @@ export default async function MembersPage() {
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <DashboardHeading
           title="Members directory"
-          subtitle="Everyone who registered to join — export or email them directly"
+          subtitle="Verify registrations, then export or email members directly"
         />
         <a
           href="/dashboard/admin/members/export"
@@ -109,7 +103,11 @@ export default async function MembersPage() {
                       </td>
                       <td className="px-4 py-3 text-ink/70">{m.communityName ?? "—"}</td>
                       <td className="px-4 py-3">
-                        <Badge tone={STATUS_TONE[m.status] ?? "gray"}>{m.status}</Badge>
+                        <MemberStatusActions
+                          id={m.id}
+                          name={m.fullName ?? ""}
+                          status={m.status}
+                        />
                       </td>
                       <td className="px-4 py-3 text-ink/55">{formatDate(m.createdAt)}</td>
                       <td className="px-4 py-3">
