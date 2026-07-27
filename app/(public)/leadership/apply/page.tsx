@@ -65,7 +65,7 @@ const PORTAL_POINTS = [
 export const metadata: Metadata = {
   title: "Apply for a Leadership Role",
   description:
-    "Enrolment is open. Apply to serve in the Bekwai Youth Movement, from Director-General to community-level seats. Open to every committed young person across the 32 communities. A CV is optional.",
+    "Enrolment is open. Apply to serve in the Bekwai Youth Movement, from Director-General to community-level seats. Open to every committed young person across the 33 communities. A CV is optional.",
 }
 
 const STEPS = [

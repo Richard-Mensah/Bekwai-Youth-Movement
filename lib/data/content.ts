@@ -8,6 +8,7 @@ import { GALLERY_PHOTOS } from "@/constants/gallery"
 import {
   COMMUNITIES,
   COMMUNITIES_BY_NAME,
+  COMMUNITY_COUNT,
   compareCommunityNames,
 } from "@/constants/communities"
 import { ORG } from "@/constants/nav"
@@ -87,12 +88,14 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   heroEyebrow: ORG.region,
   heroTitle: "Harnessing the potential of every young person in Sefwi Bekwai",
   heroSubtitle:
-    "A non-political youth movement building structured governance, community intelligence, and volunteerism across 32 communities — aligned with the UN Sustainable Development Goals.",
+    "A non-political youth movement building structured governance, community intelligence, and volunteerism across 33 communities — aligned with the UN Sustainable Development Goals.",
   foundingDate: ORG.foundingDate,
   email: ORG.email,
   medium: ORG.medium,
   whatsapp: "",
-  stats: { communities: 32, cabinet: 19, reps: 3, sdgs: 12, women: 40 },
+  // Derived, not typed: this default had drifted to 32 and was contradicting
+  // the community list on the very page that renders both.
+  stats: { communities: COMMUNITY_COUNT, cabinet: 19, reps: 3, sdgs: 12, women: 40 },
 }
 
 // ---------- Fallback mappers ----------

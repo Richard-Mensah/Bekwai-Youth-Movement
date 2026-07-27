@@ -55,7 +55,7 @@ export default function GalleryHighlights() {
           <SectionHeading
             eyebrow="Moments"
             title="The movement in pictures"
-            description="From radio talks and debates to community clean-ups and outreach — glimpses of the Bekwai Youth Movement in action since 2021, across our 32 communities."
+            description="From radio talks and debates to community clean-ups and outreach — glimpses of the Bekwai Youth Movement in action since 2021, across our 33 communities."
           />
         </Reveal>
 

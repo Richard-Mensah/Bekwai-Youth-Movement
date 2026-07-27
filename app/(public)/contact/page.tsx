@@ -18,7 +18,7 @@ const INFO = [
   {
     icon: Users,
     title: "Membership",
-    body: "Open to youth across all 32 communities.",
+    body: "Open to youth across all 33 communities.",
   },
 ]
 

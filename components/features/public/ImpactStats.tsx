@@ -1,12 +1,18 @@
 import Reveal from "@/components/ui/Reveal"
 import Counter from "@/components/ui/Counter"
 import { getSettings } from "@/lib/data/content"
+import { COMMUNITY_COUNT } from "@/constants/communities"
 
 /** Headline commitments, with count-up on scroll. Numbers come from Site Settings. */
 export default async function ImpactStats() {
   const { stats } = await getSettings()
   const STATS = [
-    { to: stats.communities, suffix: "", label: "Communities served", hint: "Sefwi Bekwai + 31 sub-communities" },
+    {
+      to: stats.communities,
+      suffix: "",
+      label: "Communities served",
+      hint: `Sefwi Bekwai + ${COMMUNITY_COUNT - 1} sub-communities`,
+    },
     { to: stats.cabinet, suffix: "", label: "Civic Cabinet portfolios", hint: "A full youth executive" },
     { to: stats.reps, suffix: "", label: "Representatives per community", hint: "MP · Council Rep · CIN Officer" },
     { to: stats.sdgs, suffix: "", label: "UN SDGs aligned", hint: "Mapped to the 2030 Agenda" },

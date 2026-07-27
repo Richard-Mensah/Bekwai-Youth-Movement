@@ -30,7 +30,7 @@ export default async function DashboardRolesPage() {
       </Link>
       <DashboardHeading
         title="Every office open for application"
-        subtitle={`${OFFICES.length} roles across the Cabinet, the Youth Parliament, the Community Intelligence Network and the 32 communities.`}
+        subtitle={`${OFFICES.length} roles across the Cabinet, the Youth Parliament, the Community Intelligence Network and the 33 communities.`}
       />
       <RoleCatalogue
         basePath="/dashboard/apply/roles"

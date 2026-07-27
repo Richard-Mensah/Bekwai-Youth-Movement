@@ -65,7 +65,7 @@ export const PUBLIC_NAV: NavItem[] = [
       {
         label: "Community Intelligence Network",
         href: "/cin",
-        description: "Evidence from all 32 communities",
+        description: "Evidence from all 33 communities",
       },
       {
         label: "Open Roles",
@@ -91,7 +91,7 @@ export const PUBLIC_NAV: NavItem[] = [
       {
         label: "Communities",
         href: "/communities",
-        description: "Explore all 32 communities and their reps",
+        description: "Explore all 33 communities and their reps",
       },
       {
         label: "Community Representation",

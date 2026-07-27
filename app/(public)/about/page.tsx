@@ -16,7 +16,7 @@ import JourneyTimeline from "@/components/features/public/JourneyTimeline"
 export const metadata: Metadata = {
   title: "About",
   description:
-    "The story of the Bekwai Youth Movement, from its grassroots beginnings to a structured youth governance movement serving 32 communities.",
+    "The story of the Bekwai Youth Movement, from its grassroots beginnings to a structured youth governance movement serving 33 communities.",
 }
 
 const PRINCIPLES: [LucideIcon, string, string][] = [
@@ -29,7 +29,7 @@ const PRINCIPLES: [LucideIcon, string, string][] = [
 
 const TAC = [
   ["Paramount Chief of Sefwi Bekwai", "Patron of the Assembly"],
-  ["Sub-Chiefs of the 31 sub-communities", "Community Patrons"],
+  ["Sub-Chiefs of the 32 sub-communities", "Community Patrons"],
   ["Queenmother of Sefwi Bekwai", "Women's Patron"],
   ["Municipal Chief Executive", "Government Liaison Patron"],
 ]
@@ -58,11 +58,11 @@ export default function AboutPage() {
                 The movement is now formalising its governance: a Youth General
                 Assembly modelled on the UK Cabinet, a Bekwai Youth Parliament
                 mirroring the Parliament of Ghana, and a Community Intelligence
-                Network rooted in all 32 communities, all aligned with the UN SDGs.
+                Network rooted in all 33 communities, all aligned with the UN SDGs.
               </p>
               <p>
                 Our mission is to harness the potential of all young people in Sefwi
-                Bekwai and its 31 surrounding sub-communities through structured
+                Bekwai and its 32 surrounding sub-communities through structured
                 governance, community intelligence, volunteerism, and sustained
                 leadership development.
               </p>

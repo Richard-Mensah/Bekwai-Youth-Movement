@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${ORG.name} — ${ORG.motto}`,
     description:
-      "Youth governance for Sefwi Bekwai and its 31 sub-communities. Aligned with the UN SDGs 2030.",
+      "Youth governance for Sefwi Bekwai and its 32 sub-communities. Aligned with the UN SDGs 2030.",
     url: siteUrl,
     siteName: ORG.name,
     images: [{ url: "/images/logo.jpg", width: 1042, height: 1042 }],

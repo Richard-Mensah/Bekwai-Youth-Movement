@@ -157,7 +157,7 @@ export default async function ApplyHomePage() {
               Good places to start
             </h3>
             <p className="mt-1 text-sm text-ink/55 dark:text-paper/55">
-              One of each of these sits in every one of the 32 communities.
+              One of each of these sits in every one of the 33 communities.
             </p>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {suggested.map((office, i) => (

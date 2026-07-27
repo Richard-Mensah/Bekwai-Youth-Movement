@@ -22,7 +22,7 @@ type Props = {
 export default function Hero({
   eyebrow = ORG.region,
   title = "Harnessing the potential of every young person in Sefwi Bekwai",
-  subtitle = "A non-political youth movement building structured governance, community intelligence, and volunteerism across 32 communities, aligned with the UN Sustainable Development Goals.",
+  subtitle = "A non-political youth movement building structured governance, community intelligence, and volunteerism across 33 communities, aligned with the UN Sustainable Development Goals.",
   foundingDate = ORG.foundingDate,
   images,
 }: Props) {

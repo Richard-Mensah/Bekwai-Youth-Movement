@@ -15,7 +15,7 @@ const POINTS = [
   {
     icon: Users,
     title: "Every office is open",
-    body: "From Director-General down to the last community seat. All 32 communities, all four arms of the Movement.",
+    body: "From Director-General down to the last community seat. All 33 communities, all four arms of the Movement.",
   },
   {
     icon: ShieldCheck,

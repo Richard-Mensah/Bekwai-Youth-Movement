@@ -45,7 +45,7 @@ export const NEWS: NewsItem[] = [
     context: "FAO · Global",
     date: "2023-11-04",
     summary:
-      "BYM gathered practical knowledge on soil and water stewardship to drive community development initiatives across our 32 communities.",
+      "BYM gathered practical knowledge on soil and water stewardship to drive community development initiatives across our 33 communities.",
     href: "https://bekwaiyouthmovement.medium.com/",
     sdg: [6, 15],
     featured: true,

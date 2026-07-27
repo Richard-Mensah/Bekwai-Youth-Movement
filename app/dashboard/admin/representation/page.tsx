@@ -32,7 +32,7 @@ export default async function RepresentationPage() {
         backHref="/dashboard/admin"
         backLabel="Administration"
         title="No Community Left Without a Voice"
-        subtitle="Representation gap tracker across all 32 communities (Governance §4.4)"
+        subtitle="Representation gap tracker across all 33 communities (Governance §4.4)"
       />
 
       <div className="grid gap-4 sm:grid-cols-3">

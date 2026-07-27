@@ -33,7 +33,7 @@ export type VoteTally = Record<VoteChoice, number>
 
 // ---- Demo data (used until Supabase is connected) ----------
 const DEMO_BILLS: BillRow[] = [
-  { id: "demo-bill-1", reference: "BYP/B/001", title: "Community Sanitation Standards Bill", summary: "Establishes minimum monthly clean-up obligations and waste points across all 32 communities.", status: "committee", createdAt: "2026-03-04" },
+  { id: "demo-bill-1", reference: "BYP/B/001", title: "Community Sanitation Standards Bill", summary: "Establishes minimum monthly clean-up obligations and waste points across all 33 communities.", status: "committee", createdAt: "2026-03-04" },
   { id: "demo-bill-2", reference: "BYP/B/002", title: "Youth Apprenticeship Support Bill", summary: "Creates a register of apprenticeship placements and a stipend framework for out-of-school youth.", status: "second_reading", createdAt: "2026-04-12" },
   { id: "demo-bill-3", reference: "BYP/B/003", title: "School Attendance Improvement Bill", summary: "Mandates community attendance monitoring and incentives to reduce dropout rates.", status: "first_reading", createdAt: "2026-05-09" },
   { id: "demo-bill-4", reference: "BYP/B/004", title: "Girls' Education Protection Bill", summary: "Protects the girl-child's right to education and sets a 40% participation target.", status: "passed", createdAt: "2026-02-18" },

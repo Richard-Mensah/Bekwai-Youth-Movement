@@ -2,6 +2,7 @@ import Image from "next/image"
 import Reveal from "@/components/ui/Reveal"
 import Button from "@/components/ui/Button"
 import { ArrowRight, Landmark, Radar, HeartHandshake } from "lucide-react"
+import { COMMUNITY_COUNT } from "@/constants/communities"
 
 const PILLARS = [
   {
@@ -12,7 +13,7 @@ const PILLARS = [
   {
     icon: Radar,
     title: "Community intelligence",
-    body: "Monthly, ground-level evidence from all 32 communities informs every decision.",
+    body: "Monthly, ground-level evidence from all 33 communities informs every decision.",
   },
   {
     icon: HeartHandshake,
@@ -39,7 +40,7 @@ export default function MissionIntro() {
           <span className="mt-5 block h-1 w-16 rounded-full bg-gold-400" />
           <p className="mt-5 text-lg leading-relaxed text-ink/70 dark:text-paper/70 text-pretty">
             The Bekwai Youth Movement harnesses the potential of every young
-            person in Sefwi Bekwai and its 31 surrounding sub-communities —
+            person in Sefwi Bekwai and its 32 surrounding sub-communities —
             turning volunteer energy into structured, accountable institutions.
           </p>
 
@@ -89,7 +90,7 @@ export default function MissionIntro() {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-t from-canopy/80 via-canopy/5 to-transparent" />
                 <figcaption className="absolute inset-x-0 bottom-0 p-4 text-sm font-semibold text-white">
-                  One movement, 32 communities
+                  One movement, 33 communities
                 </figcaption>
               </figure>
 
@@ -141,7 +142,8 @@ export default function MissionIntro() {
               {/* Stat — 31 */}
               <div className="col-span-2 col-start-3 row-start-4 flex flex-col justify-center rounded-2xl border border-canopy/10 bg-paper p-5 dark:border-white/10 dark:bg-canopy-800">
                 <p className="font-display text-3xl font-semibold text-canopy dark:text-paper">
-                  31<span className="text-gold-500">+</span>
+                  {COMMUNITY_COUNT - 1}
+                  <span className="text-gold-500">+</span>
                 </p>
                 <p className="mt-0.5 text-xs leading-snug text-ink/60 dark:text-paper/60">
                   sub-communities united under one movement

@@ -43,7 +43,7 @@ const DEMO_SCORECARDS: ScorecardRow[] = [
   { id: "s4", communityName: "Sub-Community 07", period: "H1 2026", score: 71, isPublished: true },
 ]
 const DEMO_REPORTS: ReportRow[] = [
-  { id: "r1", title: "State of the Community Report — H1 2026", summary: "Mid-year review of community indicators across 32 communities.", isPublished: true },
+  { id: "r1", title: "State of the Community Report — H1 2026", summary: "Mid-year review of community indicators across 33 communities.", isPublished: true },
   { id: "r2", title: "Sanitation Drive Outcomes", summary: "Results from the market sanitation programme.", isPublished: true },
 ]
 const DEMO_ANNUAL: AnnualRow[] = [

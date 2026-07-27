@@ -37,7 +37,7 @@ const PORTFOLIO: Record<number, string> = {
   7: "Manages petty cash and project-level expenditure; reconciles community project budgets.",
   8: "Leads the Education & Youth Development Unit and the Youth Development Academy.",
   9: "Leads the Health & Social Welfare Unit; coordinates health campaigns and child protection.",
-  10: "Leads the Economic Empowerment & Employment Unit across all 32 communities.",
+  10: "Leads the Economic Empowerment & Employment Unit across all 33 communities.",
   11: "Leads the Environment, Sanitation & Climate Unit and Volunteer Action Teams.",
   12: "Leads the Communications Unit; manages public communications, media, and the BYM website.",
   13: "Manages internal security, conflict resolution, member conduct, and the Code of Conduct.",
@@ -115,7 +115,7 @@ export const LEADERSHIP_TIERS: LeaderTier[] = [
     eyebrow: "The Intelligence",
     title: "Community Intelligence Network leadership",
     description:
-      "The CIN turns lived community experience into evidence, coordinating one intelligence officer in each of the 32 communities and a monthly reporting cycle.",
+      "The CIN turns lived community experience into evidence, coordinating one intelligence officer in each of the 33 communities and a monthly reporting cycle.",
     members: [
       {
         title: "Director of Community Intelligence",

@@ -94,7 +94,7 @@ export const ARM_META: Record<
     label: "Bekwai Youth Parliament (Legislature)",
     short: "Parliament",
     description:
-      "The deliberative chamber of the Movement, presided over by an elected Speaker and voicing the concerns of all 32 communities.",
+      "The deliberative chamber of the Movement, presided over by an elected Speaker and voicing the concerns of all 33 communities.",
   },
   cin: {
     label: "Community Intelligence Network",
@@ -106,7 +106,7 @@ export const ARM_META: Record<
     label: "Community-level seats",
     short: "Community",
     description:
-      "One seat of each kind in every one of the 32 communities. This is where most people begin serving.",
+      "One seat of each kind in every one of the 33 communities. This is where most people begin serving.",
   },
 }
 
@@ -119,7 +119,7 @@ const TERM_OPEN = "2 years, renewable without limit"
 const CABINET_BASELINE = [
   "Aged between 18 and 45 at the time of appointment (Article 13.2)",
   "A member in good standing of the Bekwai Youth Movement",
-  "Resident in, or genuinely connected to, one of the 32 communities",
+  "Resident in, or genuinely connected to, one of the 33 communities",
   "Willing to swear the Oath of Service and abide by the Code of Conduct",
 ]
 
@@ -308,7 +308,7 @@ const CABINET_DETAIL: Record<
     slug: "secretary-for-health-and-welfare",
     citation: "Article 15.9 · Schedule III",
     summary:
-      "Leads community health campaigns, child protection and social welfare across all 32 communities.",
+      "Leads community health campaigns, child protection and social welfare across all 33 communities.",
     responsibilities: [
       "Lead the Health and Social Welfare Unit",
       "Coordinate community health campaigns",
@@ -711,7 +711,7 @@ const CIN_OFFICES: Office[] = [
   },
 ]
 
-/** Community-level seats — one of each in every one of the 32 communities. */
+/** Community-level seats — one of each in every one of the 33 communities. */
 const COMMUNITY_OFFICES: Office[] = [
   {
     slug: "youth-mp",
@@ -720,7 +720,7 @@ const COMMUNITY_OFFICES: Office[] = [
     citation: "Article 18.3 · Article 19",
     reportsTo: "Speaker of the Youth Parliament",
     summary:
-      "Your community's voice in the Bekwai Youth Parliament — one seat in each of the 32 communities.",
+      "Your community's voice in the Bekwai Youth Parliament — one seat in each of the 33 communities.",
     responsibilities: [
       "Represent your community in the Bekwai Youth Parliament",
       "Debate matters of community concern raised in the chamber or referred by the Cabinet",

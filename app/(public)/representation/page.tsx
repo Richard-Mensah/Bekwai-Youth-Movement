@@ -6,7 +6,7 @@ import Card from "@/components/ui/Card"
 export const metadata: Metadata = {
   title: "Community Representation",
   description:
-    "No community left without a voice: every one of BYM's 32 communities is entitled to three dedicated representatives.",
+    "No community left without a voice: every one of BYM's 33 communities is entitled to three dedicated representatives.",
 }
 
 const INTERIM_TIERS = [

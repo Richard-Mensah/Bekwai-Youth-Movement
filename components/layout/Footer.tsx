@@ -9,7 +9,7 @@ const TRUST = [
   "Aligned with UN SDGs 2030",
   "Strictly non-political",
   "Endorsed by Traditional Authority",
-  "Serving 32 communities",
+  "Serving 33 communities",
 ]
 
 export default async function Footer() {
@@ -58,7 +58,7 @@ export default async function Footer() {
           </div>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/65">
             A non-political youth governance movement harnessing the potential of
-            every young person in Sefwi Bekwai and its 31 sub-communities, through
+            every young person in Sefwi Bekwai and its 32 sub-communities, through
             the Youth General Assembly, Bekwai Youth Parliament, and Community
             Intelligence Network.
           </p>

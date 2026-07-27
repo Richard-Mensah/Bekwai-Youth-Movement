@@ -12,7 +12,7 @@ export default async function CommunitiesPage() {
         backHref="/dashboard/admin/content"
         backLabel="Content Studio"
         title="Communities"
-        subtitle="Edit the names of the 32 communities BYM serves"
+        subtitle="Edit the names of the 33 communities BYM serves"
       />
       <CommunitiesEditor communities={communities} />
     </>

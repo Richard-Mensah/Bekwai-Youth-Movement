@@ -26,7 +26,7 @@ export default async function CinAnalyticsPage() {
     <>
       <DashboardHeading
         title="CIN Analytics"
-        subtitle="Aggregate community intelligence across all 32 communities"
+        subtitle="Aggregate community intelligence across all 33 communities"
       />
       <Link
         href="/dashboard/cin"
