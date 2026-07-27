@@ -78,12 +78,16 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="surface p-8 shadow-elevated">
-      <h1 className="font-display text-2xl font-bold text-canopy dark:text-paper">
-        Sign in
+    <div className="surface relative overflow-hidden p-7 shadow-elevated sm:p-8">
+      <span
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-gold-400/80 to-transparent"
+      />
+      <h1 className="font-display text-[1.75rem] font-bold tracking-tight text-canopy dark:text-paper">
+        Welcome back
       </h1>
-      <p className="mt-1 text-sm text-ink/55 dark:text-paper/55">
-        Access your BYM dashboard.
+      <p className="mt-1.5 text-sm text-ink/55 dark:text-paper/55">
+        Sign in to your BYM dashboard.
       </p>
 
       {!SUPABASE_READY && <div className="mt-4"><AuthNotice /></div>}
@@ -133,7 +137,7 @@ export default function LoginForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      <form onSubmit={handleSubmit} className="mt-7 space-y-4">
         <Input
           name="email"
           type="email"
@@ -152,7 +156,7 @@ export default function LoginForm() {
         <div className="text-right">
           <Link
             href="/forgot-password"
-            className="text-xs font-medium text-canopy hover:underline dark:text-paper/70"
+            className="text-xs font-semibold text-ink/55 transition-colors hover:text-canopy hover:underline dark:text-paper/55 dark:hover:text-paper"
           >
             Forgot your password?
           </Link>
