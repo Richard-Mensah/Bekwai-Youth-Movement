@@ -6,6 +6,7 @@ import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { loginSchema } from "@/lib/validations"
 import Input from "@/components/ui/Input"
+import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 import AuthNotice from "./AuthNotice"
 
@@ -70,7 +71,12 @@ export default function LoginForm() {
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <Input name="email" type="email" label="Email" error={errors.email} />
-        <Input name="password" type="password" label="Password" error={errors.password} />
+        <PasswordInput
+          name="password"
+          label="Password"
+          autoComplete="current-password"
+          error={errors.password}
+        />
         <Button type="submit" disabled={!SUPABASE_READY || loading} className="w-full">
           {loading ? "Signing in…" : "Sign in"}
         </Button>

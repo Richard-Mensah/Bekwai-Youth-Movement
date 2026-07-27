@@ -3,10 +3,12 @@
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { Check } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { registerSchema } from "@/lib/validations"
 import { COMMUNITIES } from "@/constants/communities"
 import Input from "@/components/ui/Input"
+import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 import AuthNotice from "./AuthNotice"
 
@@ -25,6 +27,13 @@ export default function SignupForm() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState("")
   const [loading, setLoading] = useState(false)
+  // Tracked only to give live feedback on the confirm field — the values that
+  // are actually submitted come from the form itself.
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+  const confirmed =
+    password.length >= 8 && confirmPassword.length > 0 && password === confirmPassword
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -95,7 +104,32 @@ export default function SignupForm() {
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <Input name="fullName" label="Full name" error={errors.fullName} />
         <Input name="email" type="email" label="Email" error={errors.email} />
-        <Input name="password" type="password" label="Password" error={errors.password} />
+        <PasswordInput
+          name="password"
+          label="Password"
+          autoComplete="new-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error={errors.password}
+          hint="At least 8 characters."
+        />
+        <PasswordInput
+          name="confirmPassword"
+          label="Confirm password"
+          autoComplete="new-password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          error={errors.confirmPassword}
+          hint={
+            confirmed ? (
+              <span className="flex items-center gap-1 text-brand-green">
+                <Check size={12} aria-hidden /> Passwords match
+              </span>
+            ) : (
+              "Type it once more so we know it is right."
+            )
+          }
+        />
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">Gender</label>

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { createClient } from "@/lib/supabase/client"
-import Input from "@/components/ui/Input"
+import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 
 const SUPABASE_READY =
@@ -57,8 +57,17 @@ export default function ChangePasswordForm() {
           {msg.text}
         </p>
       )}
-      <Input name="password" type="password" label="New password" autoComplete="new-password" />
-      <Input name="confirm" type="password" label="Confirm new password" autoComplete="new-password" />
+      <PasswordInput
+        name="password"
+        label="New password"
+        autoComplete="new-password"
+        hint="At least 8 characters."
+      />
+      <PasswordInput
+        name="confirm"
+        label="Confirm new password"
+        autoComplete="new-password"
+      />
       <Button type="submit" disabled={pending} className="w-full">
         {pending ? "Updating…" : "Update password"}
       </Button>

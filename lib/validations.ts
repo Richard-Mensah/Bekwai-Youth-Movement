@@ -1,20 +1,28 @@
 import { z } from "zod"
 
 /** Membership registration form (public "Join BYM"). */
-export const registerSchema = z.object({
-  fullName: z.string().min(3, "Enter your full name"),
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  gender: z.enum(["male", "female", "other"], {
-    message: "Select your gender",
-  }),
-  dob: z.string().min(1, "Enter your date of birth"),
-  phone: z
-    .string()
-    .min(9, "Enter a valid phone number")
-    .regex(/^[0-9+\s-]+$/, "Digits only"),
-  communityId: z.coerce.number().int().min(1, "Select your community"),
-})
+export const registerSchema = z
+  .object({
+    fullName: z.string().min(3, "Enter your full name"),
+    email: z.string().email("Enter a valid email"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(1, "Re-enter your password to confirm"),
+    gender: z.enum(["male", "female", "other"], {
+      message: "Select your gender",
+    }),
+    dob: z.string().min(1, "Enter your date of birth"),
+    phone: z
+      .string()
+      .min(9, "Enter a valid phone number")
+      .regex(/^[0-9+\s-]+$/, "Digits only"),
+    communityId: z.coerce.number().int().min(1, "Select your community"),
+  })
+  // Reported against the confirm field so the error lands under the box the
+  // applicant needs to retype, not under the one they got right.
+  .refine((v) => v.password === v.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
 
 export type RegisterInput = z.infer<typeof registerSchema>
 
