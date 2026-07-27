@@ -25,9 +25,14 @@ export default function ResetPasswordForm() {
   // getSession() waits for that exchange to finish, so a session here means the
   // link was genuine, unused and unexpired — that is what gates the form.
   useEffect(() => {
-    const description = params.get("error_description")
+    // A rejected link reports itself in the query string on one flow and in the
+    // URL fragment on the other, so read both — the fragment first, before the
+    // Supabase client is constructed below and consumes it.
+    const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ""))
+    const description =
+      params.get("error_description") ?? fragment.get("error_description")
     if (description) {
-      setLinkError(description.replace(/\+/g, " "))
+      setLinkError(description)
       setLinkState("invalid")
       return
     }
