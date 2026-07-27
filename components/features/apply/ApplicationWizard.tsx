@@ -243,7 +243,7 @@ export default function ApplicationWizard({
       {/* Panel */}
       <div className="min-w-0">
         <div className="rounded-3xl border border-canopy/10 bg-white p-6 shadow-card sm:p-8 dark:border-white/10 dark:bg-canopy-800">
-          <header className="mb-6 border-b border-canopy/8 pb-5 dark:border-white/10">
+          <header className="mb-6 border-b border-canopy/[0.08] pb-5 dark:border-white/10">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold-600 dark:text-gold-300">
               Step {step} of {TOTAL_STEPS}
             </p>
@@ -746,7 +746,7 @@ export default function ApplicationWizard({
           </AnimatePresence>
 
           {/* Footer nav */}
-          <div className="mt-8 flex items-center justify-between gap-3 border-t border-canopy/8 pt-6 dark:border-white/10">
+          <div className="mt-8 flex items-center justify-between gap-3 border-t border-canopy/[0.08] pt-6 dark:border-white/10">
             <button
               type="button"
               onClick={() => go(step - 1)}

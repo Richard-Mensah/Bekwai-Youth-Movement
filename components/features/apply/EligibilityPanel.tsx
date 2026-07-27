@@ -25,7 +25,7 @@ export default function EligibilityPanel({ office, age, className }: Props) {
         "rounded-2xl border p-4",
         fits === false
           ? "border-gold-300 bg-gold-50 dark:border-gold-400/25 dark:bg-gold-400/10"
-          : "border-canopy/12 bg-paper/70 dark:border-white/10 dark:bg-white/5",
+          : "border-canopy/[0.12] bg-paper/70 dark:border-white/10 dark:bg-white/5",
         className
       )}
     >

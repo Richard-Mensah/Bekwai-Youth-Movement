@@ -82,7 +82,7 @@ export default function ResetPasswordForm() {
 
   if (linkState === "checking") {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-canopy/10 bg-white p-8 text-sm text-ink/60 shadow-sm">
+      <div className="surface flex items-center justify-center gap-2 p-8 text-sm text-ink/60 shadow-elevated dark:text-paper/60">
         <Loader2 size={16} className="animate-spin" /> Checking your link…
       </div>
     )
@@ -90,20 +90,20 @@ export default function ResetPasswordForm() {
 
   if (linkState === "invalid") {
     return (
-      <div className="rounded-2xl border border-canopy/10 bg-white p-8 text-center shadow-sm">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-red-50 text-brand-red">
-          <CircleAlert size={28} />
+      <div className="surface p-8 text-center shadow-elevated">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-red-50 text-brand-red dark:bg-brand-red/20 dark:text-brand-red-100">
+          <CircleAlert size={28} aria-hidden />
         </div>
-        <h1 className="mt-5 font-display text-2xl font-bold text-canopy">
+        <h1 className="mt-5 font-display text-2xl font-bold text-canopy dark:text-paper">
           This link cannot be used
         </h1>
-        <p className="mt-3 text-sm leading-relaxed text-ink/65">
+        <p className="mt-3 text-sm leading-relaxed text-ink/65 dark:text-paper/60">
           {linkError ||
             "Reset links work once and expire after an hour. Open the link on the same device you requested it from — if you opened it elsewhere, just request a fresh one."}
         </p>
         <Link
           href="/forgot-password"
-          className="mt-6 inline-block rounded-lg bg-canopy px-5 py-2.5 text-sm font-medium text-white hover:bg-canopy-600"
+          className="mt-6 inline-block rounded-full bg-canopy px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
         >
           Send a new link
         </Link>
@@ -112,16 +112,16 @@ export default function ResetPasswordForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-canopy/10 bg-white p-8 shadow-sm">
-      <h1 className="font-display text-2xl font-bold text-canopy">
+    <div className="surface p-8 shadow-elevated">
+      <h1 className="font-display text-2xl font-bold text-canopy dark:text-paper">
         Choose a new password
       </h1>
-      <p className="mt-1 text-sm text-ink/60">
+      <p className="mt-1 text-sm text-ink/60 dark:text-paper/55">
         You&apos;ll be signed in as soon as it is saved.
       </p>
 
       {serverError && (
-        <p className="mt-4 rounded-lg bg-brand-red-50 p-3 text-sm text-brand-red-700">
+        <p className="mt-4 rounded-xl border border-brand-red/15 bg-brand-red-50 p-3.5 text-sm text-brand-red-700 dark:border-brand-red/25 dark:bg-brand-red/15 dark:text-brand-red-100">
           {serverError}
         </p>
       )}

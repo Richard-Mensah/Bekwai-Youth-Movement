@@ -142,7 +142,7 @@ export default function ReviewPanel({
                 "flex h-9 w-9 items-center justify-center rounded-lg transition-colors",
                 stars != null && n <= stars
                   ? "bg-gold-400 text-canopy"
-                  : "bg-canopy/8 text-ink/35 hover:bg-canopy/15 dark:bg-white/10 dark:text-paper/35"
+                  : "bg-canopy/[0.08] text-ink/35 hover:bg-canopy/15 dark:bg-white/10 dark:text-paper/35"
               )}
             >
               <Star size={16} className={stars != null && n <= stars ? "fill-current" : ""} />

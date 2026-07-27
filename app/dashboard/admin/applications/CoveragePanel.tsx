@@ -65,7 +65,7 @@ export default function CoveragePanel({ counts }: Props) {
               >
                 {r.title}
               </Link>
-              <div className="h-4 flex-1 overflow-hidden rounded-full bg-canopy/6 dark:bg-white/10">
+              <div className="h-4 flex-1 overflow-hidden rounded-full bg-canopy/[0.06] dark:bg-white/10">
                 <div
                   className={cn(
                     "h-full rounded-full transition-[width] duration-500 motion-reduce:transition-none",

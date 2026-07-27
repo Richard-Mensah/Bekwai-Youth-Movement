@@ -394,7 +394,7 @@ function TableView({
             <th className="px-4 py-3 font-medium">Stage</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-canopy/8 dark:divide-white/10">
+        <tbody className="divide-y divide-canopy/[0.08] dark:divide-white/10">
           {applications.map((a) => (
             <tr
               key={a.id}

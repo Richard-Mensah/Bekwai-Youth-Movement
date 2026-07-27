@@ -87,7 +87,7 @@ export default function ApplicationCard({ application, reachedAt }: Props) {
             reachedAt={reachedAt}
             className="mt-6"
           />
-          <div className="mt-5 flex items-center justify-between gap-3 border-t border-canopy/8 pt-4 dark:border-white/10">
+          <div className="mt-5 flex items-center justify-between gap-3 border-t border-canopy/[0.08] pt-4 dark:border-white/10">
             <p className="text-xs text-ink/50 dark:text-paper/50">
               {meta.description}
             </p>

@@ -1,7 +1,7 @@
 import { headers } from "next/headers"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Hourglass } from "lucide-react"
 import { getSessionProfile } from "@/lib/auth"
 import { PATHNAME_HEADER, openWhilePending } from "@/lib/dashboard-access"
 
@@ -31,7 +31,7 @@ export default async function DashboardLayout({
   const gated = notVerified && !openWhilePending(pathname)
 
   return (
-    <div className="flex min-h-screen bg-paper">
+    <div className="console-bg flex min-h-screen">
       <Sidebar role={session.role} />
       <div className="flex min-w-0 flex-1 flex-col">
         <DashboardTopbar
@@ -41,12 +41,15 @@ export default async function DashboardLayout({
           configured={session.configured}
         />
         {!session.configured && (
-          <div className="border-b border-amber-200 bg-amber-50 px-5 py-2 text-xs text-amber-800">
+          <div className="flex items-center gap-2 border-b border-gold-200 bg-gold-50 px-5 py-2 text-xs font-medium text-gold-700 dark:border-gold-400/20 dark:bg-gold-400/10 dark:text-gold-200">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold-400" />
             Demo mode — Supabase is not connected. Showing dashboard shells with
             sample data.
           </div>
         )}
-        <main className="flex-1 p-5 lg:p-8">
+        {/* Capped so tables and card grids don't stretch to absurd line
+            lengths on a wide monitor. */}
+        <main className="mx-auto w-full max-w-[90rem] flex-1 p-5 lg:p-8">
           {gated ? <PendingPanel /> : children}
         </main>
       </div>
@@ -56,15 +59,28 @@ export default async function DashboardLayout({
 
 function PendingPanel() {
   return (
-    <div className="mx-auto max-w-lg rounded-xl border border-dashed border-amber-300 bg-amber-50 p-8 text-center">
-      <h2 className="text-lg font-bold text-amber-800">
+    <div className="surface relative mx-auto max-w-xl overflow-hidden p-8 text-center sm:p-10">
+      <span
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-gold-400/80 to-transparent"
+      />
+      <div className="relative mx-auto flex h-14 w-14 items-center justify-center">
+        <span
+          aria-hidden
+          className="absolute inset-0 animate-pulse rounded-full bg-gold-400/20 blur-lg"
+        />
+        <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-canopy text-gold-300 shadow-card">
+          <Hourglass size={24} aria-hidden />
+        </span>
+      </div>
+      <h2 className="mt-5 font-display text-xl font-semibold text-canopy dark:text-paper">
         Membership pending verification
       </h2>
-      <p className="mt-2 text-sm text-amber-700">
+      <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink/60 dark:text-paper/60">
         An administrator will verify your membership shortly. Your role-based
         dashboard unlocks once you are verified.
       </p>
-      <p className="mt-4 text-sm font-medium text-amber-800">
+      <p className="mt-5 text-sm font-semibold text-canopy dark:text-paper">
         You do not have to wait to apply for office.
       </p>
       <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
@@ -76,7 +92,7 @@ function PendingPanel() {
         </Link>
         <Link
           href="/dashboard/apply"
-          className="rounded-full border border-amber-300 px-4 py-2 text-xs font-semibold text-amber-800 transition-colors hover:bg-amber-100"
+          className="rounded-full border border-canopy/20 px-4 py-2 text-xs font-semibold text-canopy transition-colors hover:bg-canopy-50 dark:border-white/15 dark:text-paper dark:hover:bg-white/10"
         >
           My applications
         </Link>

@@ -78,7 +78,7 @@ export default function StageTracker({
                   aria-hidden
                   className={cn(
                     "absolute left-[13px] top-7 h-full w-0.5 sm:left-auto sm:top-[13px] sm:h-0.5 sm:w-full sm:translate-x-[14px]",
-                    done ? "bg-gold-400" : "bg-canopy/12 dark:bg-white/12"
+                    done ? "bg-gold-400" : "bg-canopy/[0.12] dark:bg-white/[0.12]"
                   )}
                 />
               )}

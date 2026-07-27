@@ -194,7 +194,7 @@ export default async function ApplyHomePage() {
             {APPLICATION_STAGES.map((stage, i) => (
               <li
                 key={stage.key}
-                className="rounded-xl border border-canopy/8 bg-paper/60 p-4 dark:border-white/10 dark:bg-white/5"
+                className="rounded-xl border border-canopy/[0.08] bg-paper/60 p-4 dark:border-white/10 dark:bg-white/5"
               >
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gold-400/25 text-[11px] font-bold tabular-nums text-gold-700 dark:text-gold-200">
                   {i + 1}

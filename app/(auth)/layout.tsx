@@ -8,23 +8,39 @@ export default function AuthLayout({
   children: React.ReactNode
 }) {
   return (
-    <main className="flex min-h-screen flex-col bg-paper">
-      <div className="container-content py-6">
-        <Link href="/" className="inline-flex items-center gap-2.5">
+    <main className="console-bg relative flex min-h-screen flex-col overflow-hidden">
+      {/* Canopy wash behind the card so the page has a horizon rather than
+          being a single flat slab of paper. */}
+      <div
+        aria-hidden
+        className="canopy-texture pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-canopy to-transparent opacity-[0.07] dark:opacity-25"
+      />
+
+      <div className="container-content relative py-6">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2.5 rounded-full transition-opacity hover:opacity-80"
+        >
           <Image
             src="/images/logo.jpg"
-            alt="Bekwai Youth Movement logo"
+            alt=""
             width={36}
             height={36}
-            className="rounded-full"
+            className="rounded-full ring-1 ring-gold-400/40"
           />
-          <span className="text-sm font-bold text-brand-green-700">
-            {ORG.shortName} — {ORG.assembly}
+          <span className="leading-tight">
+            <span className="block font-display text-sm font-bold text-canopy dark:text-paper">
+              {ORG.shortName} — {ORG.assembly}
+            </span>
+            <span className="block text-[10px] uppercase tracking-[0.14em] text-gold-600 dark:text-gold-300/80">
+              {ORG.motto}
+            </span>
           </span>
         </Link>
       </div>
-      <div className="flex flex-1 items-center justify-center px-4 pb-16">
-        <div className="w-full max-w-md">{children}</div>
+
+      <div className="relative flex flex-1 items-center justify-center px-4 pb-16">
+        <div className="w-full max-w-md animate-fade-up">{children}</div>
       </div>
     </main>
   )

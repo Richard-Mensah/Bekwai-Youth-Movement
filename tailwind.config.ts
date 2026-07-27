@@ -39,10 +39,15 @@ const config: Config = {
           },
         },
         // Civic + Youth redesign tokens
+        // The canopy ramp had a hole between 100 and 500, so anything needing a
+        // mid-tone reached for brand-green or a stock gray and broke the family.
         canopy: {
           DEFAULT: "#14342B",
           50: "#eaf2ee",
           100: "#cfe1d8",
+          200: "#a9c7b8",
+          300: "#7ba694",
+          400: "#4a7d69",
           500: "#14342B",
           600: "#102a23",
           700: "#0c201b",
@@ -80,15 +85,31 @@ const config: Config = {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
+        },
+        "scale-in": {
+          "0%": { opacity: "0", transform: "scale(0.96)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s ease-out both",
         marquee: "marquee 40s linear infinite",
+        shimmer: "shimmer 1.8s infinite",
+        "scale-in": "scale-in 0.2s ease-out both",
       },
+      // A real elevation ramp. Every shadow is tinted with the canopy green
+      // rather than neutral black, so raised surfaces stay in the same family
+      // as everything else instead of looking grey and pasted on.
       boxShadow: {
+        hairline: "0 1px 2px rgba(16,42,35,0.05)",
         card: "0 1px 2px rgba(16,42,35,0.04), 0 8px 24px -12px rgba(16,42,35,0.18)",
         "card-hover":
           "0 2px 4px rgba(16,42,35,0.06), 0 18px 40px -16px rgba(16,42,35,0.28)",
+        elevated:
+          "0 4px 8px rgba(16,42,35,0.06), 0 28px 56px -24px rgba(16,42,35,0.34)",
+        gold: "0 8px 28px -12px rgba(201,162,75,0.55)",
       },
     },
   },

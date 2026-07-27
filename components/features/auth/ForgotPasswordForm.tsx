@@ -44,23 +44,23 @@ export default function ForgotPasswordForm() {
 
   if (sent) {
     return (
-      <div className="rounded-2xl border border-canopy/10 bg-white p-8 text-center shadow-sm">
+      <div className="surface p-8 text-center shadow-elevated">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-green-50 text-brand-green">
           <MailCheck size={28} />
         </div>
-        <h1 className="mt-5 font-display text-2xl font-bold text-canopy">
+        <h1 className="mt-5 font-display text-2xl font-bold text-canopy dark:text-paper">
           Check your inbox
         </h1>
-        <p className="mt-3 text-sm leading-relaxed text-ink/65">
+        <p className="mt-3 text-sm leading-relaxed text-ink/65 dark:text-paper/60">
           If that email belongs to a BYM member, a reset link is on its way. The
           link works once and expires after an hour, so open it on this device.
         </p>
-        <p className="mt-3 text-sm leading-relaxed text-ink/65">
+        <p className="mt-3 text-sm leading-relaxed text-ink/65 dark:text-paper/60">
           Nothing after a few minutes? Check your spam folder, then try again.
         </p>
         <Link
           href="/login"
-          className="mt-6 inline-block rounded-lg bg-canopy px-5 py-2.5 text-sm font-medium text-white hover:bg-canopy-600"
+          className="mt-6 inline-block rounded-full bg-canopy px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
         >
           Back to sign in
         </Link>
@@ -69,11 +69,11 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-canopy/10 bg-white p-8 shadow-sm">
-      <h1 className="font-display text-2xl font-bold text-canopy">
+    <div className="surface p-8 shadow-elevated">
+      <h1 className="font-display text-2xl font-bold text-canopy dark:text-paper">
         Reset your password
       </h1>
-      <p className="mt-1 text-sm text-ink/60">
+      <p className="mt-1 text-sm text-ink/60 dark:text-paper/55">
         We&apos;ll email you a link to choose a new one.
       </p>
 
@@ -102,9 +102,12 @@ export default function ForgotPasswordForm() {
         </Button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-ink/55">
+      <p className="mt-6 border-t border-canopy/[0.08] pt-5 text-center text-sm text-ink/55 dark:border-white/[0.08] dark:text-paper/55">
         Remembered it?{" "}
-        <Link href="/login" className="font-medium text-canopy hover:underline">
+        <Link
+          href="/login"
+          className="font-semibold text-canopy hover:underline dark:text-gold-300"
+        >
           Sign in
         </Link>
       </p>

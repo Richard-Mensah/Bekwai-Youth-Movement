@@ -78,15 +78,17 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-      <h1 className="text-2xl font-bold text-brand-green-700">Sign in</h1>
-      <p className="mt-1 text-sm text-gray-500">
+    <div className="surface p-8 shadow-elevated">
+      <h1 className="font-display text-2xl font-bold text-canopy dark:text-paper">
+        Sign in
+      </h1>
+      <p className="mt-1 text-sm text-ink/55 dark:text-paper/55">
         Access your BYM dashboard.
       </p>
 
       {!SUPABASE_READY && <div className="mt-4"><AuthNotice /></div>}
       {serverError && (
-        <div className="mt-4 rounded-lg bg-brand-red-50 p-3 text-sm text-brand-red-700">
+        <div className="mt-4 rounded-xl border border-brand-red/15 bg-brand-red-50 p-3.5 text-sm text-brand-red-700 dark:border-brand-red/25 dark:bg-brand-red/15 dark:text-brand-red-100">
           {wrongPassword ? (
             <>
               <p className="font-medium">
@@ -160,11 +162,11 @@ export default function LoginForm() {
         </Button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-gray-500">
+      <p className="mt-6 border-t border-canopy/[0.08] pt-5 text-center text-sm text-ink/55 dark:border-white/[0.08] dark:text-paper/55">
         Not a member yet?{" "}
         <Link
           href={`/join${next !== "/dashboard" ? `?next=${encodeURIComponent(next)}` : ""}`}
-          className="font-medium text-brand-green hover:underline"
+          className="font-semibold text-canopy hover:underline dark:text-gold-300"
         >
           Join BYM
         </Link>

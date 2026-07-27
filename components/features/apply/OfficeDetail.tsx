@@ -189,7 +189,7 @@ export default function OfficeDetail({
             </ul>
 
             {office.citation && (
-              <p className="mt-5 border-t border-canopy/8 pt-4 text-xs text-ink/45 dark:border-white/10 dark:text-paper/45">
+              <p className="mt-5 border-t border-canopy/[0.08] pt-4 text-xs text-ink/45 dark:border-white/10 dark:text-paper/45">
                 Source: BYM Constitution, First Edition 2026 —{" "}
                 <span className="font-medium">{office.citation}</span>
               </p>

@@ -24,6 +24,15 @@
   h4 {
     @apply font-display tracking-tight text-canopy dark:text-paper;
   }
+  /* One focus ring for the whole product. Interactive elements were each
+     inventing their own, and plenty had none at all — invisible to anyone
+     navigating by keyboard. :focus-visible keeps it off mouse clicks. */
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    @apply outline-none ring-2 ring-gold-400 ring-offset-2 ring-offset-paper dark:ring-offset-canopy-900;
+  }
+  ::selection {
+    @apply bg-gold-200 text-canopy;
+  }
   /* Respect users who prefer reduced motion */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -58,6 +67,45 @@
   }
   .civic-rule {
     @apply h-px w-12 bg-gradient-to-r from-gold to-transparent;
+  }
+  /* The standard raised panel. Named so surfaces stop being re-declared
+     slightly differently in every file. */
+  .surface {
+    @apply rounded-2xl border border-canopy/10 bg-white shadow-card dark:border-white/10 dark:bg-canopy-800;
+  }
+  /* A recessed well for nesting content inside a surface. */
+  .surface-sunken {
+    @apply rounded-xl bg-paper/70 dark:bg-white/[0.04];
+  }
+  /* Native select/textarea styled to match the Input primitive. Raw <select>
+     elements were carrying stock grey borders and no dark variant, so they
+     stood out against every field beside them. */
+  .field {
+    @apply block w-full rounded-lg border border-canopy/20 bg-white px-3 py-2.5 text-sm text-ink shadow-sm transition-colors focus:border-canopy focus:outline-none focus:ring-1 focus:ring-canopy dark:border-white/10 dark:bg-canopy-700 dark:text-paper;
+  }
+  .field-label {
+    @apply block text-sm font-medium text-ink/75 dark:text-paper/75;
+  }
+  /* Divider that reads as a hairline rather than a border. */
+  .hairline {
+    @apply border-canopy/[0.08] dark:border-white/[0.08];
+  }
+  /* Page background for the signed-in console: paper, warmed from the top so
+     the header doesn't sit on a flat slab. */
+  .console-bg {
+    @apply bg-paper dark:bg-canopy-900;
+    background-image: radial-gradient(
+      70rem 28rem at 50% -8rem,
+      rgba(201, 162, 75, 0.09),
+      transparent 70%
+    );
+  }
+  /* Loading placeholder with a travelling highlight. */
+  .skeleton {
+    @apply relative overflow-hidden rounded-lg bg-canopy/5 dark:bg-white/5;
+  }
+  .skeleton::after {
+    @apply absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/45 to-transparent content-[''] dark:via-white/10;
   }
   /* Hero/section dark-surface texture */
   .canopy-texture {

@@ -187,7 +187,7 @@ export default async function ReviewApplicationPage({ params }: Props) {
               <Field label="Experience" value={application.experience} />
             </dl>
 
-            <div className="mt-5 border-t border-canopy/8 pt-4 dark:border-white/10">
+            <div className="mt-5 border-t border-canopy/[0.08] pt-4 dark:border-white/10">
               <dt className="text-[11px] uppercase tracking-wider text-ink/40 dark:text-paper/40">
                 Why they want to serve
               </dt>
@@ -196,7 +196,7 @@ export default async function ReviewApplicationPage({ params }: Props) {
               </p>
             </div>
 
-            <div className="mt-5 border-t border-canopy/8 pt-4 dark:border-white/10">
+            <div className="mt-5 border-t border-canopy/[0.08] pt-4 dark:border-white/10">
               <dt className="text-[11px] uppercase tracking-wider text-ink/40 dark:text-paper/40">
                 Documents
               </dt>

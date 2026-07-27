@@ -240,7 +240,7 @@ export default async function ApplicationDetailPage({
               />
             </dl>
 
-            <div className="mt-5 border-t border-canopy/8 pt-4 dark:border-white/10">
+            <div className="mt-5 border-t border-canopy/[0.08] pt-4 dark:border-white/10">
               <dt className="text-[11px] uppercase tracking-wider text-ink/40 dark:text-paper/40">
                 Why you want to serve
               </dt>
@@ -250,7 +250,7 @@ export default async function ApplicationDetailPage({
             </div>
 
             {documents.length > 0 && (
-              <div className="mt-5 border-t border-canopy/8 pt-4 dark:border-white/10">
+              <div className="mt-5 border-t border-canopy/[0.08] pt-4 dark:border-white/10">
                 <dt className="text-[11px] uppercase tracking-wider text-ink/40 dark:text-paper/40">
                   Documents
                 </dt>
@@ -279,7 +279,7 @@ export default async function ApplicationDetailPage({
             )}
 
             {canWithdraw && (
-              <div className="mt-6 border-t border-canopy/8 pt-4 dark:border-white/10">
+              <div className="mt-6 border-t border-canopy/[0.08] pt-4 dark:border-white/10">
                 <WithdrawButton id={application.id} />
               </div>
             )}

@@ -89,15 +89,18 @@ export default function SignupForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-      <h1 className="text-2xl font-bold text-brand-green-700">Join BYM</h1>
-      <p className="mt-1 text-sm text-gray-500">
-        Register as a member. Your membership is verified by an administrator.
+    <div className="surface p-8 shadow-elevated">
+      <h1 className="font-display text-2xl font-bold text-canopy dark:text-paper">
+        Join BYM
+      </h1>
+      <p className="mt-1 text-sm leading-relaxed text-ink/55 dark:text-paper/55">
+        Register as a member. Your membership is verified by an administrator —
+        you can apply for office straight away.
       </p>
 
       {!SUPABASE_READY && <div className="mt-4"><AuthNotice /></div>}
       {serverError && (
-        <p className="mt-4 rounded-lg bg-brand-red-50 p-3 text-sm text-brand-red-700">
+        <p className="mt-4 rounded-xl border border-brand-red/15 bg-brand-red-50 p-3.5 text-sm text-brand-red-700 dark:border-brand-red/25 dark:bg-brand-red/15 dark:text-brand-red-100">
           {serverError}
         </p>
       )}
@@ -133,27 +136,27 @@ export default function SignupForm() {
         />
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Gender</label>
-            <select
-              name="gender"
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
-            >
+            <label htmlFor="gender" className="field-label">
+              Gender
+            </label>
+            <select id="gender" name="gender" className="field mt-1">
               <option value="">Select…</option>
               <option value="female">Female</option>
               <option value="male">Male</option>
               <option value="other">Other</option>
             </select>
-            {errors.gender && <p className="mt-1 text-xs text-brand-red">{errors.gender}</p>}
+            {errors.gender && (
+              <p className="mt-1 text-xs text-brand-red">{errors.gender}</p>
+            )}
           </div>
           <Input name="dob" type="date" label="Date of birth" error={errors.dob} />
         </div>
         <Input name="phone" label="Phone" error={errors.phone} />
         <div>
-          <label className="block text-sm font-medium text-gray-700">Community</label>
-          <select
-            name="communityId"
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
-          >
+          <label htmlFor="communityId" className="field-label">
+            Community
+          </label>
+          <select id="communityId" name="communityId" className="field mt-1">
             <option value="">Select your community…</option>
             {COMMUNITIES.map((c) => (
               <option key={c.id} value={c.id}>

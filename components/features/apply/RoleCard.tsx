@@ -68,7 +68,7 @@ export default function RoleCard({
         {office.summary}
       </p>
 
-      <dl className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-canopy/8 pt-3 text-[11px] text-ink/55 dark:border-white/10 dark:text-paper/50">
+      <dl className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-canopy/[0.08] pt-3 text-[11px] text-ink/55 dark:border-white/10 dark:text-paper/50">
         {office.ageRange && (
           <div className="flex items-center gap-1">
             <dt className="sr-only">Age range</dt>
