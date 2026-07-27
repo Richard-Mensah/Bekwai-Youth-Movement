@@ -7,7 +7,7 @@ import { Check } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { registerSchema } from "@/lib/validations"
 import { friendlyAuthError } from "@/lib/auth-errors"
-import { COMMUNITIES } from "@/constants/communities"
+import { COMMUNITIES_BY_NAME } from "@/constants/communities"
 import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
@@ -158,7 +158,7 @@ export default function SignupForm() {
           </label>
           <select id="communityId" name="communityId" className="field mt-1">
             <option value="">Select your community…</option>
-            {COMMUNITIES.map((c) => (
+            {COMMUNITIES_BY_NAME.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { createProject } from "@/app/dashboard/cabinet/actions"
-import { COMMUNITIES } from "@/constants/communities"
+import { COMMUNITIES_BY_NAME } from "@/constants/communities"
 import { UNITS } from "@/constants/units"
 import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
@@ -52,7 +52,7 @@ export default function ProjectForm() {
           <label className="block text-sm font-medium text-ink/75">Community</label>
           <select name="communityId" className={SELECT}>
             <option value="">Select…</option>
-            {COMMUNITIES.map((c) => (
+            {COMMUNITIES_BY_NAME.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>

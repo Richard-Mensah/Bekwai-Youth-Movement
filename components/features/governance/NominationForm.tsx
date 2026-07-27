@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { createNomination } from "@/app/dashboard/admin/governance/actions"
-import { COMMUNITIES } from "@/constants/communities"
+import { COMMUNITIES_BY_NAME } from "@/constants/communities"
 import { SEAT_TYPES, SEAT_LABEL } from "@/constants/governance"
 import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
@@ -46,7 +46,7 @@ export default function NominationForm() {
         <label className="block text-sm font-medium text-ink/75">Community</label>
         <select name="communityId" className={SELECT}>
           <option value="">Select…</option>
-          {COMMUNITIES.map((c) => (
+          {COMMUNITIES_BY_NAME.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>

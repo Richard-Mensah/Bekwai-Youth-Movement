@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { createTacEngagement } from "@/app/dashboard/admin/governance/actions"
-import { COMMUNITIES } from "@/constants/communities"
+import { COMMUNITIES_BY_NAME } from "@/constants/communities"
 import Button from "@/components/ui/Button"
 
 const SUPABASE_READY =
@@ -59,7 +59,7 @@ export default function TacEngagementForm() {
         <label className="block text-sm font-medium text-ink/75">Community</label>
         <select name="communityId" className={SELECT}>
           <option value="">All / not specified</option>
-          {COMMUNITIES.map((c) => (
+          {COMMUNITIES_BY_NAME.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>

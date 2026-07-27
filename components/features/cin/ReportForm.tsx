@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react"
 import { createCinReport } from "@/app/dashboard/cin/actions"
 import { CIN_CATEGORIES, SEVERITIES } from "@/constants/cin"
-import { COMMUNITIES } from "@/constants/communities"
+import { COMMUNITIES_BY_NAME } from "@/constants/communities"
 import Button from "@/components/ui/Button"
 import Input from "@/components/ui/Input"
 
@@ -76,7 +76,7 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
         <label className="block text-sm font-medium text-ink/75">Community</label>
         <select name="communityId" className={SELECT} defaultValue={defaultCommunityId ?? ""}>
           <option value="">Select…</option>
-          {COMMUNITIES.map((c) => (
+          {COMMUNITIES_BY_NAME.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>

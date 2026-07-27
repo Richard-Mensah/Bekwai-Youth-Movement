@@ -5,7 +5,11 @@ import { slugify } from "@/lib/cms"
 import { NEWS } from "@/constants/news"
 import { LEADERSHIP_TIERS } from "@/constants/leadership"
 import { GALLERY_PHOTOS } from "@/constants/gallery"
-import { COMMUNITIES } from "@/constants/communities"
+import {
+  COMMUNITIES,
+  COMMUNITIES_BY_NAME,
+  compareCommunityNames,
+} from "@/constants/communities"
 import { ORG } from "@/constants/nav"
 
 // ---------- Types ----------
@@ -328,7 +332,8 @@ export type CommunityItem = { id: number; name: string; isTown: boolean; slug: s
 
 export async function getCommunities(): Promise<CommunityItem[]> {
   noStore()
-  const fallback = COMMUNITIES.map((c) => ({
+  // Alphabetical, so a list of 33 chips can actually be scanned for a name.
+  const fallback = COMMUNITIES_BY_NAME.map((c) => ({
     id: c.id,
     name: c.name,
     isTown: c.isTown,
@@ -336,17 +341,32 @@ export async function getCommunities(): Promise<CommunityItem[]> {
   }))
   if (!isSupabaseConfigured()) return fallback
   const supabase = await createClient()
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("communities")
     .select("id, name, is_town, slug")
-    .order("id", { ascending: true })
+    .order("name", { ascending: true })
+
+  // This read used to fall back silently. It selects `slug`, which did not
+  // exist on the table until migration 0022, so the query errored, `data` came
+  // back null, and the constants fallback stood in for the database on every
+  // public page — while surfaces reading the table directly showed something
+  // else entirely. Log it, so the next schema drift is visible rather than
+  // papered over by a fallback that happens to look right.
+  if (error) {
+    console.error(`[communities] read failed, using fallback: ${error.message}`)
+    return fallback
+  }
   if (!data || data.length === 0) return fallback
-  return data.map((r) => ({
-    id: r.id,
-    name: r.name,
-    isTown: r.is_town,
-    slug: (r.slug as string) || slugify(r.name),
-  }))
+
+  return data
+    .map((r) => ({
+      id: r.id,
+      name: r.name,
+      isTown: r.is_town,
+      slug: (r.slug as string) || slugify(r.name),
+    }))
+    // Postgres orders by byte value; re-sort so "No.2" follows "No.1".
+    .sort((a, b) => compareCommunityNames(a.name, b.name))
 }
 
 // ---------- Per-community detail + representatives ----------
