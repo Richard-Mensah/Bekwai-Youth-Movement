@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { ArrowRight, UserPlus, HandHeart, Users, Vote, Radar } from "lucide-react"
 import Reveal from "@/components/ui/Reveal"
 import Button from "@/components/ui/Button"

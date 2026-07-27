@@ -2,9 +2,10 @@ import Link from "next/link"
 import { ArrowUpRight, Clock, FileText } from "lucide-react"
 import Badge from "@/components/ui/Badge"
 import StageTracker from "./StageTracker"
+import DiscardDraftButton from "./DiscardDraftButton"
 import { ARM_STYLE, officeIcon } from "./OfficeIcon"
 import { officeByTitle } from "@/constants/offices"
-import { statusMeta } from "@/constants/applications"
+import { statusMeta, TOTAL_STEPS } from "@/constants/applications"
 import type { ApplicationRow } from "@/lib/data/applications"
 import { formatDate } from "@/lib/utils"
 import { cn } from "@/lib/utils"
@@ -66,14 +67,18 @@ export default function ApplicationCard({ application, reachedAt }: Props) {
       {application.status === "draft" ? (
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-paper/70 px-4 py-3.5 dark:bg-white/5">
           <p className="text-sm text-ink/65 dark:text-paper/60">
-            Not submitted yet — you&apos;re on step {application.currentStep} of 7.
+            Not submitted yet — you&apos;re on step {application.currentStep} of{" "}
+            {TOTAL_STEPS}.
           </p>
-          <Link
-            href={`/dashboard/apply/new?id=${application.id}`}
-            className="inline-flex items-center gap-1.5 rounded-full bg-canopy px-4 py-2 text-xs font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
-          >
-            Continue <ArrowUpRight size={13} />
-          </Link>
+          <span className="flex items-center gap-1">
+            <DiscardDraftButton id={application.id} />
+            <Link
+              href={`/dashboard/apply/new?id=${application.id}`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-canopy px-4 py-2 text-xs font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
+            >
+              Continue <ArrowUpRight size={13} />
+            </Link>
+          </span>
         </div>
       ) : (
         <>

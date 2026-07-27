@@ -33,8 +33,3 @@ export const OPEN_ROLE_TITLES: string[] = OFFICES.map((o) => o.title)
 export function armForRole(title: string): RoleArm | undefined {
   return officeByTitle(title)?.arm
 }
-
-/** Maps a role title to its catalogue slug, for linking to the role page. */
-export function slugForRole(title: string): string | undefined {
-  return officeByTitle(title)?.slug
-}

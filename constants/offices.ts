@@ -818,11 +818,6 @@ export function officeByTitle(title: string): Office | undefined {
   return BY_TITLE.get(title)
 }
 
-/** Offices grouped by arm, preserving precedence within each group. */
-export function officesByArm(arm: RoleArm): Office[] {
-  return OFFICES.filter((o) => o.arm === arm)
-}
-
 /**
  * Whether an applicant's age sits inside the office's advisory band.
  * Returns `null` when either the age or the band is unknown — callers should

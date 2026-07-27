@@ -136,27 +136,6 @@ export async function getApplication(
   return data ? toApplication(data) : null
 }
 
-/** The applicant's open draft, if they have one. */
-export async function getMyDraft(): Promise<ApplicationRow | null> {
-  if (!isSupabaseConfigured()) return null
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return null
-
-  const { data } = await supabase
-    .from("leadership_applications")
-    .select(COLUMNS)
-    .eq("user_id", user.id)
-    .eq("status", "draft")
-    .order("updated_at", { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
-  return data ? toApplication(data) : null
-}
-
 /** Stage-change timeline for one application, oldest first. */
 export async function getApplicationEvents(
   applicationId: string

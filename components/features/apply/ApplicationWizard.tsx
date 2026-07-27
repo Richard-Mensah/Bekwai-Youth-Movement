@@ -25,7 +25,11 @@ import EligibilityPanel from "./EligibilityPanel"
 import { ARM_STYLE, officeIcon } from "./OfficeIcon"
 import { OPEN_ROLE_GROUPS } from "@/constants/openRoles"
 import { officeByTitle } from "@/constants/offices"
-import { TOTAL_STEPS, WIZARD_STEPS } from "@/constants/applications"
+import {
+  TOTAL_STEPS,
+  VETTING_OPTIONS,
+  WIZARD_STEPS,
+} from "@/constants/applications"
 import type { ApplicationDocument, ApplicationRow } from "@/lib/data/applications"
 import { saveDraft, submitDraft } from "@/app/dashboard/apply/actions"
 import { cn } from "@/lib/utils"
@@ -85,11 +89,12 @@ const optional = (
   <span className="font-normal text-ink/40 dark:text-paper/40">(optional)</span>
 )
 
-const VETTING = [
-  { value: "in_person", icon: MapPin, title: "In-person", body: "I'll be in Sefwi Bekwai" },
-  { value: "virtual", icon: Video, title: "Virtual", body: "I'll be away from home" },
-  { value: "either", icon: Sparkles, title: "Either", body: "Whatever works best" },
-]
+/** Icons for the shared vetting options; the labels live in constants. */
+const VETTING_ICONS: Record<string, React.ElementType> = {
+  in_person: MapPin,
+  virtual: Video,
+  either: Sparkles,
+}
 
 export default function ApplicationWizard({
   application,
@@ -566,7 +571,8 @@ export default function ApplicationWizard({
                       you are away from home. Distance is never a barrier.
                     </p>
                     <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                      {VETTING.map(({ value, icon: VIcon, title, body }) => {
+                      {VETTING_OPTIONS.map(({ value, title, body }) => {
+                        const VIcon = VETTING_ICONS[value] ?? Sparkles
                         const active = values.vettingPref === value
                         return (
                           <button
@@ -696,8 +702,8 @@ export default function ApplicationWizard({
                     rows={[
                       [
                         "Preference",
-                        VETTING.find((v) => v.value === values.vettingPref)?.title ??
-                          "Either",
+                        VETTING_OPTIONS.find((v) => v.value === values.vettingPref)
+                          ?.title ?? "Either",
                       ],
                       ["Availability", values.availability || "—"],
                       [

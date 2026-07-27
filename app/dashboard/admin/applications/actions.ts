@@ -7,12 +7,10 @@ import { sendEmail, emailEnabled } from "@/lib/email"
 import { STATUS_META, statusMeta } from "@/constants/applications"
 import type { ApplicationStatus } from "@/constants/applications"
 
-export const APPLICATION_STATUSES = Object.keys(
-  STATUS_META
-) as ApplicationStatus[]
-
 /** Statuses the Secretariat may set. Drafts belong to the applicant alone. */
-const SETTABLE: string[] = APPLICATION_STATUSES.filter((s) => s !== "draft")
+const SETTABLE: string[] = (Object.keys(STATUS_META) as ApplicationStatus[]).filter(
+  (s) => s !== "draft"
+)
 
 function escapeHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")

@@ -12,7 +12,7 @@ import Reveal from "@/components/ui/Reveal"
 import StageTracker from "@/components/features/apply/StageTracker"
 import ApplicationTimeline from "@/components/features/apply/ApplicationTimeline"
 import WithdrawButton from "@/components/features/apply/WithdrawButton"
-import { ARM_STYLE, officeIcon } from "@/components/features/apply/OfficeIcon"
+import { officeIcon } from "@/components/features/apply/OfficeIcon"
 import { officeByTitle } from "@/constants/offices"
 import {
   docKindLabel,
@@ -69,7 +69,6 @@ export default async function ApplicationDetailPage({
 
   const office = officeByTitle(application.roleApplied)
   const Icon = office ? officeIcon(office.icon) : FileText
-  const style = office ? ARM_STYLE[office.arm] : ARM_STYLE.cabinet
   const meta = statusMeta(application.status)
   const appointed =
     application.status === "appointed" || application.status === "sworn_in"

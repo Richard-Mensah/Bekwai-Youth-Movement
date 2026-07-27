@@ -78,7 +78,7 @@ export const APPLICATION_STAGES: Stage[] = [
   },
 ]
 
-export const STAGE_ORDER: StageKey[] = APPLICATION_STAGES.map((s) => s.key)
+const STAGE_ORDER: StageKey[] = APPLICATION_STAGES.map((s) => s.key)
 
 /** Statuses that end the process without an appointment. */
 export const CLOSED_STATUSES: ApplicationStatus[] = [
