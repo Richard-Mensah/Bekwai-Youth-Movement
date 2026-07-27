@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
+import { PATHNAME_HEADER } from "@/lib/dashboard-access"
 
 type CookieToSet = { name: string; value: string; options: CookieOptions }
 
@@ -11,7 +12,19 @@ const PROTECTED_PREFIX = "/dashboard"
  * it passes requests through untouched so the public site still works.
  */
 export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request })
+  /**
+   * Forwards the request with the current path attached, so server components
+   * can read it. Rebuilt rather than cached because Supabase mutates
+   * `request.cookies` during a session refresh and those updated cookies must
+   * reach the app on this same request.
+   */
+  const forward = () => {
+    const headers = new Headers(request.headers)
+    headers.set(PATHNAME_HEADER, request.nextUrl.pathname)
+    return NextResponse.next({ request: { headers } })
+  }
+
+  let response = forward()
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
   const configured = url.length > 0 && !url.includes("placeholder")
@@ -29,7 +42,7 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
-          response = NextResponse.next({ request })
+          response = forward()
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           )

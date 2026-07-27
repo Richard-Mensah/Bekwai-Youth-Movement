@@ -1,5 +1,9 @@
+import { headers } from "next/headers"
+import Link from "next/link"
 import { redirect } from "next/navigation"
+import { ArrowUpRight } from "lucide-react"
 import { getSessionProfile } from "@/lib/auth"
+import { PATHNAME_HEADER, openWhilePending } from "@/lib/dashboard-access"
 
 // Auth-gated, role-dependent — never statically prerender any dashboard route.
 export const dynamic = "force-dynamic"
@@ -20,6 +24,12 @@ export default async function DashboardLayout({
   const notVerified =
     session.configured && session.verificationStatus !== "verified"
 
+  // An unverified member keeps full use of the apply portal; the gate only
+  // covers the areas that confer standing. A missing header (no middleware on
+  // this request) falls through to gated, so the failure mode is closed.
+  const pathname = (await headers()).get(PATHNAME_HEADER) ?? ""
+  const gated = notVerified && !openWhilePending(pathname)
+
   return (
     <div className="flex min-h-screen bg-paper">
       <Sidebar role={session.role} />
@@ -37,7 +47,7 @@ export default async function DashboardLayout({
           </div>
         )}
         <main className="flex-1 p-5 lg:p-8">
-          {notVerified ? <PendingPanel /> : children}
+          {gated ? <PendingPanel /> : children}
         </main>
       </div>
     </div>
@@ -54,6 +64,23 @@ function PendingPanel() {
         An administrator will verify your membership shortly. Your role-based
         dashboard unlocks once you are verified.
       </p>
+      <p className="mt-4 text-sm font-medium text-amber-800">
+        You do not have to wait to apply for office.
+      </p>
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+        <Link
+          href="/dashboard/apply/roles"
+          className="inline-flex items-center gap-1.5 rounded-full bg-canopy px-4 py-2 text-xs font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-canopy-600"
+        >
+          Browse offices <ArrowUpRight size={13} />
+        </Link>
+        <Link
+          href="/dashboard/apply"
+          className="rounded-full border border-amber-300 px-4 py-2 text-xs font-semibold text-amber-800 transition-colors hover:bg-amber-100"
+        >
+          My applications
+        </Link>
+      </div>
     </div>
   )
 }
