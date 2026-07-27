@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { MailCheck } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
+import { friendlyAuthError } from "@/lib/auth-errors"
 import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
 import AuthNotice from "./AuthNotice"
@@ -37,7 +38,7 @@ export default function ForgotPasswordForm() {
 
     // Deliberately shown even when the address is not registered: confirming
     // which emails have accounts would let anyone enumerate our membership.
-    if (error) setError(error.message)
+    if (error) setError(friendlyAuthError(error.message))
     else setSent(true)
   }
 

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { loginSchema } from "@/lib/validations"
+import { friendlyAuthError } from "@/lib/auth-errors"
 import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
@@ -26,22 +27,30 @@ export default function LoginForm() {
   const [serverError, setServerError] = useState("")
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
-  const [resent, setResent] = useState(false)
+  const [resent, setResent] = useState<"idle" | "sent" | "failed">("idle")
+  const [resendError, setResendError] = useState("")
 
   /** Supabase returns this whenever the address exists but the password is
    *  wrong — and, identically, when no such account exists. */
   const wrongPassword = /invalid login credentials/i.test(serverError)
   const unconfirmed = /email not confirmed/i.test(serverError)
 
+  /** Never claim the email went out without checking — the project-wide email
+   *  quota is shared, so this genuinely fails sometimes. */
   async function resendConfirmation() {
-    setResent(true)
-    await createClient().auth.resend({ type: "signup", email })
+    const { error } = await createClient().auth.resend({ type: "signup", email })
+    if (error) {
+      setResendError(friendlyAuthError(error.message))
+      setResent("failed")
+    } else {
+      setResent("sent")
+    }
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setServerError("")
-    setResent(false)
+    setResent("idle")
     const form = new FormData(e.currentTarget)
     const parsed = loginSchema.safeParse(Object.fromEntries(form.entries()))
 
@@ -101,8 +110,10 @@ export default function LoginForm() {
               <p className="font-medium">Your email isn&apos;t confirmed yet.</p>
               <p className="mt-1 text-brand-red-700/85">
                 Open the link we sent when you joined.{" "}
-                {resent ? (
+                {resent === "sent" ? (
                   <span className="font-medium">Sent again — check your inbox.</span>
+                ) : resent === "failed" ? (
+                  <span className="font-medium">{resendError}</span>
                 ) : (
                   <button
                     type="button"

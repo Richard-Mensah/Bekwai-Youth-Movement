@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Check } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { registerSchema } from "@/lib/validations"
+import { friendlyAuthError } from "@/lib/auth-errors"
 import { COMMUNITIES } from "@/constants/communities"
 import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
@@ -74,7 +75,7 @@ export default function SignupForm() {
     setLoading(false)
 
     if (error) {
-      setServerError(error.message)
+      setServerError(friendlyAuthError(error.message))
       return
     }
     // If email confirmation is disabled, Supabase returns a live session and the
