@@ -8,8 +8,15 @@ export function emailEnabled(): boolean {
   return Boolean(KEY)
 }
 
+/**
+ * Where the Secretariat receives notifications (new applications, contact
+ * messages). This is a recipient, not a sender: Resend can only send FROM a
+ * domain you have verified by DNS, which a gmail.com address can never be —
+ * so EMAIL_FROM stays a verified domain (or the resend.dev sandbox) while
+ * mail is delivered here.
+ */
 export const ADMIN_EMAIL =
-  process.env.EMAIL_ADMIN ?? "info@bekwaiyouthmovement.org"
+  process.env.EMAIL_ADMIN ?? "bekwaiyouthmovement@gmail.com"
 
 type SendArgs = {
   to: string | string[]

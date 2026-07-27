@@ -132,6 +132,6 @@ export const ORG = {
   established: 2026,
   /** Official Launch / Founding Day of the Youth General Assembly. */
   foundingDate: "2027-01-12",
-  email: "info@bekwaiyouthmovement.org",
+  email: "bekwaiyouthmovement@gmail.com",
   medium: "https://bekwaiyouthmovement.medium.com",
 } as const
