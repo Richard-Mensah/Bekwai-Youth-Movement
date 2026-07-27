@@ -21,20 +21,25 @@ export default function EnrolmentBanner() {
                   <Megaphone size={14} />
                   Leadership enrolment is open
                 </span>
-                <h2 className="mt-4 font-display text-2xl font-semibold text-white sm:text-3xl">
+                <h2 className="mt-5 font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-white text-balance sm:text-[2.125rem]">
                   Ready to serve? Apply to lead the movement.
                 </h2>
-                <p className="mt-2 max-w-xl text-white/75">
+                <p className="mt-3 max-w-xl leading-relaxed text-white/75">
                   Every office is open, from Director-General to community seats.
                   Create your free account, get your unique BYM ID, and put your
                   name forward. No CV required.
                 </p>
+                {/* shadow-gold is the tinted ramp; shadow-lg was a stock
+                    neutral drop that read as grey under a gold button. */}
                 <Link
                   href="/leadership/apply"
-                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-gold-400 px-6 py-3.5 text-sm font-semibold text-canopy shadow-lg transition-all hover:-translate-y-0.5 hover:bg-gold-300"
+                  className="group mt-7 inline-flex items-center gap-2 rounded-full bg-gold-400 px-6 py-3.5 text-sm font-semibold text-canopy shadow-gold transition-all hover:-translate-y-0.5 hover:bg-gold-300"
                 >
                   Start your application
-                  <ArrowRight size={16} />
+                  <ArrowRight
+                    size={16}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                  />
                 </Link>
               </div>
 
