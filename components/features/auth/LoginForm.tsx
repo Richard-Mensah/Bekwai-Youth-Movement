@@ -6,6 +6,7 @@ import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { loginSchema } from "@/lib/validations"
 import { friendlyAuthError } from "@/lib/auth-errors"
+import { safeNext } from "@/lib/auth-redirect"
 import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
@@ -15,16 +16,18 @@ const SUPABASE_READY =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
 
-/** Only allow same-site relative redirects (avoid open-redirect). */
-function safeNext(v: string | null): string {
-  return v && v.startsWith("/") && !v.startsWith("//") ? v : "/dashboard"
-}
-
 export default function LoginForm() {
   const router = useRouter()
-  const next = safeNext(useSearchParams().get("next"))
+  const params = useSearchParams()
+  const next = safeNext(params.get("next"))
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [serverError, setServerError] = useState("")
+  // /auth/callback sends a refused confirmation or reset link back here with the
+  // reason attached; showing it beats dropping someone on a blank sign-in page
+  // with no idea why their link did not work.
+  const [serverError, setServerError] = useState(() => {
+    const linkError = params.get("error")
+    return linkError ? friendlyAuthError(linkError) : ""
+  })
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [resent, setResent] = useState<"idle" | "sent" | "failed">("idle")
@@ -38,7 +41,16 @@ export default function LoginForm() {
   /** Never claim the email went out without checking — the project-wide email
    *  quota is shared, so this genuinely fails sometimes. */
   async function resendConfirmation() {
-    const { error } = await createClient().auth.resend({ type: "signup", email })
+    const { error } = await createClient().auth.resend({
+      type: "signup",
+      email,
+      // Without this the resent link falls back to the project's Site URL and
+      // skips /auth/callback — so the second email would behave differently
+      // from the first, which is exactly the sort of thing nobody thinks to test.
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+      },
+    })
     if (error) {
       setResendError(friendlyAuthError(error.message))
       setResent("failed")
@@ -70,7 +82,7 @@ export default function LoginForm() {
     setLoading(false)
 
     if (error) {
-      setServerError(error.message)
+      setServerError(friendlyAuthError(error.message))
       return
     }
     router.push(next)
