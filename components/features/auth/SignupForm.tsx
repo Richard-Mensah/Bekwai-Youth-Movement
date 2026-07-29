@@ -7,6 +7,7 @@ import { Check } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { registerSchema } from "@/lib/validations"
 import { friendlyAuthError } from "@/lib/auth-errors"
+import { safeNext } from "@/lib/auth-redirect"
 import { COMMUNITIES_BY_NAME, COMMUNITY_COUNT } from "@/constants/communities"
 import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
@@ -16,11 +17,6 @@ import AuthNotice from "./AuthNotice"
 const SUPABASE_READY =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
-
-/** Only allow same-site relative redirects (avoid open-redirect). */
-function safeNext(v: string | null): string {
-  return v && v.startsWith("/") && !v.startsWith("//") ? v : ""
-}
 
 /**
  * A numbered group of related fields.
@@ -59,7 +55,9 @@ function Fieldset({
 
 export default function SignupForm() {
   const router = useRouter()
-  const next = safeNext(useSearchParams().get("next"))
+  // "" rather than "/dashboard", so the sign-in and verify-pending links below
+  // can tell "no destination was asked for" from "/dashboard was asked for".
+  const next = safeNext(useSearchParams().get("next"), "")
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -94,9 +92,15 @@ export default function SignupForm() {
       email: parsed.data.email,
       password: parsed.data.password,
       options: {
+        // Must land on /auth/callback, never on the destination directly: the
+        // link carries a code that only that route knows how to redeem into a
+        // session. Pointing it at a page confirms the account but leaves the
+        // member signed out.
         emailRedirectTo:
           typeof window !== "undefined"
-            ? `${window.location.origin}${next || "/dashboard"}`
+            ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(
+                next || "/dashboard"
+              )}`
             : undefined,
         data: {
           full_name: parsed.data.fullName,

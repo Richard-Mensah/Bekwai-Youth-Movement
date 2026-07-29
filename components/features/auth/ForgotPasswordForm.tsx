@@ -32,7 +32,13 @@ export default function ForgotPasswordForm() {
 
     setLoading(true)
     const { error } = await createClient().auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      // Via /auth/callback, not straight to /reset-password: the reset link
+      // carries the same unredeemed code the signup link does, so that page's
+      // getSession() would find nothing and report a perfectly good link as
+      // invalid.
+      redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(
+        "/reset-password"
+      )}`,
     })
     setLoading(false)
 
