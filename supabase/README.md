@@ -111,6 +111,27 @@ into a session; if that URL is not allowed, Supabase quietly substitutes the
 Site URL, the code is never redeemed, and the member is confirmed but still
 signed out.
 
+### 4b-ii. Email templates — use token_hash, not ConfirmationURL
+
+**Authentication → Email Templates.** The bodies to paste live in
+`supabase/email-templates/` (`confirm-signup.html`, `reset-password.html`) so
+they are reviewable in git; the dashboard holds the live copy.
+
+Supabase's default templates use `{{ .ConfirmationURL }}`, which routes the
+member through Supabase's own `/verify` and then hands our app a PKCE `?code=`.
+Redeeming that code needs the `code_verifier` cookie from **the browser the
+member signed up in** — and Gmail opens links in its own in-app browser, where
+that cookie does not exist. The observable result is a member who is confirmed
+but lands signed out and has to type their password. That was measured on a real
+sign-up: `GET /verify` succeeded, no PKCE token exchange followed, and the
+session came from `grant_type=password` 41 seconds later.
+
+`{{ .TokenHash }}` carries its own proof, so
+[app/auth/callback/route.ts](../app/auth/callback/route.ts) verifies it
+server-side with `verifyOtp` and writes the session into its own cookie jar. No
+cookie from the original browser is involved, so the link works from any
+browser, app or device.
+
 ### 4c. The app's own email (separate system)
 
 Auth email is Supabase's. Notifications the *app* sends — new applications,
