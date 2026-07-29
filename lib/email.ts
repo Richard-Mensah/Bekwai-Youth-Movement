@@ -16,7 +16,7 @@ export function emailEnabled(): boolean {
  * mail is delivered here.
  */
 export const ADMIN_EMAIL =
-  process.env.EMAIL_ADMIN ?? "bekwaiyouthmovement@gmail.com"
+  process.env.EMAIL_ADMIN ?? "rmensahuk@gmail.com"
 
 type SendArgs = {
   to: string | string[]
