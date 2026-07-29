@@ -55,6 +55,73 @@ RLS and the UI can read the member's role from the token.
 - For local testing you may disable "Confirm email" so new sign-ups can log in
   immediately. Re-enable it for production.
 
+### 4a. Email delivery — read this before an enrolment drive
+
+This is what broke registration on 29 Jul 2026. Five people signed up and none
+could verify. Supabase reported no error at all: every `/signup` returned 200
+and `confirmation_sent_at` was set. Supabase had handed the mail to the sender
+and the **sender** dropped it, silently. Nothing in the app or the auth logs
+will tell you this is happening — the only symptom is `email_confirmed_at`
+staying null while people insist they never got an email.
+
+The cause was a sandbox sender that only delivered to the account owner's own
+address. So one-at-a-time test sign-ups worked perfectly and every real
+applicant got nothing.
+
+**Project Settings → Authentication → SMTP Settings.** Current provider is
+**Brevo**:
+
+| Field | Value |
+|---|---|
+| Host | `smtp-relay.brevo.com` |
+| Port | `587` |
+| Username | the **Login** shown on Brevo's SMTP & API page |
+| Password | a Brevo **SMTP key** — not the account password |
+| Sender email | an address verified as a sender in Brevo |
+| Sender name | `Bekwai Youth Movement` |
+
+Brevo verifies an individual email address as a sender, so it can send from a
+`gmail.com` address without owning a domain. That is the reason it is here
+rather than Resend, which requires a DNS-verified domain and cannot ever send
+as Gmail. Free tier is ~300 emails/day.
+
+Set the sender **name** even when the sender address is personal: recipients
+read the name in their inbox list, so the mail still arrives as the movement.
+
+Two things that are easy to miss:
+
+- **Do not switch custom SMTP off.** It falls back to Supabase's built-in
+  sender, which is capped near 2 emails/hour and is not for production — worse
+  than a misconfigured provider, and it fails the same silent way.
+- **Authentication → Rate Limits → "Rate limit for sending emails"** defaults
+  low. Raise it before a drive or the back half of your applicants are refused.
+
+### 4b. URL configuration
+
+**Authentication → URL Configuration**:
+
+- **Site URL**: `https://bekwai-youth-movement.vercel.app` — no trailing path.
+  A stray `/@` here once corrupted `metadataBase` and every generated link.
+- **Redirect URLs** must include `https://bekwai-youth-movement.vercel.app/**`
+  and `http://localhost:3000/**`.
+
+The allow-list is not optional. Every auth email points at
+`/auth/callback`, which is the only route that redeems the `?code=` in the link
+into a session; if that URL is not allowed, Supabase quietly substitutes the
+Site URL, the code is never redeemed, and the member is confirmed but still
+signed out.
+
+### 4c. The app's own email (separate system)
+
+Auth email is Supabase's. Notifications the *app* sends — new applications,
+contact messages, member verification — go through `lib/email.ts` via Resend
+and are **switched off**: `RESEND_API_KEY` is unset, so `emailEnabled()` is
+false and every caller degrades gracefully (applications still submit,
+broadcasts save as drafts). Resend needs a DNS-verified domain, so this stays
+off until BYM has one. `EMAIL_FROM` must remain that verified domain — it is a
+sender, and a `gmail.com` value there is rejected outright. `EMAIL_ADMIN` is
+only a recipient and can be any address.
+
 ## 5. Verify
 - Register at `/join` → a row appears in `profiles` with
   `verification_status = 'pending'`.
