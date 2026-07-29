@@ -1,11 +1,31 @@
 import { z } from "zod"
 
+/**
+ * Shortest password we accept, in one place.
+ *
+ * **Keep this equal to "Minimum password length" in Supabase** (Authentication
+ * → Sign In / Providers → Email). Supabase is the real enforcement, server-side;
+ * this number is what the member is told. If this one is the smaller of the two,
+ * the form accepts a password and Supabase then rejects it with a raw error the
+ * member can do nothing about — so if the two ever drift, drift this one higher.
+ *
+ * Length is doing the work here, not symbols: a passphrase like
+ * "sefwi bekwai palm" resists guessing far better than "P@ss1!" and is easier to
+ * type on a phone. Refusing passwords found in real breaches is a separate,
+ * stronger control — the "leaked passwords" toggle on that same Supabase page.
+ */
+export const PASSWORD_MIN = 10
+
+const passwordField = z
+  .string()
+  .min(PASSWORD_MIN, `Password must be at least ${PASSWORD_MIN} characters`)
+
 /** Membership registration form (public "Join BYM"). */
 export const registerSchema = z
   .object({
     fullName: z.string().min(3, "Enter your full name"),
     email: z.string().email("Enter a valid email"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    password: passwordField,
     confirmPassword: z.string().min(1, "Re-enter your password to confirm"),
     gender: z.enum(["male", "female", "other"], {
       message: "Select your gender",
@@ -29,7 +49,7 @@ export type RegisterInput = z.infer<typeof registerSchema>
 /** Choosing a new password — from the reset link, or from account settings. */
 export const newPasswordSchema = z
   .object({
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    password: passwordField,
     confirmPassword: z.string().min(1, "Re-enter your password to confirm"),
   })
   .refine((v) => v.password === v.confirmPassword, {

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Check } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-import { registerSchema } from "@/lib/validations"
+import { registerSchema, PASSWORD_MIN } from "@/lib/validations"
 import { friendlyAuthError } from "@/lib/auth-errors"
 import { safeNext } from "@/lib/auth-redirect"
 import { COMMUNITIES_BY_NAME, COMMUNITY_COUNT } from "@/constants/communities"
@@ -173,7 +173,7 @@ export default function SignupForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             error={errors.password}
-            hint="At least 8 characters."
+            hint={`At least ${PASSWORD_MIN} characters.`}
           />
           <PasswordInput
             name="confirmPassword"

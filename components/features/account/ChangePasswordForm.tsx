@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { newPasswordSchema } from "@/lib/validations"
+import { newPasswordSchema, PASSWORD_MIN } from "@/lib/validations"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 
@@ -59,7 +59,7 @@ export default function ChangePasswordForm() {
         name="password"
         label="New password"
         autoComplete="new-password"
-        hint="At least 8 characters."
+        hint={`At least ${PASSWORD_MIN} characters.`}
       />
       <PasswordInput
         name="confirmPassword"

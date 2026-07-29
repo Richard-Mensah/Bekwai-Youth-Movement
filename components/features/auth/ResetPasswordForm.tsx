@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { CircleAlert, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-import { newPasswordSchema } from "@/lib/validations"
+import { newPasswordSchema, PASSWORD_MIN } from "@/lib/validations"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 
@@ -132,7 +132,7 @@ export default function ResetPasswordForm() {
           label="New password"
           autoComplete="new-password"
           error={errors.password}
-          hint="At least 8 characters. Use the eye to check what you typed."
+          hint={`At least ${PASSWORD_MIN} characters. Use the eye to check what you typed.`}
         />
         <PasswordInput
           name="confirmPassword"
