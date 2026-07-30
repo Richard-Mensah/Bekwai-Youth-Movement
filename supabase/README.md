@@ -313,10 +313,16 @@ Two things that are easy to miss:
 
 **Authentication → URL Configuration**:
 
-- **Site URL**: `https://bekwai-youth-movement.vercel.app` — no trailing path.
-  A stray `/@` here once corrupted `metadataBase` and every generated link.
-- **Redirect URLs** must include `https://bekwai-youth-movement.vercel.app/**`
-  and `http://localhost:3000/**`.
+- **Site URL**: `https://bekwaiyouthmovement.org` — no trailing path. A stray
+  `/@` here once corrupted `metadataBase` and every generated link.
+- **Redirect URLs** must include **all three**:
+  - `https://bekwaiyouthmovement.org/**` — the live domain
+  - `https://bekwai-youth-movement.vercel.app/**` — the old host, which stays
+    reachable on Vercel. **Keep it.** Removing it breaks auth for anyone whose
+    DNS has not caught up, and for any old link already sitting in an inbox.
+  - `http://localhost:3000/**` — local development
+- `https://*-bekwai-youth-movement.vercel.app/**` as well if you want auth to
+  work on preview deployments.
 
 The allow-list is not optional. Every auth email points at
 `/auth/callback`, which is the only route that redeems the `?code=` in the link
