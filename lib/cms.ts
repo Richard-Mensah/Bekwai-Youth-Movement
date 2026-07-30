@@ -15,6 +15,40 @@ export function canManageContent(role: Role): boolean {
 }
 
 /**
+ * Roles that may confer standing in the Movement — verify a membership, confirm
+ * or change the address someone signs in with.
+ *
+ * Narrower than `canManageContent` on purpose, and the narrowness is not a
+ * preference: it is what the database will actually honour. Every relevant RLS
+ * policy and the 0021 privilege-guard trigger key off `is_admin()`, which is
+ * `role in ('admin','super_admin')` — `secretary` is not in it. Left to
+ * `canManageContent`, a secretary would pass the app's gate, reach the members
+ * console, click Verify, and change nothing: RLS filters the row out rather than
+ * rejecting it, so Supabase returns no error and the UI reports success. A
+ * refusal they can read beats a button that lies.
+ *
+ * Widening `is_admin()` to include secretaries would also work, but it is used
+ * by policies on every table in the schema, so it would quietly hand a secretary
+ * write access to all of them. Standing is the narrower thing to gate.
+ */
+export function canVerifyMembers(role: Role): boolean {
+  return role === "admin" || role === "super_admin"
+}
+
+/** As `assertSecretariat`, for the actions that confer standing. */
+export async function assertMemberAdmin(): Promise<ContentResult | null> {
+  const session = await getSessionProfile()
+  if (!session.userId || !canVerifyMembers(session.role)) {
+    return {
+      ok: false,
+      error:
+        "Only an administrator can verify memberships or change a member's sign-in address.",
+    }
+  }
+  return null
+}
+
+/**
  * Refuses the call unless the signed-in user is Secretariat. Returns null when
  * they are, or the `ContentResult` to hand straight back when they are not.
  *

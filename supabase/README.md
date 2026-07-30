@@ -161,6 +161,49 @@ rather than publishing the key), and every action using it calls
 `assertSecretariat()` — the admin layout's role gate does not cover Server
 Actions, since each is its own POST endpoint that no layout runs for.
 
+### 4-0-iii. Clearing the verification queue, and who may
+
+Signing up no longer needs email, but a new member still lands `pending`, and a
+drive turns that into a queue of hundreds. The members directory has a **"N
+awaiting verification"** panel above the table: everyone ticked by default, untick
+whoever should not be approved, verify the rest in one action. It is recorded in
+`content_audit` as `bulk_verified`, which the SQL-editor `update` it replaces was
+not.
+
+The bulk sweep deliberately sends **no email**, unlike the single-member decision.
+Three hundred individual sends would spend the day's quota saying something
+better said once — use **Email members** on the same page for that.
+
+Being `pending` is less limiting than it sounds, and this matters for planning a
+drive: `lib/dashboard-access.ts` leaves `/dashboard/apply` and
+`/dashboard/account` open, so a brand-new member can apply for office and correct
+their details immediately. Only the areas conferring standing — role dashboards,
+Parliament, CIN, admin — wait on verification. **Nobody is blocked on the day.**
+
+**Verification is `admin` / `super_admin` only, and this is a database fact, not
+a UI preference.** Every relevant RLS policy and the 0021 privilege-guard trigger
+key off `is_admin()`, which is `role in ('admin','super_admin')`. `secretary` is
+*not* in it, although `canManageContent()` admits secretaries to the rest of the
+console.
+
+That mismatch used to fail invisibly. Measured 30 Jul, signed in as each role and
+updating another member's `verification_status`:
+
+| role | error returned | rows changed |
+|---|---|---|
+| `member` | none | 0 |
+| `secretary` | none | 0 |
+
+RLS filters the row out rather than rejecting the statement, so PostgREST reports
+success and nothing happens. A secretary could click Verify and watch the badge
+not move, with nothing on screen to explain it. `canVerifyMembers()` /
+`assertMemberAdmin()` in `lib/cms.ts` now refuse in the app, where a message can
+be shown, and both member actions report a zero-row write as a failure rather
+than a success.
+
+If you want secretaries to verify members, promote them to `admin` — do not widen
+`is_admin()`, which policies on every table depend on.
+
 ### 4a. Email delivery — how it broke once, and how to tell
 
 > **Status: resolved.** Brevo is configured and delivering; a confirmation link

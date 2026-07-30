@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
 import { createAdminClient, adminClientReady } from "@/lib/supabase/admin"
 import { sendEmail, emailEnabled, ADMIN_EMAIL } from "@/lib/email"
-import { audit, assertSecretariat, NOT_READY, type ContentResult } from "@/lib/cms"
+import { audit, assertMemberAdmin, NOT_READY, type ContentResult } from "@/lib/cms"
 import { emailOnlySchema } from "@/lib/validations"
 import type { VerificationStatus } from "@/types"
 
@@ -89,12 +89,19 @@ export async function emailMembers(formData: FormData): Promise<ContentResult> {
  * The member is told by email when a decision is made, because otherwise the
  * only signal is a dashboard that silently starts working. Mail is best-effort:
  * a delivery failure is logged inside sendEmail and never blocks the decision.
+ *
+ * The role check is not belt-and-braces over RLS — it is the only thing that
+ * reports the refusal. A caller RLS declines to serve gets no error back, just
+ * zero rows touched, so before this guard a secretary could click Verify and
+ * watch the badge stay exactly where it was, with nothing on screen to say why.
  */
 export async function setMemberVerification(
   id: string,
   status: VerificationStatus
 ): Promise<ContentResult> {
   if (!isSupabaseConfigured()) return NOT_READY
+  const denied = await assertMemberAdmin()
+  if (denied) return denied
   const supabase = await createClient()
 
   const { data: member } = await supabase
@@ -103,11 +110,18 @@ export async function setMemberVerification(
     .eq("id", id)
     .single()
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("profiles")
     .update({ verification_status: status })
     .eq("id", id)
+    .select("id")
   if (error) return { ok: false, error: error.message }
+  if ((updated?.length ?? 0) === 0) {
+    return {
+      ok: false,
+      error: "That member's record did not change. Reload the page and try again.",
+    }
+  }
 
   // A rejected member should not stay on the public homepage wall.
   if (status !== "verified") {
@@ -141,6 +155,66 @@ export async function setMemberVerification(
 }
 
 /**
+ * Verifies many members in one decision.
+ *
+ * An enrolment drive turns verification from a judgement made a few times a week
+ * into a queue of hundreds, and a queue that can only be cleared one row at a
+ * time does not get cleared — it gets cleared by whoever is willing to run an
+ * `update` in the SQL editor, which is how six members came to be confirmed with
+ * no audit trail on 29 Jul. Making the sweep a real, recorded action is what
+ * stops that happening again.
+ *
+ * Deliberately no email, unlike the single-member decision. Two reasons: three
+ * hundred individual sends would exhaust the provider's daily quota to say
+ * something better said once, and the Secretariat already has "Email members"
+ * on this page for exactly that announcement. So the sweep is silent, and saying
+ * so is part of the UI.
+ *
+ * One `update ... in (...)` rather than a loop — three hundred round trips would
+ * time the request out long before they finished.
+ */
+export async function verifyMembers(ids: string[]): Promise<ContentResult> {
+  if (!isSupabaseConfigured()) return NOT_READY
+  const denied = await assertMemberAdmin()
+  if (denied) return denied
+  if (ids.length === 0) return { ok: false, error: "Select at least one member." }
+
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({ verification_status: "verified" })
+    .in("id", ids)
+    // Returned so the count reported back is what the database actually changed,
+    // not what the browser hoped it would.
+    .select("id")
+  if (error) return { ok: false, error: error.message }
+
+  const changed = data?.length ?? 0
+  await audit("members", null, "bulk_verified", `${changed} member(s)`)
+  revalidatePath("/dashboard/admin/members")
+  revalidatePath("/")
+
+  // Nothing at all changed. Distinguished from a partial sweep because the cause
+  // is different: RLS serving zero rows rather than a race with another
+  // administrator, and telling someone to "reload to see where they stand" when
+  // the real answer is "you were not permitted" wastes their evening.
+  if (changed === 0) {
+    return {
+      ok: false,
+      error:
+        "No records changed. Your account may not have permission to verify memberships — ask a super admin.",
+    }
+  }
+  if (changed < ids.length) {
+    return {
+      ok: true,
+      error: `Verified ${changed} of ${ids.length}. The rest were changed by someone else — reload to see where they stand.`,
+    }
+  }
+  return { ok: true }
+}
+
+/**
  * Confirms a member's email address on their behalf.
  *
  * The escape hatch for someone who cannot get in because a confirmation email
@@ -155,7 +229,7 @@ export async function setMemberVerification(
  */
 export async function confirmMemberEmail(id: string): Promise<ContentResult> {
   if (!isSupabaseConfigured()) return NOT_READY
-  const denied = await assertSecretariat()
+  const denied = await assertMemberAdmin()
   if (denied) return denied
   if (!adminClientReady()) {
     return {
@@ -194,7 +268,7 @@ export async function correctMemberEmail(
   rawEmail: string
 ): Promise<ContentResult> {
   if (!isSupabaseConfigured()) return NOT_READY
-  const denied = await assertSecretariat()
+  const denied = await assertMemberAdmin()
   if (denied) return denied
   if (!adminClientReady()) {
     return {

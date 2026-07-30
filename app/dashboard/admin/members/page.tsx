@@ -7,6 +7,7 @@ import { emailEnabled } from "@/lib/email"
 import { formatDate } from "@/lib/utils"
 import MemberAccount from "./MemberAccount"
 import MemberEmail from "./MemberEmail"
+import PendingVerification from "./PendingVerification"
 import MemberPublicToggle from "./MemberPublicToggle"
 import MemberStatusActions from "./MemberStatusActions"
 
@@ -82,7 +83,22 @@ export default async function MembersPage() {
         />
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.4fr] lg:items-start">
+      {/* Above the directory, not inside it: clearing the queue is the job an
+          administrator opens this page to do during a drive. */}
+      <div className="mt-8">
+        <PendingVerification
+          members={members
+            .filter((m) => m.status === "pending")
+            .map((m) => ({
+              id: m.id,
+              fullName: m.fullName,
+              email: m.email,
+              communityName: m.communityName,
+            }))}
+        />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr] lg:items-start">
         <MemberEmail
           total={total}
           verified={verified}
