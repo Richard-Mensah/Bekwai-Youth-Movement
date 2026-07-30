@@ -74,8 +74,8 @@ export default function TransparencyForm() {
         <Input name="title" label="Title" />
         {kind === "report" && (
           <div>
-            <label className="block text-sm font-medium text-ink/75">Summary</label>
-            <textarea name="summary" rows={2} className={SELECT} />
+            <label htmlFor="summary" className="block text-sm font-medium text-ink/75">Summary</label>
+            <textarea id="summary" name="summary" rows={2} className={SELECT} />
           </div>
         )}
         {kind === "annual" && (

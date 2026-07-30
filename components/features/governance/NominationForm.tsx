@@ -43,8 +43,8 @@ export default function NominationForm() {
       )}
       <Input name="fullName" label="Nominee full name" />
       <div>
-        <label className="block text-sm font-medium text-ink/75">Community</label>
-        <select name="communityId" className={SELECT}>
+        <label htmlFor="communityId" className="block text-sm font-medium text-ink/75">Community</label>
+        <select id="communityId" name="communityId" className={SELECT}>
           <option value="">Select…</option>
           {COMMUNITIES_BY_NAME.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
@@ -52,8 +52,8 @@ export default function NominationForm() {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-ink/75">Seat</label>
-        <select name="seatType" className={SELECT}>
+        <label htmlFor="seatType" className="block text-sm font-medium text-ink/75">Seat</label>
+        <select id="seatType" name="seatType" className={SELECT}>
           <option value="">Select…</option>
           {SEAT_TYPES.map((s) => (
             <option key={s} value={s}>{SEAT_LABEL[s]}</option>

@@ -4,6 +4,7 @@ import "./globals.css"
 import { ORG } from "@/constants/nav"
 import { SITE_URL } from "@/lib/site"
 import PwaRegister from "@/components/PwaRegister"
+import StructuredData from "@/components/StructuredData"
 
 const sans = Public_Sans({
   subsets: ["latin"],
@@ -80,6 +81,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <StructuredData />
         {children}
         <PwaRegister />
       </body>
