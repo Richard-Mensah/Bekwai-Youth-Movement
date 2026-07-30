@@ -53,7 +53,7 @@ Not yet fit to be left unattended.
 | Authentication & authorization | 85 | Strong RLS; temporary open enrolment costs it |
 | Database correctness | 85 | Good constraints; cascade behaviour verified |
 | Database performance | 72 | FK indexes fixed; RLS initplan outstanding |
-| Security posture | 74 | Headers added; no CSP; leaked-password protection off |
+| Security posture | 74 | Headers added; no CSP; breach-check unavailable on Free |
 | SEO | 82 | Was 55 — sitemap, robots, JSON-LD all added this pass |
 | Accessibility | 76 | 14 label failures fixed; no automated audit yet |
 | Testing & CI | 15 | Nothing exists |
@@ -326,11 +326,25 @@ inlines a theme-flash script and Next injects its own bootstrap, so a correct
 policy needs per-request nonces threaded through the document via middleware. A
 wrong CSP takes the site down. It deserves its own change and its own test pass.
 
-**Leaked-password protection** is a single toggle:
-**Authentication → Sign In / Providers → Email → Prevent use of leaked
-passwords.** It checks HaveIBeenPwned on signup. For a drive registering hundreds
-of people who will reuse a password, this is the highest security-per-click
-available — and worth doing *before* the drive, not after.
+**Leaked-password protection — NOT AVAILABLE ON THIS PLAN.** Supabase's advisor
+reports it as a plain WARN with a one-toggle remedy, which is how it first
+appeared in this audit; the toggle is **Pro-only** and this project is on Free.
+It cannot be actioned as written, and the recommendation was wrong to make.
+
+The protection itself is still worth having, and nothing about it requires
+Supabase. HaveIBeenPwned's Pwned Passwords API is free, needs no key, and is
+designed so the password never leaves the browser: SHA-1 the candidate, send the
+**first five hex characters** of the hash to `api.pwnedpasswords.com/range/{prefix}`,
+receive every matching suffix, and compare locally. The server learns a prefix
+shared with hundreds of thousands of other hashes and nothing else. That is the
+same mechanism Supabase runs behind its toggle.
+
+If implemented here it must **fail open** — an unreachable API allows the
+password through. Everything else in this document argues the same way: a
+registration that depends on a third party being up is a registration that stops
+when the third party stops.
+
+Not built. Recorded so the gap is deliberate rather than forgotten.
 
 **A finding fixed earlier this session, recorded here for completeness:** the
 member-verification actions had no role check and relied on RLS alone. Because
@@ -456,7 +470,9 @@ most of that test.
 
 ### P1 — this week
 
-3. **Enable leaked-password protection** (one toggle) — before the drive.
+3. ~~Enable leaked-password protection~~ — **Pro-only, not available on Free.**
+   See the Security Report for the free HaveIBeenPwned equivalent, which is a
+   client-side k-anonymity check and needs no plan change.
 4. **Run Lighthouse** on `/`, `/join`, `/leadership/apply` and record real
    numbers. Everything in the Performance and Accessibility sections above is
    inference until you do.
