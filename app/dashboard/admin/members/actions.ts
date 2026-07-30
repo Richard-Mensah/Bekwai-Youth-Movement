@@ -2,8 +2,10 @@
 
 import { revalidatePath } from "next/cache"
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
+import { createAdminClient, adminClientReady } from "@/lib/supabase/admin"
 import { sendEmail, emailEnabled, ADMIN_EMAIL } from "@/lib/email"
-import { audit, NOT_READY, type ContentResult } from "@/lib/cms"
+import { audit, assertSecretariat, NOT_READY, type ContentResult } from "@/lib/cms"
+import { emailOnlySchema } from "@/lib/validations"
 import type { VerificationStatus } from "@/types"
 
 const SITE_URL =
@@ -133,6 +135,116 @@ export async function setMemberVerification(
     })
   }
 
+  revalidatePath("/dashboard/admin/members")
+  revalidatePath("/")
+  return { ok: true }
+}
+
+/**
+ * Confirms a member's email address on their behalf.
+ *
+ * The escape hatch for someone who cannot get in because a confirmation email
+ * never arrived, or arrived and expired. Before this existed the only remedy was
+ * an `update` against `auth.users` in the SQL editor — which is how six members
+ * came to be confirmed in a single statement on 29 Jul, with no audit trail and
+ * no way for the Secretariat to do it themselves.
+ *
+ * Note what this does *not* do: it proves nothing about the address. It says an
+ * administrator vouches for it. That is why it is a deliberate per-member action
+ * and not a "confirm everyone" button.
+ */
+export async function confirmMemberEmail(id: string): Promise<ContentResult> {
+  if (!isSupabaseConfigured()) return NOT_READY
+  const denied = await assertSecretariat()
+  if (denied) return denied
+  if (!adminClientReady()) {
+    return {
+      ok: false,
+      error:
+        "Set SUPABASE_SERVICE_ROLE_KEY to confirm addresses from here (see supabase/README.md §4-0).",
+    }
+  }
+
+  const { error } = await createAdminClient().auth.admin.updateUserById(id, {
+    email_confirm: true,
+  })
+  if (error) return { ok: false, error: error.message }
+
+  await audit("member", id, "email_confirmed_by_admin")
+  revalidatePath("/dashboard/admin/members")
+  return { ok: true }
+}
+
+/**
+ * Corrects the email address a member registered with.
+ *
+ * A registration desk produces typos, and a typo'd address is not cosmetic: it
+ * is a member who can never reset their own password, because the reset goes to
+ * an inbox nobody reads. That gets worse, not better, with "Confirm email"
+ * turned off for a drive — nothing bounces to reveal the mistake.
+ *
+ * Both places must move together. `auth.users.email` is what the member signs in
+ * with; `profiles.email` is what the directory, exports and notifications read.
+ * Left half-done, someone signs in with one address while the Secretariat emails
+ * another — so the auth side goes first and the profile only follows if it
+ * succeeded.
+ */
+export async function correctMemberEmail(
+  id: string,
+  rawEmail: string
+): Promise<ContentResult> {
+  if (!isSupabaseConfigured()) return NOT_READY
+  const denied = await assertSecretariat()
+  if (denied) return denied
+  if (!adminClientReady()) {
+    return {
+      ok: false,
+      error:
+        "Set SUPABASE_SERVICE_ROLE_KEY to change addresses from here (see supabase/README.md §4-0).",
+    }
+  }
+
+  // Same normalisation the join form applies, so an address corrected by hand
+  // cannot differ from the same address typed by the member.
+  const parsed = emailOnlySchema.safeParse({ email: rawEmail })
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0].message }
+  }
+  const email = parsed.data.email
+
+  const admin = createAdminClient()
+
+  // `email_confirm` alongside the new address, because the point of the fix is a
+  // member who can now be reached: leaving it unconfirmed would send them back
+  // to waiting for an email, which is the problem being solved.
+  const { error } = await admin.auth.admin.updateUserById(id, {
+    email,
+    email_confirm: true,
+  })
+  if (error) {
+    // The likeliest failure by far, and worth naming: the address already
+    // belongs to another member, usually because they registered twice.
+    return {
+      ok: false,
+      error: /already|duplicate/i.test(error.message)
+        ? `${email} already belongs to another member.`
+        : error.message,
+    }
+  }
+
+  const supabase = await createClient()
+  const { error: profileError } = await supabase
+    .from("profiles")
+    .update({ email })
+    .eq("id", id)
+  if (profileError) {
+    return {
+      ok: false,
+      error: `Sign-in address changed to ${email}, but the directory still shows the old one — retry to finish. (${profileError.message})`,
+    }
+  }
+
+  await audit("member", id, "email_corrected", email)
   revalidatePath("/dashboard/admin/members")
   revalidatePath("/")
   return { ok: true }

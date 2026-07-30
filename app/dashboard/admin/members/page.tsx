@@ -1,10 +1,11 @@
-import { Download, Hourglass, UserCheck, Users } from "lucide-react"
+import { Download, Hourglass, MailWarning, UserCheck, Users } from "lucide-react"
 import DashboardHeading from "@/components/features/dashboard/DashboardHeading"
 import StatCard from "@/components/ui/StatCard"
 import Card from "@/components/ui/Card"
-import { getMembers } from "@/lib/data/admin"
+import { getMembers, getMemberAuthStates } from "@/lib/data/admin"
 import { emailEnabled } from "@/lib/email"
 import { formatDate } from "@/lib/utils"
+import MemberAccount from "./MemberAccount"
 import MemberEmail from "./MemberEmail"
 import MemberPublicToggle from "./MemberPublicToggle"
 import MemberStatusActions from "./MemberStatusActions"
@@ -13,10 +14,25 @@ export const metadata = { title: "Members" }
 export const dynamic = "force-dynamic"
 
 export default async function MembersPage() {
-  const members = await getMembers()
+  const [members, authStates] = await Promise.all([
+    getMembers(),
+    getMemberAuthStates(),
+  ])
   const total = members.length
   const verified = members.filter((m) => m.status === "verified").length
   const pending = members.filter((m) => m.status === "pending").length
+
+  // Registered, but never actually got in. The number a drive has to watch: it
+  // counts people who filled in the form and were still lost afterwards, and it
+  // is invisible in `profiles` alone. Empty map (no service-role key) means we
+  // cannot tell, which must not read as zero.
+  const authKnown = authStates.size > 0
+  const stranded = authKnown
+    ? members.filter((m) => {
+        const s = authStates.get(m.id)
+        return s ? !s.everSignedIn : false
+      }).length
+    : null
 
   return (
     <>
@@ -35,7 +51,7 @@ export default async function MembersPage() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Total members" value={total} icon={Users} />
         <StatCard
           label="Verified"
@@ -50,6 +66,19 @@ export default async function MembersPage() {
           accent="red"
           icon={Hourglass}
           hint={pending > 0 ? "Awaiting your decision" : "Nothing waiting"}
+        />
+        <StatCard
+          label="Never signed in"
+          value={stranded ?? "—"}
+          accent={stranded ? "red" : undefined}
+          icon={MailWarning}
+          hint={
+            stranded === null
+              ? "Needs SUPABASE_SERVICE_ROLE_KEY"
+              : stranded > 0
+                ? "Registered but never got in"
+                : "Everyone has got in"
+          }
         />
       </div>
 
@@ -99,17 +128,24 @@ export default async function MembersPage() {
                           </span>
                         )}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 align-top">
                         {m.email ? (
                           <a
                             href={`mailto:${m.email}`}
-                            className="text-canopy hover:underline"
+                            className="break-all text-canopy hover:underline"
                           >
                             {m.email}
                           </a>
                         ) : (
                           <span className="text-ink/40">—</span>
                         )}
+                        <MemberAccount
+                          id={m.id}
+                          email={m.email}
+                          confirmed={authStates.get(m.id)?.confirmed ?? false}
+                          everSignedIn={authStates.get(m.id)?.everSignedIn ?? false}
+                          known={authKnown && authStates.has(m.id)}
+                        />
                       </td>
                       <td className="px-4 py-3 text-ink/70">{m.communityName ?? "—"}</td>
                       <td className="px-4 py-3">

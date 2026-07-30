@@ -100,6 +100,45 @@ because password resets still send: **Authentication → Rate Limits → "Rate l
 for sending emails"**. And note Brevo's free tier is ~300 emails/day — with
 confirmation on, that alone caps a drive at 300 registrations.
 
+### 4-0-ii. Rescuing a member who is stuck
+
+**Dashboard → Administration → Members directory.** Under each address the
+console now shows what the login system knows, which `profiles` cannot say:
+**Email not confirmed**, or **Never signed in**. Rows that are fine show nothing,
+so the handful that are not stand out. A "Never signed in" stat card counts them.
+
+That count is the one to watch during a drive. It is the number of people who
+filled in the form and were lost anyway — and it read 6 out of 10 before anyone
+noticed, because nothing displayed it.
+
+Two repairs sit on each row:
+
+- **Confirm for them** — marks the address confirmed without the member clicking
+  anything. For someone whose email never arrived or expired. It proves nothing
+  about the address; it records that an administrator vouched for it, which is
+  why there is no "confirm everyone" button.
+- **Fix address** — corrects a typo'd email. This moves *both* `auth.users.email`
+  (what they sign in with) and `profiles.email` (what the directory and exports
+  read), and confirms the new one. Needed more with "Confirm email" off, not
+  less: nothing bounces, so a wrong address is silent, and its owner can never
+  reset their own password.
+
+Both are audited to `content_audit` — which the SQL-editor `update` that
+confirmed six members by hand was not.
+
+Both need `SUPABASE_SERVICE_ROLE_KEY` in the environment, because `auth.users` is
+not exposed to RLS and no member session can reach it however the policies are
+written. Without the key the directory still works and both controls explain
+what is missing. On the deployed site the key must also be set in **Vercel →
+Settings → Environment Variables**, followed by a redeploy — `.env.local` is
+your machine only.
+
+Two things about that key. It bypasses every RLS policy, so `lib/supabase/admin.ts`
+is marked `server-only` (importing it from a Client Component fails the build
+rather than publishing the key), and every action using it calls
+`assertSecretariat()` — the admin layout's role gate does not cover Server
+Actions, since each is its own POST endpoint that no layout runs for.
+
 ### 4a. Email delivery — how it broke once, and how to tell
 
 > **Status: resolved.** Brevo is configured and delivering; a confirmation link

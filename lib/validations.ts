@@ -41,6 +41,9 @@ const emailField = z
   .toLowerCase()
   .email("Enter a valid email")
 
+/** An email address on its own — used where an administrator corrects one. */
+export const emailOnlySchema = z.object({ email: emailField })
+
 /** Membership registration form (public "Join BYM"). */
 export const registerSchema = z
   .object({
