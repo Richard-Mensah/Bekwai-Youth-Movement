@@ -108,7 +108,10 @@ export async function POST(request: NextRequest) {
     // Logged in full so a misconfiguration is diagnosable; returned as a bare
     // 401 so a prober learns nothing about why they failed.
     console.error(`[auth-email] rejected: ${verified.reason}`)
-    return new NextResponse("unauthorized", { status: 401 })
+    // JSON for the same reason as the 200 below — every response from this
+    // endpoint needs a Content-Type or Supabase reports its own error instead
+    // of ours, which sends the next person debugging this to the wrong place.
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 })
   }
 
   let payload: HookPayload
@@ -158,11 +161,18 @@ export async function POST(request: NextRequest) {
 
   console.log(`[auth-email] ${type} sent to ${maskEmail(email)}`)
 
-  // Empty 200 is the documented success contract for this hook.
-  return new NextResponse(null, { status: 200 })
+  // `{}` with an explicit Content-Type, not an empty body.
+  //
+  // The documentation says "an empty response with a status code of 200 is
+  // taken as a successful response". The implementation disagrees: a bodyless
+  // 200 carries no Content-Type, and Supabase rejects the whole signup with
+  // `hook_payload_invalid_content_type — Missing Content-Type header`. Measured
+  // against the live project on 30 Jul, after the email had already been sent —
+  // so the member received their confirmation and was told registration failed.
+  return NextResponse.json({}, { status: 200 })
 }
 
 /** Anything other than POST is not this endpoint's business. */
 export async function GET() {
-  return new NextResponse("method not allowed", { status: 405 })
+  return NextResponse.json({ error: "method not allowed" }, { status: 405 })
 }
