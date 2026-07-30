@@ -1,0 +1,143 @@
+-- 0027_rls_initplan.sql — NOT APPLIED. Review, test on a branch, then rename
+-- to drop the .REVIEW suffix and apply.
+--
+-- ============================================================
+-- WHAT IT FIXES
+-- ============================================================
+-- 47 RLS policies across 31 tables call `auth.uid()` (or auth.jwt()/auth.role())
+-- unwrapped. Postgres treats those as volatile per-row calls, so a policy is
+-- re-evaluated once for every row scanned rather than once for the statement.
+-- On a 50,000-row `votes` table that is 50,000 function calls to answer one
+-- question whose answer cannot change during the query.
+--
+-- The fix is Supabase's documented one: wrap the call in a scalar subquery,
+-- `(select auth.uid())`, which the planner hoists into an InitPlan and evaluates
+-- exactly once. Semantics are identical — same value, same result, same rows.
+--
+-- ============================================================
+-- WHY IT IS NOT APPLIED IN THE SAME PASS AS THE REST
+-- ============================================================
+-- Three reasons, and they are worth stating rather than quietly shipping it:
+--
+--  1. **No urgency.** The benefit is proportional to rows scanned. The largest
+--     table in this database currently holds 13 rows. The gain today is
+--     unmeasurable; the risk is not.
+--  2. **The failure mode is silent and severe.** This rewrites the expressions
+--     that *are* the authorization model. A regex that mangles one policy does
+--     not throw — it changes who can read what, and nothing on screen says so.
+--     That is the one category of change that should never be applied unattended.
+--  3. **It needs a real test, not an eyeball.** Correct verification is: run it
+--     on a Supabase branch, then assert every role's visibility is unchanged on
+--     every table. That is a deliberate exercise, not a step in a broad audit.
+--
+-- Recommended sequence:
+--   supabase branches create rls-initplan      # or the dashboard
+--   -- apply this file to the branch
+--   -- re-run the access assertions (see TESTING below)
+--   -- compare pg_policies between branch and main: only the wrapping differs
+--   -- merge the branch
+--
+-- ============================================================
+-- TESTING (must all still hold afterwards, per role)
+-- ============================================================
+--   anon         : can read reference + published content; can read
+--                  public_members; cannot read profiles directly
+--   member       : reads own profile; cannot read another member's profile;
+--                  can draft/submit/read own leadership_application;
+--                  cannot read anyone else's application
+--   admin        : reads every profile; can set verification_status
+--   any role     : cannot change its own role/verification_status
+--                  (0021 guard must still revert it)
+--
+-- ============================================================
+-- ROLLBACK
+-- ============================================================
+-- Re-run the same block with `unwrap := true` (bottom of this file). It reverses
+-- the transformation exactly. Take a snapshot of the current definitions first:
+--
+--   select schemaname, tablename, policyname, permissive, roles, cmd,
+--          qual, with_check
+--   from pg_policies where schemaname = 'public' order by tablename, policyname;
+--
+-- Save that output. It is the authoritative rollback, and it is cheap insurance
+-- against a rewrite this broad.
+
+-- ============================================================
+-- FORWARD
+-- ============================================================
+do $$
+declare
+  p record;
+  new_qual  text;
+  new_check text;
+  ddl       text;
+  -- Wrap a bare auth.<fn>() that is not already inside `select `.
+  pattern   text := '(?<!select )(auth\.(?:uid|jwt|role)\(\))';
+  n         int := 0;
+begin
+  for p in
+    select schemaname, tablename, policyname, permissive, roles, cmd,
+           qual, with_check
+    from pg_policies
+    where schemaname = 'public'
+      and (coalesce(qual,'') ~ pattern or coalesce(with_check,'') ~ pattern)
+    order by tablename, policyname
+  loop
+    new_qual  := regexp_replace(p.qual,       pattern, '(select \1)', 'g');
+    new_check := regexp_replace(p.with_check, pattern, '(select \1)', 'g');
+
+    execute format('drop policy %I on %I.%I',
+                   p.policyname, p.schemaname, p.tablename);
+
+    ddl := format('create policy %I on %I.%I as %s for %s to %s',
+                  p.policyname, p.schemaname, p.tablename,
+                  case when p.permissive = 'PERMISSIVE'
+                       then 'permissive' else 'restrictive' end,
+                  lower(p.cmd),
+                  array_to_string(p.roles, ', '));
+
+    if new_qual  is not null then ddl := ddl || format(' using (%s)', new_qual); end if;
+    if new_check is not null then ddl := ddl || format(' with check (%s)', new_check); end if;
+
+    execute ddl;
+    n := n + 1;
+  end loop;
+
+  raise notice 'rewrote % policies', n;
+
+  -- Refuse to finish quietly if any were missed: a partial rewrite is the worst
+  -- outcome, because the advisor goes quiet while some tables stay slow.
+  if exists (
+    select 1 from pg_policies
+    where schemaname = 'public'
+      and (coalesce(qual,'') ~ pattern or coalesce(with_check,'') ~ pattern)
+  ) then
+    raise exception 'policies still contain unwrapped auth calls — rolled back';
+  end if;
+end $$;
+
+-- ============================================================
+-- ROLLBACK BLOCK — run this to reverse the above.
+-- ============================================================
+-- do $$
+-- declare
+--   p record; ddl text;
+--   pattern text := '\(select (auth\.(?:uid|jwt|role)\(\))\)';
+-- begin
+--   for p in
+--     select schemaname, tablename, policyname, permissive, roles, cmd,
+--            qual, with_check
+--     from pg_policies
+--     where schemaname = 'public'
+--       and (coalesce(qual,'') ~ pattern or coalesce(with_check,'') ~ pattern)
+--   loop
+--     execute format('drop policy %I on %I.%I', p.policyname, p.schemaname, p.tablename);
+--     ddl := format('create policy %I on %I.%I as %s for %s to %s',
+--                   p.policyname, p.schemaname, p.tablename,
+--                   case when p.permissive = 'PERMISSIVE' then 'permissive' else 'restrictive' end,
+--                   lower(p.cmd), array_to_string(p.roles, ', '));
+--     if p.qual       is not null then ddl := ddl || format(' using (%s)',      regexp_replace(p.qual,       pattern, '\1', 'g')); end if;
+--     if p.with_check is not null then ddl := ddl || format(' with check (%s)', regexp_replace(p.with_check, pattern, '\1', 'g')); end if;
+--     execute ddl;
+--   end loop;
+-- end $$;

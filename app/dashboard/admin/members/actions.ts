@@ -6,10 +6,12 @@ import { createAdminClient, adminClientReady } from "@/lib/supabase/admin"
 import { sendEmail, emailEnabled, ADMIN_EMAIL } from "@/lib/email"
 import { audit, assertMemberAdmin, NOT_READY, type ContentResult } from "@/lib/cms"
 import { emailOnlySchema } from "@/lib/validations"
+// Was a second, independent derivation of the origin with a hard-coded
+// production fallback — so after a domain move this file would have kept
+// emailing members links to the old address while every page rendered the new
+// one. Now it is the one in lib/site.ts, like everything else.
+import { SITE_URL } from "@/lib/site"
 import type { VerificationStatus } from "@/types"
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://bekwai-youth-movement.vercel.app"
 
 function escapeHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Public_Sans, Fraunces } from "next/font/google"
 import "./globals.css"
 import { ORG } from "@/constants/nav"
+import { SITE_URL } from "@/lib/site"
 import PwaRegister from "@/components/PwaRegister"
 
 const sans = Public_Sans({
@@ -16,7 +17,7 @@ const display = Fraunces({
   axes: ["opsz"],
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+const siteUrl = SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
