@@ -112,10 +112,25 @@ for replies, which matters because the welcome email sets `Reply-To`.
 
 ---
 
-## 3. Finish the Resend records
+## 3. Finish the Resend records — this is what is blocking verification
 
-DKIM is already in place (`resend._domainkey` resolves). Missing is the `send.`
-subdomain pair Resend uses for bounce and complaint handling.
+**Diagnosed 30 Jul, 1:17 PM.** Resend shows *Domain added → Checking DNS →
+Verifying domain*, stalled at **Checking DNS**, with DKIM already **Verified**.
+
+The cause, confirmed by direct DNS query:
+
+```
+resend._domainkey   present (218 chars)   <- Resend: Verified
+send.<domain>  MX   MISSING               <- blocking
+send.<domain>  TXT  MISSING               <- blocking
+```
+
+Resend will not move past *Checking DNS* until **every** record it lists resolves,
+not just DKIM. Scroll down past the DKIM table on that page and you will find an
+**SPF** section with two rows, both still pending. Those two are the whole holdup.
+
+Nothing is wrong with what you have done — DKIM is correct and verified. Two
+records are simply not there yet.
 
 **Do not invent these values — copy them.** Go to
 **resend.com → Domains → bekwaiyouthmovement.org** and read the pending rows.
@@ -126,7 +141,12 @@ They will look like this, but the region differs per account:
 | `send` | `MX` | `10` | `feedback-smtp.<region>.amazonses.com` |
 | `send` | `TXT` | — | `v=spf1 include:amazonses.com ~all` |
 
-### Two cPanel traps
+### Three cPanel traps
+
+- **Use Zone Editor → Manage → Add Record, not the "MX Entry" tool.** cPanel's
+  dedicated MX tool only edits mail routing for the domain itself and cannot
+  create an MX on a subdomain. The `send` MX has to go in through the zone editor
+  or it silently will not exist.
 
 - **cPanel appends the domain for you.** If Resend shows
   `send.bekwaiyouthmovement.org`, type only `send` in the Name field. Typing the
