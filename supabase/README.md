@@ -281,7 +281,65 @@ The cause was a sandbox sender that only delivered to the account owner's own
 address. So one-at-a-time test sign-ups worked perfectly and every real
 applicant got nothing.
 
-#### Recommended since 30 Jul 2026: point Supabase SMTP at Resend
+#### 🔴 Read this first: Node cannot send Supabase's auth email
+
+A distinction that costs a day if it is missed. **Two separate senders, and only
+one of them is ours to write:**
+
+| Email | Sent by | Configured in |
+|---|---|---|
+| Confirm signup, password reset, email change | **Supabase's own server** | Supabase dashboard → SMTP Settings |
+| Welcome, contact alerts, verification notices, broadcasts | **Our Next.js code** (`lib/email.ts`) | `SMTP_*` env vars |
+
+`nodemailer` in `lib/email.ts` handles the second row and **cannot touch the
+first**. Supabase generates and dispatches confirmation and reset mail inside its
+own infrastructure; our code is never invoked and has nothing to intercept. The
+only lever on that traffic is the SMTP panel below.
+
+So "use our own mail server, not a third party" is achievable for **both** — but
+it takes two separate configurations, not one.
+
+**With "Confirm email" ON and no custom SMTP set, registration is broken.**
+Supabase falls back to its built-in sender, which is capped near 2–4 emails/hour
+and on current projects delivers only to the project team's own address. Measured
+on this project 30 Jul 2026, 2:06 PM: signup returned no session and
+`confirmation_sent_at` was set — Supabase had handed the mail off and it went
+nowhere a member could read. Identical to the 29 Jul failure.
+
+#### Option A — point Supabase at BYM's own mail server (no third party)
+
+**Project Settings → Authentication → SMTP Settings:**
+
+| Field | Value |
+|---|---|
+| Host | `s44.srvx.ws` — **not** `mail.bekwaiyouthmovement.org` until DOMAIN.md §2 is done; that name still resolves to Vercel |
+| Port | `465` |
+| Username | `info@bekwaiyouthmovement.org` |
+| Password | that mailbox's password (cPanel → Email Accounts) |
+| Sender email | `info@bekwaiyouthmovement.org` |
+| Sender name | `Bekwai Youth Movement` |
+
+The mailbox must exist in cPanel first, and sending works before the MX fix —
+that fix is only needed to *receive* replies.
+
+Two things to know before choosing this:
+
+- **No DKIM.** Checked 30 Jul: no `default._domainkey`, `mail._domainkey` or
+  `cpanel._domainkey` is published, so mail from this server is unsigned. SPF
+  still passes (the apex record authorises `107.161.174.15` and MailChannels), so
+  DMARC will pass on SPF alignment alone — but Gmail treats a signed message more
+  kindly. Fix with **cPanel → Email Deliverability → Manage → DKIM**, which
+  generates and publishes the record for you.
+- **Shared-host sending limits.** These are typically a few hundred messages per
+  hour or per day and are not published anywhere you will find in a hurry. Ask
+  SecureHostify what the cap is *before* a drive of 300 members, not during.
+
+#### Option B — point Supabase at Resend
+
+`bekwaiyouthmovement.org` is DNS-verified in Resend (DKIM + the `send.` SPF/MX
+pair, region `eu-west-1`), which makes this the better *deliverability* choice:
+DKIM-signed, dedicated sending reputation, per-message logs, and a quota you can
+actually read. The trade is a third party in the path.
 
 `bekwaiyouthmovement.org` is now DNS-verified in Resend (DKIM + the `send.`
 SPF/MX pair, region `eu-west-1`). That makes Resend the better choice than Brevo

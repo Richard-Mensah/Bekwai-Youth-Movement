@@ -2,7 +2,7 @@
   "name": "bym-governance-platform",
   "version": "0.1.0",
   "private": true,
-  "description": "Bekwai Youth Movement \u2014 Digital Governance Platform",
+  "description": "Bekwai Youth Movement — Digital Governance Platform",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -18,6 +18,7 @@
     "framer-motion": "^12.42.0",
     "lucide-react": "^0.460.0",
     "next": "15.5.19",
+    "nodemailer": "^9.0.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-markdown": "^10.1.0",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.20",
