@@ -22,9 +22,9 @@ Re-verified 30 July 2026, after the Supabase URLs were added.
 | Authoritative nameservers | `ns1–ns4.srv-console.com` (cPanel) | ✅ Zone Editor is the right place |
 | Wildcard `*` record | none | — |
 | `_dmarc` TXT | absent | ❌ §4 |
-| `send.` MX + TXT | absent | ❌ §3 |
+| `send.` MX + TXT | **both present**, `feedback-smtp.eu-west-1.amazonses.com` | ✅ done, propagated |
 | **`MX` apex → apex → `216.198.79.1`** | Vercel, **port 25 closed** | 🔴 **§2 — mail to `info@` is dropped** |
-| `mail.` A → `216.198.79.1` | exists, points at **Vercel** | 🔴 §2 — must be edited, not added |
+| `mail.` → `216.198.79.1` | is a **CNAME to the apex**, which follows it to Vercel | 🔴 §2 — delete, replace with an `A` |
 
 ### The mail server, located and confirmed
 
@@ -79,31 +79,53 @@ the `A` record moved to Vercel.
 
 **Fix — cPanel → Zone Editor for `bekwaiyouthmovement.org`:**
 
-There is no wildcard record, so `mail.bekwaiyouthmovement.org` already exists as
-its own entry — currently aimed at Vercel. **Edit it; do not add a second one.**
-Two A records on the same name would round-robin, so half your mail would still
-be thrown at a web server.
+**Inspecting the actual zone (30 Jul, 1:39 PM) showed `mail` is a `CNAME`, not an
+`A` record:**
 
-1. **Edit the existing `A` record for `mail`:**
+```
+mail.bekwaiyouthmovement.org.   14400   CNAME   bekwaiyouthmovement.org
+```
+
+That is the whole mechanism: `mail` is an alias for the apex, the apex `A` record
+now points at Vercel, so `mail` follows it there. It cannot be *edited* into an
+`A` record — a name may not hold both a `CNAME` and an `A`, so the alias has to go
+first.
+
+There is also a standards reason not to leave it a CNAME: **an `MX` target must
+resolve to an address record, never to a CNAME.** Some receiving servers reject
+mail outright when the MX points at an alias, so pointing the `MX` at a
+still-aliased `mail` would swap one delivery failure for a subtler one.
+
+1. **Delete** the `mail.bekwaiyouthmovement.org.` `CNAME` row.
+
+2. **Add** an `A` record in its place:
 
    | Field | Value |
    |---|---|
-   | Name | `mail` |
+   | Name | `mail.bekwaiyouthmovement.org.` |
    | Type | `A` |
    | TTL | `14400` |
-   | Address | `107.161.174.15` ← change from `216.198.79.1` |
+   | Address | `107.161.174.15` |
 
-2. **Edit the `MX` record** to point at that host instead of the apex:
+3. **Edit** the apex `MX` so it points at that host instead of the apex:
 
    | Field | Value |
    |---|---|
-   | Name | `bekwaiyouthmovement.org` (leave as the apex) |
+   | Name | `bekwaiyouthmovement.org.` |
    | Type | `MX` |
-   | Priority | `10` |
-   | Destination | `mail.bekwaiyouthmovement.org` |
+   | Priority | `0` (leave it) |
+   | Destination | `mail.bekwaiyouthmovement.org.` ← change from `bekwaiyouthmovement.org` |
 
-The existing MX has priority `0` pointing at the apex. Change its destination —
-the priority number itself does not matter while there is only one MX.
+   With a single MX the priority number is irrelevant — it only ranks backups —
+   so there is no reason to touch it.
+
+**Leave these alone.** They are in the same zone and all have a job:
+`_acme-challenge` (×2) and `_cpanel-dcv-test-record` are TLS and domain-control
+validation; `www` CNAME → apex is what makes the site resolve; the apex `A`
+(`216.198.79.1`) is Vercel and correct; the apex `TXT` is your only SPF record.
+
+> The `ftp` CNAME also follows the apex to Vercel, so FTP by hostname will not
+> work. Harmless — nothing here uses it, and `s44.srvx.ws` still reaches the box.
 
 **Test it** after ~30 minutes: send a mail from Gmail to
 `info@bekwaiyouthmovement.org` and confirm it lands in cPanel webmail. Until this
