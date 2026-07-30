@@ -281,8 +281,51 @@ The cause was a sandbox sender that only delivered to the account owner's own
 address. So one-at-a-time test sign-ups worked perfectly and every real
 applicant got nothing.
 
-**Project Settings → Authentication → SMTP Settings.** Current provider is
-**Brevo**:
+#### Recommended since 30 Jul 2026: point Supabase SMTP at Resend
+
+`bekwaiyouthmovement.org` is now DNS-verified in Resend (DKIM + the `send.`
+SPF/MX pair, region `eu-west-1`). That makes Resend the better choice than Brevo
+for **both** systems, which collapses a long-standing source of confusion in this
+project: auth email and app email finally travel the same path, from the same
+verified sender, with one place to look when something does not arrive.
+
+**Project Settings → Authentication → SMTP Settings:**
+
+| Field | Value |
+|---|---|
+| Host | `smtp.resend.com` |
+| Port | `587` |
+| Username | `resend` — the literal word, not an email address |
+| Password | your Resend **API key** (`re_…`), the same one in `RESEND_API_KEY` |
+| Sender email | `info@bekwaiyouthmovement.org` |
+| Sender name | `Bekwai Youth Movement` |
+
+Three things people get wrong here:
+
+- **Username is literally `resend`.** Not the sender address, not the account
+  email. Resend's SMTP bridge authenticates the API key as the password.
+- **Do not switch custom SMTP off** to "test" it. Supabase falls back to its
+  built-in sender, which is capped near 2 emails/hour and on current projects
+  only delivers to your own team — so it looks like it works for you and silently
+  fails for everyone else. That is the exact shape of the 29 Jul failure.
+- **The sender address must be at the verified domain.** A `gmail.com` sender is
+  rejected outright by Resend however the mailbox is owned.
+
+Once set, Supabase sends password resets and (if re-enabled) confirmations
+directly through Resend, and they appear in the Resend dashboard's **Logs**
+alongside the app's own mail — which is the first time in this project that a
+missing auth email has been diagnosable rather than invisible.
+
+Note this is independent of `RESEND_API_KEY` in the app environment. Supabase
+holds its own copy of the key in the SMTP panel; setting one does not set the
+other, and rotating the key means updating both.
+
+#### Previous provider — Brevo
+
+Kept for reference; still valid if you prefer it, and still the right answer for
+a project with no domain.
+
+**Project Settings → Authentication → SMTP Settings:**
 
 | Field | Value |
 |---|---|
