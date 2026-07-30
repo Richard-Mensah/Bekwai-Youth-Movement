@@ -3,8 +3,12 @@
   Paste the body below into the dashboard. Kept here so the template is
   reviewable and recoverable; the dashboard is the live copy.
 
-  WHY THIS DOES NOT USE {{ .ConfirmationURL }}
-  --------------------------------------------
+  Paste from the <div> below — NOT this comment. Template variables are expanded
+  even inside HTML comments, so a stray one here would put a live confirmation
+  link into every email. That is why the name below is written without braces.
+
+  WHY THIS DOES NOT USE ConfirmationURL
+  -------------------------------------
   ConfirmationURL sends the member through Supabase's own /verify endpoint,
   which then redirects to our app carrying a PKCE `?code=`. Redeeming that code
   requires the code_verifier cookie set in the browser where the member signed
