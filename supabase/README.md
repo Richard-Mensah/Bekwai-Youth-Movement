@@ -583,14 +583,44 @@ browser, app or device.
 
 ### 4c. The app's own email (separate system)
 
-Auth email is Supabase's. Notifications the *app* sends — new applications,
-contact messages, member verification — go through `lib/email.ts` via Resend
-and are **switched off**: `RESEND_API_KEY` is unset, so `emailEnabled()` is
-false and every caller degrades gracefully (applications still submit,
-broadcasts save as drafts). Resend needs a DNS-verified domain, so this stays
-off until BYM has one. `EMAIL_FROM` must remain that verified domain — it is a
-sender, and a `gmail.com` value there is rejected outright. `EMAIL_ADMIN` is
-only a recipient and can be any address.
+Notifications the *app* sends — new applications, contact messages, member
+verification, the welcome email — go through `lib/email.ts`. It is **on**, over
+BYM's own mail server: `emailTransport()` returns `"smtp"` whenever `SMTP_HOST`
+and credentials are present, and prefers SMTP over Resend. Resend stays unset.
+
+`EMAIL_FROM` must be at the DNS-verified domain — it is a sender, and a
+`gmail.com` value there is rejected outright. `EMAIL_ADMIN` is only ever a
+recipient (and a Reply-To), so it can be any address at all.
+
+### 4c-i. Handover — December 2026
+
+The system is currently run by one person, and two settings reflect that rather
+than reflecting what the Movement should look like afterwards. Both are
+deliberate, and both are undone without touching code.
+
+**1. Notifications go to a personal inbox.**
+`EMAIL_ADMIN` is set in Vercel to `rmensahuk@gmail.com`, which overrides the
+default in `lib/email.ts`. During a build-out that is correct: an application or
+a stuck member needs to reach somebody who reads their mail hourly, not a shared
+mailbox nobody has opened yet.
+
+To hand over: **delete the `EMAIL_ADMIN` variable in Vercel and redeploy.** That
+is the whole change. The code default is already
+`info@bekwaiyouthmovement.org`, so removing the override moves notifications to
+the role mailbox — which the incoming leaders can be given access to without
+anyone editing a repository or knowing this file exists.
+
+Verify afterwards by submitting the contact form and confirming it arrives in
+webmail at `info@`, not in the founder's Gmail.
+
+**2. Members are verified on arrival.** Separate change, same handover — see
+§4-0-i, which has the SQL to restore administrator verification and a query
+listing everyone auto-verified in the meantime, so the new leaders can review
+them rather than inherit them unexamined.
+
+Neither of these is a bug, and neither should be "fixed" early. They are the
+settings of a movement being built by one person, and the handover is the moment
+they stop being true.
 
 ## 5. Verify
 - Register at `/join` → a row appears in `profiles` with

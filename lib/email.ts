@@ -58,19 +58,22 @@ export function emailEnabled(): boolean {
  * Where the Secretariat receives notifications (new applications, contact
  * messages), and the Reply-To on mail we send to members.
  *
- * The default used to be a personal gmail.com address, which worked but put one
- * person's private inbox in the loop for Movement business — and left the
- * Secretariat with nothing to hand over when that person moves on. It is now a
- * role mailbox on the Movement's own domain, which anyone holding the office can
- * be given access to.
+ * **The default here is the address for the Movement, not for today.**
  *
- * It being on our own domain also removes an old constraint. A gmail.com address
- * can never be DNS-verified as a sender, so it could only ever be a recipient;
- * `info@bekwaiyouthmovement.org` is verified for sending as well, which is why
- * the same address can now be the Reply-To on member mail.
+ * Until December 2026 the founder is running the system single-handed, so
+ * `EMAIL_ADMIN` is set in Vercel to a personal gmail.com address and that
+ * override wins over this line. Notifications land where someone is actually
+ * reading them, which during a build-out matters more than tidiness.
  *
- * Still overridable by `EMAIL_ADMIN` — if that is set in Vercel it wins over
- * this default, so check there too rather than assuming this line is the answer.
+ * The default is the role mailbox deliberately, so that handing the system to
+ * the incoming leaders is *deleting* the override rather than editing code and
+ * redeploying. Nobody has to find this file, and nobody inherits a system that
+ * quietly mails a person who has left. See `supabase/README.md` §4c-i.
+ *
+ * One reason the role mailbox is the right destination long-term: a gmail.com
+ * address can never be DNS-verified as a sender, so it can only ever receive.
+ * `info@bekwaiyouthmovement.org` is verified for both, which is why it can also
+ * be the Reply-To on member mail.
  */
 export const ADMIN_EMAIL = process.env.EMAIL_ADMIN ?? "info@bekwaiyouthmovement.org"
 
