@@ -56,12 +56,23 @@ export function emailEnabled(): boolean {
 
 /**
  * Where the Secretariat receives notifications (new applications, contact
- * messages). This is a recipient, not a sender: Resend can only send FROM a
- * domain you have verified by DNS, which a gmail.com address can never be —
- * so EMAIL_FROM stays a verified domain (or the resend.dev sandbox) while
- * mail is delivered here.
+ * messages), and the Reply-To on mail we send to members.
+ *
+ * The default used to be a personal gmail.com address, which worked but put one
+ * person's private inbox in the loop for Movement business — and left the
+ * Secretariat with nothing to hand over when that person moves on. It is now a
+ * role mailbox on the Movement's own domain, which anyone holding the office can
+ * be given access to.
+ *
+ * It being on our own domain also removes an old constraint. A gmail.com address
+ * can never be DNS-verified as a sender, so it could only ever be a recipient;
+ * `info@bekwaiyouthmovement.org` is verified for sending as well, which is why
+ * the same address can now be the Reply-To on member mail.
+ *
+ * Still overridable by `EMAIL_ADMIN` — if that is set in Vercel it wins over
+ * this default, so check there too rather than assuming this line is the answer.
  */
-export const ADMIN_EMAIL = process.env.EMAIL_ADMIN ?? "rmensahuk@gmail.com"
+export const ADMIN_EMAIL = process.env.EMAIL_ADMIN ?? "info@bekwaiyouthmovement.org"
 
 type SendArgs = {
   to: string | string[]

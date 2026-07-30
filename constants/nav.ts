@@ -132,6 +132,21 @@ export const ORG = {
   established: 2026,
   /** Official Launch / Founding Day of the Youth General Assembly. */
   foundingDate: "2027-01-12",
-  email: "bekwaiyouthmovement@gmail.com",
+  /**
+   * The Movement's own address, on the Movement's own domain.
+   *
+   * This is the public contact point: the footer, the contact page and the
+   * `NGO` structured data all read it from here. It was a gmail.com address,
+   * which undercut every other signal on the site — a body that publishes its
+   * accounts and its Assembly minutes asking to be written to at a free mailbox
+   * reads as smaller than it is, and Gmail itself treats a domain that sends
+   * from one place and receives at another with more suspicion.
+   *
+   * `info@bekwaiyouthmovement.org` is a real mailbox on the Movement's mail
+   * server, receiving over IMAP and sending with SPF, DKIM and DMARC aligned.
+   * It is also the Reply-To on every auth and welcome email, so a member who
+   * simply hits reply reaches the Secretariat rather than a no-reply void.
+   */
+  email: "info@bekwaiyouthmovement.org",
   medium: "https://bekwaiyouthmovement.medium.com",
 } as const
