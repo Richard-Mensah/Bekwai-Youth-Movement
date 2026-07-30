@@ -473,10 +473,20 @@ signed out.
 
 ### 4b-i. Google sign-in
 
-Enabled so a member can join without inventing a password. Two mistyped fields
-disappear with it: the email address (which is where a confirmation goes to die)
-and a password chosen in a hurry and forgotten by the next visit. Google supplies
-a verified address; the member supplies nothing.
+**Sign-in only. It is deliberately not offered on `/join`.**
+
+Registration is the one moment BYM gets to ask for community, phone, gender and
+date of birth. Google supplies none of them, so "sign up with Google" would only
+move the same questions to a second screen — and community is not optional: it
+decides who represents a member, whether they appear on the community wall, and
+every per-community report. So joining goes through the full form, and Google
+exists to save a *returning* member the password they have forgotten.
+
+One consequence to know about, because it is Supabase's behaviour and not ours:
+OAuth creates an account for an address it has not seen before. Someone who
+never registered but clicks "Sign in with Google" therefore ends up with a
+profile carrying no community. `/complete-profile` is the safety net that
+catches them — see the gate described below.
 
 **Nothing about this lives in the code repository.** There is no environment
 variable to set — the client secret is held by Supabase, which is the point.
@@ -518,9 +528,9 @@ variable to set — the client secret is held by Supabase, which is the point.
 
 #### Step 3 — nothing
 
-No deploy, no environment variable, no code change. The button on `/login` and
-`/join` is already shipped; it starts working the moment the provider is enabled,
-and it shows Supabase's own error if it is not.
+No deploy, no environment variable, no code change. The button on `/login` is
+already shipped; it starts working the moment the provider is enabled, and it
+shows Supabase's own error if it is not.
 
 #### What Google does not know
 

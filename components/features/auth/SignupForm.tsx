@@ -14,7 +14,6 @@ import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 import AuthNotice from "./AuthNotice"
-import GoogleButton, { AuthDivider } from "./GoogleButton"
 
 const SUPABASE_READY =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -212,20 +211,13 @@ export default function SignupForm() {
         </p>
       )}
 
-      {/* First, because it removes five of these eight fields. Google returns a
-          verified address and a name; /complete-profile then asks only for the
-          community, phone, gender and date of birth it cannot know. `next || ""`
-          would send an empty destination — safeNext's default belongs here. */}
-      <div className="mt-7">
-        <GoogleButton
-          next={next || "/dashboard"}
-          label="Sign up with Google"
-          disabled={!SUPABASE_READY}
-        />
-      </div>
-      <AuthDivider />
+      {/* No Google button here, deliberately. Registration is the one moment BYM
+          gets to ask for community, phone, gender and date of birth, and a
+          provider that supplies none of them turns joining into a two-stage
+          process with a form at the end of it anyway. Google is offered on
+          /login instead, where it saves a returning member a password. */}
 
-      <form onSubmit={handleSubmit} className="space-y-7">
+      <form onSubmit={handleSubmit} className="mt-7 space-y-7">
         <Fieldset legend="Who you are" step={1}>
           <Input
             name="fullName"
