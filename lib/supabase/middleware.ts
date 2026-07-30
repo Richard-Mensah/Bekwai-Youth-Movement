@@ -4,7 +4,21 @@ import { PATHNAME_HEADER } from "@/lib/dashboard-access"
 
 type CookieToSet = { name: string; value: string; options: CookieOptions }
 
-const PROTECTED_PREFIX = "/dashboard"
+/**
+ * Paths that require a session, redirected at the edge.
+ *
+ * `/complete-profile` is here for a reason worth recording. Its page component
+ * already refuses a signed-out visitor, but a `redirect()` raised inside a
+ * streamed Server Component cannot become a 307 — the shell has been flushed by
+ * then, so Next embeds the redirect in the RSC payload and the browser performs
+ * it. Measured on the live site: 33 KB of HTML and a client-side navigation,
+ * where this returns a 307 with an empty body before any rendering happens.
+ *
+ * The page keeps its own check regardless. Middleware answers "is anyone signed
+ * in", which is all it can see; the page answers "does this member still need
+ * the form", which needs the profile row.
+ */
+const PROTECTED_PREFIXES = ["/dashboard", "/complete-profile"]
 
 /**
  * Refreshes the Supabase auth session on each request and guards the
@@ -55,7 +69,9 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const isProtected = request.nextUrl.pathname.startsWith(PROTECTED_PREFIX)
+  const isProtected = PROTECTED_PREFIXES.some((p) =>
+    request.nextUrl.pathname.startsWith(p)
+  )
   if (isProtected && !user) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = "/login"
