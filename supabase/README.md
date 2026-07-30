@@ -161,6 +161,65 @@ rather than publishing the key), and every action using it calls
 `assertSecretariat()` — the admin layout's role gate does not cover Server
 Actions, since each is its own POST endpoint that no layout runs for.
 
+### 4-0-i. Open enrolment — members verified on arrival (TEMPORARY)
+
+> **Active since 30 Jul 2026.** Applied as `0025_open_enrolment.sql`. **Revert
+> once the domain is set up** — the statements are at the bottom of that file and
+> repeated below.
+
+New members are `verified` the moment they register, so there is no manual step
+between signing up and a working dashboard. With confirmation email already off
+(§4-0), registration is now: fill in the form, land on your dashboard. Nothing
+waits on anybody.
+
+**What this does not hand over.** `verification_status` is not referenced by a
+single RLS *policy* — every one keys off `role` or `is_admin()`, and `role` still
+defaults to `member`. Parliament, CIN, Cabinet, voting and the admin console stay
+shut exactly as before. What opens is the app-level gate in
+`app/dashboard/layout.tsx`: the member dashboard instead of the pending panel.
+
+**Why `is_public` changed too.** The `public_members` view is granted to `anon`
+and lists verified, opted-in members on the homepage — first name, community,
+photo. `is_public` defaulted to `true`, which was only safe because reaching
+`verified` required an administrator to decide. Auto-verification removes that
+decision, so left alone this would publish every registrant to the public
+homepage the instant they signed up, unreviewed — not acceptable for a movement
+registering minors (Gov Doc §6.3; Ghana Data Protection Act 2012). New members
+are therefore verified but **not listed**; the **Wall** toggle on each row of the
+members directory puts them up when the Secretariat chooses. Nobody already on
+the wall came off it.
+
+Verified on a real signup after applying it:
+
+| | |
+|---|---|
+| session at signup | yes |
+| `verification_status` | `verified` |
+| `role` | `member` (unchanged) |
+| `is_public` | `false` |
+| dashboard | full member dashboard |
+| on public homepage | no |
+| can read other profiles | no |
+
+**To revert:**
+
+```sql
+alter table profiles alter column verification_status set default 'pending';
+alter table profiles alter column is_public          set default true;
+```
+
+That affects new registrations only — members auto-verified during the drive stay
+verified. To review them afterwards:
+
+```sql
+select id, full_name, email, community_id, created_at
+from profiles where created_at >= '2026-07-30' order by created_at;
+```
+
+Re-enable **Confirm email** at the same time (§4-0). The two together are the
+drive configuration, and leaving one half on is how you end up not knowing which
+state you are in.
+
 ### 4-0-iii. Clearing the verification queue, and who may
 
 Signing up no longer needs email, but a new member still lands `pending`, and a
