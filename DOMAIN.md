@@ -7,17 +7,34 @@ against `8.8.8.8` and requesting the site, not by reading a dashboard.
 
 ## Current state
 
+Re-verified 30 July 2026, after the Supabase URLs were added.
+
 | Check | Result | Verdict |
 |---|---|---|
 | `A` apex → `216.198.79.1` | Vercel anycast IP | ✅ done |
 | `CNAME www` → apex | resolves to the Vercel IP | ✅ works |
 | `https://www.bekwaiyouthmovement.org` | **HTTP 200** | ✅ **site is live** |
-| `https://bekwaiyouthmovement.org` | HTTP 308 → `www` | ⚠️ see §1 |
+| `https://bekwaiyouthmovement.org` | HTTP 308 → `www` | ⚠️ §1 |
 | `resend._domainkey` TXT | DKIM public key present | ✅ done |
-| SPF (apex TXT) | `v=spf1 +a +mx +ip4:107.161.174.15 include:relay.mailchannels.net ~all` | ✅ present, and **exactly one** |
+| SPF (apex TXT) | one record, cPanel/MailChannels | ✅ present, and **exactly one** |
+| **Supabase Site URL** | `https://bekwaiyouthmovement.org` | ✅ **done, no trailing slash** |
+| **Supabase redirect allow-list** | all 4 hosts allowed; a non-listed host correctly substituted | ✅ **done and enforced** |
+| Authoritative nameservers | `ns1–ns4.srv-console.com` (cPanel) | ✅ Zone Editor is the right place |
+| Wildcard `*` record | none | — |
 | `_dmarc` TXT | absent | ❌ §4 |
 | `send.` MX + TXT | absent | ❌ §3 |
-| **`MX` apex → `bekwaiyouthmovement.org`** | → `216.198.79.1` (Vercel) | 🔴 **§2 — mail to `info@` cannot be delivered** |
+| **`MX` apex → apex → `216.198.79.1`** | Vercel, **port 25 closed** | 🔴 **§2 — mail to `info@` is dropped** |
+| `mail.` A → `216.198.79.1` | exists, points at **Vercel** | 🔴 §2 — must be edited, not added |
+
+### The mail server, located and confirmed
+
+| | |
+|---|---|
+| `107.161.174.15` reverse DNS | `s44.srvx.ws` — the cPanel host |
+| ports 25 / 587 / 465 / 993 | **all OPEN** → a real mail server |
+| `216.198.79.1` port 25 | **closed** → proves mail to `info@` is being dropped now |
+
+So `107.161.174.15` is not a guess any more. It is where mail has to go.
 
 ---
 
@@ -62,17 +79,21 @@ the `A` record moved to Vercel.
 
 **Fix — cPanel → Zone Editor for `bekwaiyouthmovement.org`:**
 
-1. **Add an `A` record for the mail host** (so it resolves to the hosting server,
-   not Vercel):
+There is no wildcard record, so `mail.bekwaiyouthmovement.org` already exists as
+its own entry — currently aimed at Vercel. **Edit it; do not add a second one.**
+Two A records on the same name would round-robin, so half your mail would still
+be thrown at a web server.
+
+1. **Edit the existing `A` record for `mail`:**
 
    | Field | Value |
    |---|---|
    | Name | `mail` |
    | Type | `A` |
    | TTL | `14400` |
-   | Address | `107.161.174.15` |
+   | Address | `107.161.174.15` ← change from `216.198.79.1` |
 
-2. **Edit the existing `MX` record** to point at that host instead of the apex:
+2. **Edit the `MX` record** to point at that host instead of the apex:
 
    | Field | Value |
    |---|---|
@@ -81,10 +102,8 @@ the `A` record moved to Vercel.
    | Priority | `10` |
    | Destination | `mail.bekwaiyouthmovement.org` |
 
-> **Confirm the IP before you trust it.** `107.161.174.15` is inferred from your
-> own SPF record, which lists it as an authorised sender — so it is almost
-> certainly your hosting server. Verify in cPanel under **Server Information →
-> Shared IP Address**, and use that value if it differs.
+The existing MX has priority `0` pointing at the apex. Change its destination —
+the priority number itself does not matter while there is only one MX.
 
 **Test it** after ~30 minutes: send a mail from Gmail to
 `info@bekwaiyouthmovement.org` and confirm it lands in cPanel webmail. Until this
@@ -149,18 +168,27 @@ address only works once §2 is fixed.
 
 ---
 
-## 5. Supabase → Authentication → URL Configuration
+## 5. Supabase → Authentication → URL Configuration — ✅ DONE
 
-Currently still `https://bekwai-youth-movement.vercel.app/` — old host, and with
-a trailing slash that the README already warns about.
+Verified by generating a real recovery link per host and reading back the
+`redirect_to` Supabase actually honoured. `generateLink` sends no email, so this
+cost nothing:
 
-**Site URL** — no trailing slash, no path:
+| Requested redirect | Result |
+|---|---|
+| `https://bekwaiyouthmovement.org/auth/callback` | allowed ✅ |
+| `https://www.bekwaiyouthmovement.org/auth/callback` | allowed ✅ |
+| `https://bekwai-youth-movement.vercel.app/auth/callback` | allowed ✅ |
+| `http://localhost:3000/auth/callback` | allowed ✅ |
+| `https://evil-not-allowed.example.com/auth/callback` | **substituted** with the Site URL ✅ |
 
-```
-https://bekwaiyouthmovement.org
-```
+Site URL reads back as `https://bekwaiyouthmovement.org` — correct, and with no
+trailing slash.
 
-**Redirect URLs — add, do not replace.** All of these must be present:
+That last row is the one worth noting: it proves the allow-list is being
+*enforced* rather than sitting wide open. Nothing more to do in this section.
+
+For reference, the four entries that must stay present:
 
 ```
 https://bekwaiyouthmovement.org/**
@@ -203,16 +231,21 @@ reads. Both need the values.
 
 ---
 
-## Order to do it in
+## What is left, in order
 
-1. **§2 MX fix** — the only thing actually broken. DNS takes longest to
-   propagate, so start it first.
-2. **§5 Supabase URLs** — instant, and auth links point at the old host until
-   you do.
-3. **§1 Vercel primary domain** — instant.
-4. **§3 Resend `send.` records**, then press Verify.
-5. **§4 DMARC.**
-6. **§6 env vars + redeploy**, once Resend shows verified and you have the key.
+✅ Done: A record, site live, DKIM, SPF, **Supabase URL configuration**.
+
+1. **§2 — edit `mail` A record, then the MX destination.** The only thing actually
+   broken. DNS is slowest to propagate, so start here.
+2. **§1 — make the apex primary in Vercel.** One click.
+3. **§3 — Resend `send.` MX + TXT**, then press Verify in Resend.
+4. **§4 — DMARC.** One record.
+5. **§6 — `RESEND_API_KEY` and `EMAIL_FROM` in Vercel, then redeploy.** Last,
+   because the key is worthless until Resend shows the domain verified.
+
+Nothing on this list blocks registration. Members sign up and reach their
+dashboard today; email is additive by design, which is exactly why you can take
+these in order rather than at speed.
 
 Nothing here is load-bearing for registration. Members can sign up and reach
 their dashboard today — email is additive, which is the whole point of the
