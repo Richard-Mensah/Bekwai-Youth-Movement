@@ -281,7 +281,47 @@ The cause was a sandbox sender that only delivered to the account owner's own
 address. So one-at-a-time test sign-ups worked perfectly and every real
 applicant got nothing.
 
-#### 🔴 Read this first: Node cannot send Supabase's auth email
+#### The live design: the Send Email Hook
+
+**Auth email is composed and sent by this app**, over BYM's own mail server, via
+[`app/api/auth/send-email/route.ts`](../app/api/auth/send-email/route.ts).
+
+Supabase's Send Email Hook replaces its built-in sending: with the hook enabled,
+Supabase stops sending auth mail and POSTs the token to us instead. Precedence,
+from the docs:
+
+| Email Provider | Auth Hook | Result |
+|---|---|---|
+| Enabled | Enabled | **Auth Hook sends (SMTP not used)** |
+| Enabled | Disabled | SMTP sends (custom if configured, else built-in) |
+| Disabled | either | Email signups disabled |
+
+So the SMTP panel below is not redundant — it is the fallback *behind* the hook,
+and disabling the hook is a one-toggle recovery that needs no deploy.
+
+**Setting it up:**
+
+1. Deploy first, so `/api/auth/send-email` exists.
+2. **Authentication → Hooks → Send Email Hook** → HTTPS →
+   `https://bekwaiyouthmovement.org/api/auth/send-email` → generate a secret.
+3. Put that secret in **Vercel** as `SEND_EMAIL_HOOK_SECRET`, whole, including the
+   `v1,whsec_` prefix. Redeploy.
+4. Enable the hook.
+
+Order matters: enabling the hook before the secret is deployed means every
+request is rejected with 401 and **no auth email is sent at all**.
+
+The hook is authenticated by HMAC signature (Standard Webhooks), verified in
+[`lib/webhook-signature.ts`](../lib/webhook-signature.ts) against the raw request
+body. Without that check the endpoint would be a spam relay sending from a
+domain we spent DNS records earning.
+
+Message bodies live in [`lib/auth-emails.ts`](../lib/auth-emails.ts), ported from
+`supabase/email-templates/` and still built around `token_hash` — see §4b-ii for
+why that matters. The dashboard's own Email Templates are **not used** while the
+hook is on.
+
+#### Why this could not be done with nodemailer alone
 
 A distinction that costs a day if it is missed. **Two separate senders, and only
 one of them is ours to write:**
