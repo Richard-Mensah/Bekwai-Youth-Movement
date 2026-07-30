@@ -52,10 +52,60 @@ RLS and the UI can read the member's role from the token.
 
 ## 4. Auth settings
 - **Authentication → Providers → Email**: enable email/password.
-- For local testing you may disable "Confirm email" so new sign-ups can log in
-  immediately. Re-enable it for production.
+- Whether "Confirm email" should be on is a real decision, not a default to
+  leave alone. See §4-0 — read it before an enrolment drive.
 
-### 4a. Email delivery — read this before an enrolment drive
+### 4-0. Before a mass enrolment drive: take email off the critical path
+
+Measured on this project, 30 Jul 2026. Of the first **10 members, only 4 had
+ever signed in.** That is the number that matters, and it is not a delivery
+problem: by then Brevo was delivering and the link worked end to end — one
+member registered at 22:51, confirmed at 22:54 and was signed in by 22:56,
+unassisted. Six of the ten had to be confirmed by hand, in one `update` against
+`auth.users`, and **still** never signed in.
+
+The lesson: once mail is actually being sent, the loss is not in delivery, it is
+in the number of steps. Every applicant must leave the site, find an email on a
+phone, and come back. At a market-square registration desk, most will not.
+
+**So for a drive, turn confirmation off and let people straight in.**
+
+**Authentication → Sign In / Providers → Email → "Confirm email" → off.**
+
+`signUp` then returns a live session and
+[SignupForm](../components/features/auth/SignupForm.tsx) sends the member
+directly to their dashboard — registration finishes on the site, in one sitting,
+and no email needs to arrive for it to have worked.
+
+Nothing is given away by this, because **email confirmation was never the
+control that protects anything here.** Access is gated on
+`profiles.verification_status`, which only an administrator can move to
+`verified`, plus RLS on every table. An unconfirmed member is a row awaiting
+verification either way. What is genuinely lost is the guarantee that a member
+owns the address they typed, which costs two things worth knowing:
+
+- A typo'd address gets a member who cannot reset their own password. An admin
+  can correct the address in `auth.users`; the member can also be reached on the
+  phone number registration already collects.
+- Someone could register under an address that is not theirs. It buys them a
+  `pending` account with no access, so the ceiling on the abuse is noise in the
+  verification queue.
+
+Both are recoverable. Six members who never got in are not. Turn it back on once
+the drive is over — it is one toggle, and the confirmation flow below is kept
+working for exactly that reason.
+
+Also raise the email rate limit before the drive even with confirmation off,
+because password resets still send: **Authentication → Rate Limits → "Rate limit
+for sending emails"**. And note Brevo's free tier is ~300 emails/day — with
+confirmation on, that alone caps a drive at 300 registrations.
+
+### 4a. Email delivery — how it broke once, and how to tell
+
+> **Status: resolved.** Brevo is configured and delivering; a confirmation link
+> was verified working end to end on 30 Jul 2026. Keep this section for the
+> diagnosis, because the failure is silent and will look like nothing at all if
+> it recurs.
 
 This is what broke registration on 29 Jul 2026. Five people signed up and none
 could verify. Supabase reported no error at all: every `/signup` returned 200
