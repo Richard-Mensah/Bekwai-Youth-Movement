@@ -70,7 +70,21 @@ phone, and come back. At a market-square registration desk, most will not.
 
 **So for a drive, turn confirmation off and let people straight in.**
 
-**Authentication → Sign In / Providers → Email → "Confirm email" → off.**
+**Authentication → Sign In / Providers → "Confirm email" → off** (it sits under
+*User Signups*, above the *Auth Providers* list — the panel has its own **Save
+changes** button, and the toggle looks flipped before you press it).
+
+> **Status: off since 30 Jul 2026**, for the enrolment drive. Verified by a real
+> signup through the anon key: `signUp` returned a live session,
+> `email_confirmed_at` was set immediately, `confirmation_sent_at` stayed null —
+> no mail sent — and the new session could read its own profile through RLS with
+> the community resolved. Turn it back on when the drive is over.
+
+**Do not confuse this with the `Email` provider toggle** further down the same
+page, under *Auth Providers*. That one is what makes email/password work at all;
+switching it off breaks every registration and every sign-in at once, and there
+is no OAuth provider wired into this app to fall back on. Same for *"Allow new
+users to sign up"* at the top of the panel — it must stay on.
 
 `signUp` then returns a live session and
 [SignupForm](../components/features/auth/SignupForm.tsx) sends the member
@@ -95,10 +109,18 @@ Both are recoverable. Six members who never got in are not. Turn it back on once
 the drive is over — it is one toggle, and the confirmation flow below is kept
 working for exactly that reason.
 
-Also raise the email rate limit before the drive even with confirmation off,
-because password resets still send: **Authentication → Rate Limits → "Rate limit
-for sending emails"**. And note Brevo's free tier is ~300 emails/day — with
-confirmation on, that alone caps a drive at 300 registrations.
+**Registration now sends no email at all, but password resets still do**, and
+members who chose a password in a hurry at a registration desk will need them.
+So the SMTP provider still has to work — it has simply stopped being able to
+block a registration. Two things follow:
+
+- Keep custom SMTP configured (§4a). With it off, Supabase's built-in sender
+  takes over: capped near 2 emails/hour, and on current projects it delivers
+  only to your own team, so member resets fail silently — the same invisible
+  failure that cost five members on 29 Jul.
+- Raise **Authentication → Rate Limits → "Rate limit for sending emails"**
+  anyway. It defaults low, and a drive produces a burst of resets a day or two
+  later, not on the day.
 
 ### 4-0-ii. Rescuing a member who is stuck
 
