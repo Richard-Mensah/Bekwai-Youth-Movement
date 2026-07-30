@@ -21,13 +21,29 @@ export default async function DashboardLayout({
   // Configured but signed out → middleware normally redirects; guard anyway.
   if (session.configured && !session.userId) redirect("/login")
 
+  // A member who signed in with Google has an account but no community yet.
+  // Diverted here rather than in middleware on purpose: middleware runs on every
+  // request and has no profile row to hand, so gating there would mean a
+  // database round trip per navigation to answer a question that changes once in
+  // a member's life. This layout already loads the profile, and `getSessionProfile`
+  // is request-memoised, so the check is free.
+  const pathname = (await headers()).get(PATHNAME_HEADER) ?? ""
+  if (session.needsProfile) {
+    // Carry the intended destination so someone who followed a link to the
+    // apply portal still gets there after the four fields.
+    const back = pathname.startsWith("/dashboard")
+      ? `?next=${encodeURIComponent(pathname)}`
+      : ""
+    redirect(`/complete-profile${back}`)
+  }
+
   const notVerified =
     session.configured && session.verificationStatus !== "verified"
 
   // An unverified member keeps full use of the apply portal; the gate only
   // covers the areas that confer standing. A missing header (no middleware on
   // this request) falls through to gated, so the failure mode is closed.
-  const pathname = (await headers()).get(PATHNAME_HEADER) ?? ""
+  // `pathname` is read once above, for the profile diversion.
   const gated = notVerified && !openWhilePending(pathname)
 
   return (

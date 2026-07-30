@@ -471,6 +471,85 @@ into a session; if that URL is not allowed, Supabase quietly substitutes the
 Site URL, the code is never redeemed, and the member is confirmed but still
 signed out.
 
+### 4b-i. Google sign-in
+
+Enabled so a member can join without inventing a password. Two mistyped fields
+disappear with it: the email address (which is where a confirmation goes to die)
+and a password chosen in a hurry and forgotten by the next visit. Google supplies
+a verified address; the member supplies nothing.
+
+**Nothing about this lives in the code repository.** There is no environment
+variable to set — the client secret is held by Supabase, which is the point.
+`SUPABASE_SERVICE_ROLE_KEY` remains the only server-side secret the app holds.
+
+#### Step 1 — Google Cloud Console
+
+1. <https://console.cloud.google.com> → create a project (any name; BYM works).
+2. **APIs & Services → OAuth consent screen**
+   - User type **External**, then **Create**.
+   - App name `Bekwai Youth Movement`, support email `info@bekwaiyouthmovement.org`.
+   - **Authorised domains**: `bekwaiyouthmovement.org` **and** `supabase.co` —
+     the second is the one people forget, and Google rejects the credential
+     later without explaining which domain was missing.
+   - Publish the app (**Publishing status → Publish**). Left in *Testing*, only
+     addresses added by hand can sign in, which fails silently for everyone else
+     with "access blocked".
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID**
+   - Application type **Web application**.
+   - **Authorised JavaScript origins**: `https://bekwaiyouthmovement.org`
+   - **Authorised redirect URI** — exactly one, and it is Supabase's, not ours:
+
+     ```
+     https://npbeiffqenmzdxwmlydz.supabase.co/auth/v1/callback
+     ```
+
+     This is the single most common mistake. The instinct is to enter
+     `https://bekwaiyouthmovement.org/auth/callback`, because that is where the
+     member ends up. Google never redirects there. Google returns to *Supabase*,
+     Supabase mints the session and only then bounces to our `/auth/callback`.
+     Get this wrong and Google shows `redirect_uri_mismatch` before the member
+     sees anything of ours at all.
+4. Copy the **Client ID** and **Client secret**.
+
+#### Step 2 — Supabase
+
+**Authentication → Sign In / Providers → Google** → enable, paste both values,
+**Save**. Leave "Skip nonce check" off.
+
+#### Step 3 — nothing
+
+No deploy, no environment variable, no code change. The button on `/login` and
+`/join` is already shipped; it starts working the moment the provider is enabled,
+and it shows Supabase's own error if it is not.
+
+#### What Google does not know
+
+A Google account proves an email address and offers a name. It cannot say which
+of the 33 communities somebody belongs to — and community is what decides who
+represents them, populates the community wall, and scopes every per-community
+report. So an OAuth member is created with `community_id` NULL and diverted to
+`/complete-profile` for four fields before the dashboard opens.
+
+The gate is `needsProfile` in `lib/auth.ts`, and it is deliberately narrow:
+
+- **Community only.** Phone, gender and date of birth are asked for on the same
+  form but do not stand between a member and their dashboard.
+- **Ordinary members only.** Staff roles are conferred by an administrator, and
+  the `super_admin` account predates the community field being collected — it has
+  no community to this day. Gating every role would have met the one account that
+  can repair things with a form it must complete before reaching the console.
+
+Migration `0030_oauth_profiles.sql` makes the new-user trigger tolerate what a
+provider actually sends: the name falls back `full_name` → `name` → the local
+part of the email, so a member is never created called "".
+
+#### Redirect URLs
+
+Google sign-in reuses `/auth/callback` unchanged — the same route the emailed
+links use, because OAuth returns the same `?code=` that PKCE does. The allow-list
+in 4b above already covers it. If you add a domain later, add it there or Google
+sign-in breaks with it.
+
 ### 4b-ii. Email templates — use token_hash, not ConfirmationURL
 
 **Authentication → Email Templates.** The bodies to paste live in

@@ -14,6 +14,7 @@ import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 import AuthNotice from "./AuthNotice"
+import GoogleButton, { AuthDivider } from "./GoogleButton"
 
 const SUPABASE_READY =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -211,7 +212,20 @@ export default function SignupForm() {
         </p>
       )}
 
-      <form onSubmit={handleSubmit} className="mt-7 space-y-7">
+      {/* First, because it removes five of these eight fields. Google returns a
+          verified address and a name; /complete-profile then asks only for the
+          community, phone, gender and date of birth it cannot know. `next || ""`
+          would send an empty destination — safeNext's default belongs here. */}
+      <div className="mt-7">
+        <GoogleButton
+          next={next || "/dashboard"}
+          label="Sign up with Google"
+          disabled={!SUPABASE_READY}
+        />
+      </div>
+      <AuthDivider />
+
+      <form onSubmit={handleSubmit} className="space-y-7">
         <Fieldset legend="Who you are" step={1}>
           <Input
             name="fullName"

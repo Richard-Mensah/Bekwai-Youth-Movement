@@ -9,6 +9,10 @@ export interface SessionProfile {
   fullName: string
   role: Role
   verificationStatus: VerificationStatus
+  /** Null for anyone who signed in with Google and has not finished the form. */
+  communityId: number | null
+  /** True when the dashboard should divert to `/complete-profile`. */
+  needsProfile: boolean
 }
 
 /** Signed out, or shut out. The safe answer whenever we cannot establish who
@@ -20,6 +24,10 @@ const ANONYMOUS: SessionProfile = {
   fullName: "",
   role: "public",
   verificationStatus: "pending",
+  communityId: null,
+  // Deliberately false: a signed-out visitor needs sign-in, not a profile form.
+  // Sending them to /complete-profile would bounce them between the two.
+  needsProfile: false,
 }
 
 /**
@@ -46,6 +54,8 @@ export const getSessionProfile = cache(async (): Promise<SessionProfile> => {
       fullName: "Demo User",
       role: "admin",
       verificationStatus: "verified",
+      communityId: null,
+      needsProfile: false,
     }
   }
 
@@ -58,17 +68,39 @@ export const getSessionProfile = cache(async (): Promise<SessionProfile> => {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, role, verification_status")
+    .select("full_name, role, verification_status, community_id")
     .eq("id", user.id)
     .single()
+
+  const role = (profile?.role as Role) ?? "member"
+  const communityId = (profile?.community_id as number | null) ?? null
 
   return {
     configured: true,
     userId: user.id,
     email: user.email ?? null,
+    // Google supplies a name; the email is the fallback for a provider that
+    // does not, so the dashboard never greets somebody as "Member".
     fullName: profile?.full_name ?? user.email ?? "Member",
-    role: (profile?.role as Role) ?? "member",
+    role,
     verificationStatus:
       (profile?.verification_status as VerificationStatus) ?? "pending",
+    communityId,
+    /**
+     * Community is the only field gated on, and only for ordinary members.
+     *
+     * Only community, because it is the one that changes what the Movement can
+     * do: representation, the community wall and every per-community report are
+     * computed from it, and a member without one is invisible to all three.
+     * Phone and date of birth are asked for on the same form but are not worth
+     * standing between someone and their dashboard.
+     *
+     * Only members, because staff roles are conferred by an administrator rather
+     * than self-registered — and because the super_admin account predates the
+     * field being collected at all. Gating every role would have met the one
+     * account that can repair things with a form it must fill in before it can
+     * reach the console, which is a lockout of our own making.
+     */
+    needsProfile: role === "member" && communityId === null,
   }
 })

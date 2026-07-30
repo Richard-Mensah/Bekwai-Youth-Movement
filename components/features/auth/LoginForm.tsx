@@ -11,6 +11,7 @@ import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
 import Button from "@/components/ui/Button"
 import AuthNotice from "./AuthNotice"
+import GoogleButton, { AuthDivider } from "./GoogleButton"
 
 const SUPABASE_READY =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -152,7 +153,15 @@ export default function LoginForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="mt-7 space-y-4">
+      {/* Above the password form, not below it: for a returning member this is
+          the shorter path, and the one that cannot fail on a forgotten password.
+          `next` is already normalised by safeNext at the top of this component. */}
+      <div className="mt-7">
+        <GoogleButton next={next} label="Sign in with Google" disabled={!SUPABASE_READY} />
+      </div>
+      <AuthDivider />
+
+      <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           name="email"
           type="email"

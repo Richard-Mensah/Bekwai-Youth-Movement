@@ -70,6 +70,31 @@ export const registerSchema = z
 
 export type RegisterInput = z.infer<typeof registerSchema>
 
+/**
+ * The half of registration that Google cannot answer.
+ *
+ * Signing in with Google proves an email address and supplies a name; it says
+ * nothing about which community someone belongs to, and community is what
+ * decides who represents them. So an OAuth member arrives with a valid account
+ * and an incomplete profile, and `/complete-profile` asks for the remainder.
+ *
+ * The field rules are the same objects the registration form uses, not copies —
+ * if the phone pattern or the community check ever changes, both routes into
+ * membership change with it. Only name/email/password are absent, because the
+ * provider has already established those.
+ */
+export const completeProfileSchema = z.object({
+  gender: z.enum(["male", "female", "other"], { message: "Select your gender" }),
+  dob: z.string().min(1, "Enter your date of birth"),
+  phone: z
+    .string()
+    .min(9, "Enter a valid phone number")
+    .regex(/^[0-9+\s-]+$/, "Digits only"),
+  communityId: z.coerce.number().int().min(1, "Select your community"),
+})
+
+export type CompleteProfileInput = z.infer<typeof completeProfileSchema>
+
 /** Choosing a new password — from the reset link, or from account settings. */
 export const newPasswordSchema = z
   .object({
