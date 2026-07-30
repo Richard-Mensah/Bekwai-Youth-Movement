@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client"
 import { registerSchema, PASSWORD_MIN } from "@/lib/validations"
 import { friendlyAuthError, isAlreadyRegistered } from "@/lib/auth-errors"
 import { safeNext } from "@/lib/auth-redirect"
+import { sendWelcomeEmail } from "@/app/actions/welcome"
 import { COMMUNITIES_BY_NAME, COMMUNITY_COUNT } from "@/constants/communities"
 import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
@@ -145,6 +146,11 @@ export default function SignupForm() {
     // If email confirmation is disabled, Supabase returns a live session and the
     // applicant can go straight on; otherwise send them to verify their email.
     if (data.session) {
+      // Not awaited, and errors are swallowed by the action itself. The member is
+      // already registered and signed in — making them watch a spinner while an
+      // SMTP provider thinks about it would reintroduce, in miniature, the exact
+      // dependency this whole flow was rebuilt to remove.
+      void sendWelcomeEmail()
       router.push(next || "/dashboard")
       router.refresh()
       return
