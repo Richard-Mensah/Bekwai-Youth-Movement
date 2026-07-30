@@ -141,17 +141,32 @@ They will look like this, but the region differs per account:
 | `send` | `MX` | `10` | `feedback-smtp.<region>.amazonses.com` |
 | `send` | `TXT` | — | `v=spf1 include:amazonses.com ~all` |
 
-### Three cPanel traps
+### cPanel traps
 
 - **Use Zone Editor → Manage → Add Record, not the "MX Entry" tool.** cPanel's
   dedicated MX tool only edits mail routing for the domain itself and cannot
   create an MX on a subdomain. The `send` MX has to go in through the zone editor
   or it silently will not exist.
 
-- **cPanel appends the domain for you.** If Resend shows
-  `send.bekwaiyouthmovement.org`, type only `send` in the Name field. Typing the
-  full name produces `send.bekwaiyouthmovement.org.bekwaiyouthmovement.org`,
-  which silently never verifies. Same rule for `resend._domainkey`.
+- **"The given serial number … does not match the DNS zone's serial number."**
+  Hit on this account, 30 Jul 1:26 PM, and it blocked the write completely —
+  checked against the authoritative nameserver, the record never entered the zone.
+  It is an optimistic-locking check, not a fault in your record: the browser holds
+  an older copy of the zone than the server has, so cPanel refuses the write
+  rather than clobber whatever changed in between.
+  **Fix: reload the page, then re-enter the record.** Pressing Save again without
+  reloading fails identically every time.
+  Prefer the per-row **Save Record** over **Save All Records**, and reload between
+  records — that keeps the serial fresh and confines a failure to one record.
+
+- **This account's Zone Editor uses fully-qualified names with a trailing dot**,
+  so `send.bekwaiyouthmovement.org.` is correct as typed — the trailing dot makes
+  the name absolute and the origin is not appended again.
+  On hosts whose Name field is *relative* you would type only `send`; entering the
+  full name there yields
+  `send.bekwaiyouthmovement.org.bekwaiyouthmovement.org` and silently never
+  verifies. Tell them apart from an existing row: if it reads
+  `bekwaiyouthmovement.org.` with the dot, the field is absolute.
 - **🔴 Never add a second SPF record to the apex.** You already have one
   (`v=spf1 +a +mx +ip4:107.161.174.15 include:relay.mailchannels.net ~all`).
   Two SPF `TXT` records on the same name is a **permanent error** — receivers
