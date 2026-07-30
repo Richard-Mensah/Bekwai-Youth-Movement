@@ -1,4 +1,5 @@
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
+import { createAdminClient, adminClientReady } from "@/lib/supabase/admin"
 
 export type MemberStats = {
   configured: boolean
@@ -72,6 +73,55 @@ export async function getMembers(): Promise<Member[]> {
     communityName: (r.communities as { name?: string } | null)?.name ?? null,
     createdAt: r.created_at as string,
   }))
+}
+
+/**
+ * What the login system knows about a member, which `profiles` cannot say.
+ *
+ * `confirmed` is whether the email address has been proven; `everSignedIn` is
+ * whether they have ever actually got in. The second is the one that matters and
+ * the one nothing in this console used to show — of the first ten members, six
+ * were confirmed and had still never signed in, and the only way to discover
+ * that was to query `auth.users` by hand. A registration that never becomes a
+ * sign-in is the failure mode of a drive, so it belongs on screen.
+ */
+export type MemberAuthState = {
+  confirmed: boolean
+  everSignedIn: boolean
+}
+
+/**
+ * Login state for every member, keyed by user id.
+ *
+ * Needs the service-role client: `auth.users` is not exposed to RLS at all, so
+ * the member's own session cannot read it however the policies are written. When
+ * the key is absent this returns an empty map and callers simply show less —
+ * a missing key must not take the members directory down with it.
+ */
+export async function getMemberAuthStates(): Promise<Map<string, MemberAuthState>> {
+  const states = new Map<string, MemberAuthState>()
+  if (!isSupabaseConfigured() || !adminClientReady()) return states
+
+  try {
+    const admin = createAdminClient()
+    // Paginated deliberately: listUsers caps the page size, so a drive that adds
+    // a few hundred members would silently show only the first page of results.
+    for (let page = 1; page <= 20; page++) {
+      const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 200 })
+      if (error) break
+      for (const u of data.users) {
+        states.set(u.id, {
+          confirmed: Boolean(u.email_confirmed_at ?? u.confirmed_at),
+          everSignedIn: Boolean(u.last_sign_in_at),
+        })
+      }
+      if (data.users.length < 200) break
+    }
+  } catch {
+    // Reporting login state is a nicety; the directory itself is not.
+  }
+
+  return states
 }
 
 export type ContactMessage = {

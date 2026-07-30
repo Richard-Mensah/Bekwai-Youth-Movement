@@ -47,8 +47,8 @@ export default function TacEngagementForm() {
         </p>
       )}
       <div>
-        <label className="block text-sm font-medium text-ink/75">Type</label>
-        <select name="kind" className={SELECT}>
+        <label htmlFor="kind" className="block text-sm font-medium text-ink/75">Type</label>
+        <select id="kind" name="kind" className={SELECT}>
           <option value="">Select…</option>
           {KINDS.map(([v, l]) => (
             <option key={v} value={v}>{l}</option>
@@ -56,8 +56,8 @@ export default function TacEngagementForm() {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-ink/75">Community</label>
-        <select name="communityId" className={SELECT}>
+        <label htmlFor="communityId" className="block text-sm font-medium text-ink/75">Community</label>
+        <select id="communityId" name="communityId" className={SELECT}>
           <option value="">All / not specified</option>
           {COMMUNITIES_BY_NAME.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
@@ -65,8 +65,8 @@ export default function TacEngagementForm() {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-ink/75">Summary</label>
-        <textarea name="summary" rows={2} className={SELECT} />
+        <label htmlFor="summary" className="block text-sm font-medium text-ink/75">Summary</label>
+        <textarea id="summary" name="summary" rows={2} className={SELECT} />
       </div>
       <Button type="submit" disabled={!SUPABASE_READY || pending} size="sm">
         {pending ? "Saving…" : "Log engagement"}

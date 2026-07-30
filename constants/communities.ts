@@ -34,7 +34,18 @@ export const COMMUNITIES: Community[] = [
   })),
 ]
 
-export const COMMUNITY_COUNT = COMMUNITIES.length // 33
+/**
+ * 33 — and the site's copy saying "32 sub-communities" is also correct, because
+ * the 33rd entry is Sefwi Bekwai town itself (`isTown: true`), which is not a
+ * *sub*-community. Both numbers are right about different things.
+ *
+ * Written down because the mismatch looks exactly like a bug: the database has 33
+ * rows, the metadata says 32, and the obvious "fix" is to make one match the
+ * other. Don't. Use COMMUNITY_COUNT where you mean "places to pick from" (the
+ * join form's dropdown) and the literal 32 where you mean "sub-communities the
+ * movement represents".
+ */
+export const COMMUNITY_COUNT = COMMUNITIES.length // 33 = 32 sub-communities + the town
 
 /**
  * Compares community names the way a reader expects, so "Adobewura No.2"

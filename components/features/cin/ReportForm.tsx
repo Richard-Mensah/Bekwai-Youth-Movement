@@ -54,8 +54,8 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-ink/75">Category</label>
-          <select name="category" className={SELECT}>
+          <label htmlFor="category" className="block text-sm font-medium text-ink/75">Category</label>
+          <select id="category" name="category" className={SELECT}>
             <option value="">Select…</option>
             {CIN_CATEGORIES.map((c) => (
               <option key={c} value={c}>{c}</option>
@@ -63,8 +63,8 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-ink/75">Severity</label>
-          <select name="severity" className={SELECT} defaultValue="medium">
+          <label htmlFor="severity" className="block text-sm font-medium text-ink/75">Severity</label>
+          <select id="severity" name="severity" className={SELECT} defaultValue="medium">
             {SEVERITIES.map((s) => (
               <option key={s.value} value={s.value}>{s.label}</option>
             ))}
@@ -73,8 +73,8 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-ink/75">Community</label>
-        <select name="communityId" className={SELECT} defaultValue={defaultCommunityId ?? ""}>
+        <label htmlFor="communityId" className="block text-sm font-medium text-ink/75">Community</label>
+        <select id="communityId" name="communityId" className={SELECT} defaultValue={defaultCommunityId ?? ""}>
           <option value="">Select…</option>
           {COMMUNITIES_BY_NAME.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
@@ -83,8 +83,8 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-ink/75">Description</label>
-        <textarea
+        <label htmlFor="description" className="block text-sm font-medium text-ink/75">Description</label>
+        <textarea id="description"
           name="description"
           rows={3}
           className={SELECT}
@@ -93,10 +93,10 @@ export default function ReportForm({ defaultCommunityId }: { defaultCommunityId?
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-ink/75">
+        <label htmlFor="evidence" className="block text-sm font-medium text-ink/75">
           Evidence photo (optional)
         </label>
-        <input
+        <input id="evidence"
           type="file"
           name="evidence"
           accept="image/*"

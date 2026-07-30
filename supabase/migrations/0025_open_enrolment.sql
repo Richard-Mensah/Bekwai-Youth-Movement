@@ -1,0 +1,64 @@
+-- 0025_open_enrolment.sql
+--
+-- TEMPORARY, FOR THE ENROLMENT DRIVE. Revert when it is over — the exact
+-- statements are at the bottom of this file.
+--
+-- New members are verified on arrival instead of waiting for an administrator.
+-- Requested 30 Jul 2026 to open the drive: registration is already email-free
+-- (see supabase/README.md §4-0), and this removes the last manual step between
+-- signing up and having a working dashboard.
+--
+-- WHAT THIS DOES AND DOES NOT HAND OVER
+--
+-- `verification_status` is not referenced by a single RLS *policy*. Every one of
+-- them keys off `role` or `is_admin()`, and `role` still defaults to 'member'.
+-- So this does not grant Parliament, CIN, Cabinet, voting or admin — those stay
+-- shut behind role, exactly as before. What it opens is the app-level gate in
+-- app/dashboard/layout.tsx: the member dashboard, rather than the "pending
+-- verification" panel. That is the whole intended effect.
+--
+-- What `verification_status` *is* used by is four read-only views —
+-- public_members (0014), the community/representation counts (0006, 0015) — so
+-- member counts on the public site now move as people register. That is correct:
+-- they are members.
+--
+-- WHY is_public CHANGES TOO
+--
+-- `public_members` is granted to `anon` and selects verified, opted-in members
+-- for the homepage wall — first name, community, photo. `is_public` defaulted to
+-- true, which was safe only because reaching 'verified' required an
+-- administrator to decide. Auto-verification removes that decision, so left
+-- alone this migration would publish every registrant to the public homepage the
+-- instant they signed up, unreviewed. For a youth movement registering minors
+-- that is not a side effect to accept quietly (Gov Doc §6.3; Ghana Data
+-- Protection Act 2012).
+--
+-- So publication stays a deliberate act: new members are verified but not
+-- listed, and the "Wall" toggle already on each row of the members directory
+-- puts them up when the Secretariat chooses. Nobody currently on the wall comes
+-- off it — this changes the default for new rows only.
+
+alter table profiles alter column verification_status set default 'verified';
+alter table profiles alter column is_public          set default false;
+
+-- Existing members are deliberately untouched. Nothing is backfilled: the
+-- pending queue was empty when this ran, and a schema migration that quietly
+-- rewrites rows is how you lose the ability to tell what happened.
+
+-- ============================================================
+-- TO REVERT (after the drive / once the domain is set up):
+--
+--   alter table profiles alter column verification_status set default 'pending';
+--   alter table profiles alter column is_public          set default true;
+--
+-- Reverting affects new registrations only. Members verified automatically
+-- during the drive stay verified — decide separately whether to re-review them:
+--
+--   select id, full_name, email, community_id, created_at
+--   from profiles
+--   where created_at >= '2026-07-30'
+--   order by created_at;
+--
+-- Also re-enable "Confirm email" in the dashboard at that point
+-- (README §4-0), which is the other half of the drive configuration.
+-- ============================================================

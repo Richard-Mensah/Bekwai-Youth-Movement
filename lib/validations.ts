@@ -20,11 +20,35 @@ const passwordField = z
   .string()
   .min(PASSWORD_MIN, `Password must be at least ${PASSWORD_MIN} characters`)
 
+/**
+ * An email address as a phone keyboard actually produces one.
+ *
+ * Android capitalises the first letter and autofill pastes a trailing space, so
+ * a mass enrolment drive delivers " Kofi@Gmail.com " many times over. Untrimmed,
+ * `.email()` refuses it and the applicant is told their own address is invalid —
+ * with no visible reason, because the space does not render. Lower-casing
+ * matters for a second reason: Supabase treats the address as the account key,
+ * and someone who registers as `Kofi@` then signs in as `kofi@` must land on the
+ * same account.
+ *
+ * The checks run in order, so `.email()` validates the already-normalised value
+ * and the parsed output is the normalised string — meaning callers get the
+ * cleaned address without having to remember to clean it.
+ */
+const emailField = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .email("Enter a valid email")
+
+/** An email address on its own — used where an administrator corrects one. */
+export const emailOnlySchema = z.object({ email: emailField })
+
 /** Membership registration form (public "Join BYM"). */
 export const registerSchema = z
   .object({
-    fullName: z.string().min(3, "Enter your full name"),
-    email: z.string().email("Enter a valid email"),
+    fullName: z.string().trim().min(3, "Enter your full name"),
+    email: emailField,
     password: passwordField,
     confirmPassword: z.string().min(1, "Re-enter your password to confirm"),
     gender: z.enum(["male", "female", "other"], {
@@ -124,7 +148,9 @@ export const nominationSchema = z.object({
 export type NominationInput = z.infer<typeof nominationSchema>
 
 export const loginSchema = z.object({
-  email: z.string().email("Enter a valid email"),
+  // Normalised exactly as at registration, so the address someone types on a
+  // phone reaches the same account they created on a laptop.
+  email: emailField,
   password: z.string().min(1, "Enter your password"),
 })
 

@@ -44,13 +44,13 @@ export default function ProjectForm() {
       )}
       <Input name="name" label="Project name" />
       <div>
-        <label className="block text-sm font-medium text-ink/75">Description</label>
-        <textarea name="description" rows={2} className={SELECT} />
+        <label htmlFor="description" className="block text-sm font-medium text-ink/75">Description</label>
+        <textarea id="description" name="description" rows={2} className={SELECT} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-medium text-ink/75">Community</label>
-          <select name="communityId" className={SELECT}>
+          <label htmlFor="communityId" className="block text-sm font-medium text-ink/75">Community</label>
+          <select id="communityId" name="communityId" className={SELECT}>
             <option value="">Select…</option>
             {COMMUNITIES_BY_NAME.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -58,8 +58,8 @@ export default function ProjectForm() {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-ink/75">Unit</label>
-          <select name="unitId" className={SELECT}>
+          <label htmlFor="unitId" className="block text-sm font-medium text-ink/75">Unit</label>
+          <select id="unitId" name="unitId" className={SELECT}>
             <option value="">Select…</option>
             {UNITS.map((u) => (
               <option key={u.no} value={u.no}>{u.name}</option>

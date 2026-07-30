@@ -29,7 +29,10 @@ export default function LoginForm() {
     return linkError ? friendlyAuthError(linkError) : ""
   })
   const [loading, setLoading] = useState(false)
-  const [email, setEmail] = useState("")
+  // Prefilled when another page already knows the address — the signup form
+  // sends someone here once it discovers they are a member already, and making
+  // them retype it is how you lose them on a phone.
+  const [email, setEmail] = useState(() => params.get("email") ?? "")
   const [resent, setResent] = useState<"idle" | "sent" | "failed">("idle")
   const [resendError, setResendError] = useState("")
 

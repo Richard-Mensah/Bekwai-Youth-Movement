@@ -20,6 +20,10 @@ export default function BillForm() {
   const [pending, startTransition] = useTransition()
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null)
 
+  /** A bill is summarised, a motion has a body — and the server action reads the
+   *  field by that name, so the label's `htmlFor` has to follow it. */
+  const fieldName = kind === "bill" ? "summary" : "body"
+
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = e.currentTarget
@@ -63,10 +67,13 @@ export default function BillForm() {
       <form onSubmit={onSubmit} className="space-y-3">
         <Input name="title" label="Title" />
         <div>
-          <label className="block text-sm font-medium text-ink/75">
+          {/* The field name changes with `kind`, so the association has to be
+              derived the same way rather than hard-coded — otherwise htmlFor
+              points at an id that only exists for bills. */}
+          <label htmlFor={fieldName} className="block text-sm font-medium text-ink/75">
             {kind === "bill" ? "Summary" : "Body"}
           </label>
-          <textarea name={kind === "bill" ? "summary" : "body"} rows={3} className={SELECT} />
+          <textarea id={fieldName} name={fieldName} rows={3} className={SELECT} />
         </div>
         <Button type="submit" disabled={!SUPABASE_READY || pending} className="w-full">
           {pending ? "Submitting…" : `Submit ${kind}`}

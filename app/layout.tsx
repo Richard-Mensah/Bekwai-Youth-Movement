@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next"
 import { Public_Sans, Fraunces } from "next/font/google"
 import "./globals.css"
 import { ORG } from "@/constants/nav"
+import { SITE_URL } from "@/lib/site"
 import PwaRegister from "@/components/PwaRegister"
+import StructuredData from "@/components/StructuredData"
 
 const sans = Public_Sans({
   subsets: ["latin"],
@@ -16,10 +18,18 @@ const display = Fraunces({
   axes: ["opsz"],
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+const siteUrl = SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  // Every page declares itself canonical at its own path on the *current* origin.
+  // This matters now rather than in the abstract: bekwai-youth-movement.vercel.app
+  // stays reachable after the move to bekwaiyouthmovement.org, and has to — old
+  // links and un-propagated DNS still resolve there. Without a canonical, the two
+  // hosts serve identical content and compete with each other for it, splitting
+  // whatever ranking the site earns. `alternates.canonical: "./"` resolves each
+  // page against metadataBase, so one line covers every route.
+  alternates: { canonical: "./" },
   title: {
     default: `${ORG.name} — ${ORG.motto}`,
     template: `%s · ${ORG.shortName}`,
@@ -79,6 +89,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <StructuredData />
         {children}
         <PwaRegister />
       </body>

@@ -6,8 +6,9 @@ import Link from "next/link"
 import { Check } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { registerSchema, PASSWORD_MIN } from "@/lib/validations"
-import { friendlyAuthError } from "@/lib/auth-errors"
+import { friendlyAuthError, isAlreadyRegistered } from "@/lib/auth-errors"
 import { safeNext } from "@/lib/auth-redirect"
+import { sendWelcomeEmail } from "@/app/actions/welcome"
 import { COMMUNITIES_BY_NAME, COMMUNITY_COUNT } from "@/constants/communities"
 import Input from "@/components/ui/Input"
 import PasswordInput from "@/components/ui/PasswordInput"
@@ -60,18 +61,27 @@ export default function SignupForm() {
   const next = safeNext(useSearchParams().get("next"), "")
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState("")
+  // The address of someone who turns out to already be a member. Not an error —
+  // it means "you are further along than you think", so it gets its own notice
+  // and a sign-in link rather than red text telling them they failed.
+  const [existing, setExisting] = useState("")
   const [loading, setLoading] = useState(false)
   // Tracked only to give live feedback on the confirm field — the values that
   // are actually submitted come from the form itself.
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
 
+  // PASSWORD_MIN, not a literal: a hard-coded 8 here showed "Passwords match" in
+  // green for a password the form was about to reject on the very next submit.
   const confirmed =
-    password.length >= 8 && confirmPassword.length > 0 && password === confirmPassword
+    password.length >= PASSWORD_MIN &&
+    confirmPassword.length > 0 &&
+    password === confirmPassword
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setServerError("")
+    setExisting("")
     const form = new FormData(e.currentTarget)
     const raw = Object.fromEntries(form.entries())
     const parsed = registerSchema.safeParse(raw)
@@ -114,17 +124,43 @@ export default function SignupForm() {
     setLoading(false)
 
     if (error) {
-      setServerError(friendlyAuthError(error.message))
+      // "Already registered" is the one failure that is not a failure, and it is
+      // common in a drive: people who cannot remember whether they signed up
+      // last week simply sign up again.
+      if (isAlreadyRegistered(error.message)) setExisting(parsed.data.email)
+      else setServerError(friendlyAuthError(error.message))
       return
     }
+
+    // With "Confirm email" ON, a duplicate signup does not error at all: Supabase
+    // returns an obfuscated user with no identities, so that nobody can discover
+    // which addresses belong to members by watching which ones fail. Treated as
+    // success it becomes the worst outcome of the three — a returning member is
+    // told "Account created" and sent to wait for an email that never comes,
+    // because none was sent.
+    if (data.user && data.user.identities?.length === 0) {
+      setExisting(parsed.data.email)
+      return
+    }
+
     // If email confirmation is disabled, Supabase returns a live session and the
     // applicant can go straight on; otherwise send them to verify their email.
     if (data.session) {
+      // Not awaited, and errors are swallowed by the action itself. The member is
+      // already registered and signed in — making them watch a spinner while an
+      // SMTP provider thinks about it would reintroduce, in miniature, the exact
+      // dependency this whole flow was rebuilt to remove.
+      void sendWelcomeEmail()
       router.push(next || "/dashboard")
       router.refresh()
-    } else {
-      router.push(`/verify-pending${next ? `?next=${encodeURIComponent(next)}` : ""}`)
+      return
     }
+
+    // Carry the address so /verify-pending can name the inbox to check and offer
+    // to send the link again. Same convention as the sign-in page's reset link.
+    const pending = new URLSearchParams({ email: parsed.data.email })
+    if (next) pending.set("next", next)
+    router.push(`/verify-pending?${pending}`)
   }
 
   return (
@@ -142,6 +178,33 @@ export default function SignupForm() {
       </p>
 
       {!SUPABASE_READY && <div className="mt-4"><AuthNotice /></div>}
+      {existing && (
+        <div className="mt-4 rounded-xl border border-gold-400/40 bg-gold-50 p-3.5 text-sm text-canopy dark:border-gold-400/25 dark:bg-gold-400/10 dark:text-paper">
+          <p className="font-medium">
+            {existing} is already registered with BYM.
+          </p>
+          <p className="mt-1 text-canopy/80 dark:text-paper/75">
+            Nothing more to fill in —{" "}
+            <Link
+              href={`/login?${new URLSearchParams({
+                email: existing,
+                ...(next ? { next } : {}),
+              })}`}
+              className="font-semibold underline"
+            >
+              sign in instead
+            </Link>
+            , or{" "}
+            <Link
+              href={`/forgot-password?email=${encodeURIComponent(existing)}`}
+              className="font-semibold underline"
+            >
+              reset the password
+            </Link>{" "}
+            if you have forgotten it.
+          </p>
+        </div>
+      )}
       {serverError && (
         <p className="mt-4 rounded-xl border border-brand-red/15 bg-brand-red-50 p-3.5 text-sm text-brand-red-700 dark:border-brand-red/25 dark:bg-brand-red/15 dark:text-brand-red-100">
           {serverError}
