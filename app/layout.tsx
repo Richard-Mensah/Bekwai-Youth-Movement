@@ -46,7 +46,35 @@ export const metadata: Metadata = {
     "SDGs",
     "Volunteering for Change",
   ],
-  icons: { icon: "/images/logo.jpg", apple: "/images/logo.jpg" },
+  /**
+   * Two icons, deliberately, because two different consumers look for two
+   * different things.
+   *
+   * `/favicon.ico` is the one Google Search fetches when it decides whether to
+   * show a site icon beside a result — and it was returning 404, so BYM appeared
+   * with the blank default page glyph. It carries 16/32/48px in a single file
+   * and weighs 5 KB against the 45 KB JPEG the browser was previously
+   * downloading just to draw a 16px tab icon.
+   *
+   * It is generated from `public/images/logo.jpg` — the BYM logo — but cropped
+   * to the emblem. The full lockup wraps "BEKWAI YOUTH MOVEMENT" around the mark
+   * and carries a "VOLUNTEERING FOR CHANGE" banner, and neither survives below
+   * about 64px: rendered at 16 they are grey smear, and the whole icon reads as
+   * a smudge. The emblem alone keeps the three brand colours and the figure, so
+   * the tab is recognisably BYM at the size a tab is actually drawn.
+   * Regenerate with the script recorded in `scripts/generate-favicon.mjs`.
+   *
+   * The full logo is what appears everywhere it has room to be read: the
+   * apple-touch-icon, the Android home screen, the social preview card and the
+   * `NGO` structured data Google reads for the knowledge panel.
+   */
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/images/logo.jpg", type: "image/jpeg" },
+    ],
+    apple: "/images/logo.jpg",
+  },
   appleWebApp: { capable: true, title: ORG.shortName, statusBarStyle: "default" },
   manifest: "/manifest.webmanifest",
   openGraph: {
@@ -55,7 +83,19 @@ export const metadata: Metadata = {
       "Youth governance for Sefwi Bekwai and its 32 sub-communities. Aligned with the UN SDGs 2030.",
     url: siteUrl,
     siteName: ORG.name,
-    images: [{ url: "/images/logo.jpg", width: 1042, height: 1042 }],
+    // 1050, not 1042. The file is 1050×1050 and the declared size was wrong,
+    // which matters because WhatsApp and Facebook lay the card out from these
+    // numbers before the image arrives — and a link to /join shared into a
+    // WhatsApp group is how most of this drive's members will actually arrive.
+    images: [
+      {
+        url: "/images/logo.jpg",
+        width: 1050,
+        height: 1050,
+        alt: `${ORG.name} — ${ORG.motto}`,
+        type: "image/jpeg",
+      },
+    ],
     locale: "en_GH",
     type: "website",
   },
